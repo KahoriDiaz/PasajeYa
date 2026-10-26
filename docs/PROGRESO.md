@@ -79,3 +79,12 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
   correo sin verificar, roles y datos inválidos.
 - Se inicializa explícitamente la app Admin en las Functions y se mantienen las pruebas
   unitarias rápidas fuera del emulador.
+
+### 2026-10-26 — F1, paso 5: datos y dominio Android
+
+- Se agregaron repositorios Firebase para autenticación, perfil, sesión, rutas y Functions.
+- El identificador de dispositivo se genera una vez y se guarda en DataStore; la sesión
+  activa se mantiene en memoria y se renueva al iniciar el proceso.
+- La lista de contraseñas comunes se lee del asset compartido y se cachea.
+- Se agregaron modelos, errores de dominio, resolución de destino y bloqueo local tras
+  cinco intentos fallidos en treinta segundos.
