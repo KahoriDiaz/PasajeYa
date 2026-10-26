@@ -61,3 +61,12 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
   `OperatorVerifier` y el script `seedRoutes`.
 - `data/routes.json` queda vacío a la espera de las rutas reales; no se inventaron datos.
 - El secreto de emulador se genera localmente en `functions/.secret.local` y no se sube.
+
+### 2026-10-26 — F1, paso 3: reglas de Firestore
+
+- `users/{uid}` y `sessions/{uid}` son legibles solo por su dueño y nunca escribibles
+  por el cliente.
+- `routes` es legible por usuarios autenticados y solo escribible por el servidor.
+- `users_private`, `dniIndex`, `operators`, `vehicles` y `benefitRequests` no tienen
+  acceso desde clientes.
+- Todo lo demás queda denegado por defecto.
