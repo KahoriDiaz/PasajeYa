@@ -51,3 +51,13 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 - Se implementaron los validadores equivalentes en Kotlin y TypeScript, ambos probados
   contra los mismos vectores.
 - Las pruebas de ambos lenguajes pasan.
+
+### 2026-10-26 — F1, paso 2: Cloud Functions
+
+- Se implementaron `completeProfile`, `registerOperator` y `registerDevice` con
+  transacciones, `sessionId`, HMAC-SHA256 del DNI y revocación de tokens.
+- Se agregó `assertActiveSession` para las siguientes funcionalidades.
+- Se agregó la configuración de placas, licencias y clases del MTC, la interfaz
+  `OperatorVerifier` y el script `seedRoutes`.
+- `data/routes.json` queda vacío a la espera de las rutas reales; no se inventaron datos.
+- El secreto de emulador se genera localmente en `functions/.secret.local` y no se sube.

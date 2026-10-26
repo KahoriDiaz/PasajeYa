@@ -1,6 +1,12 @@
 import { onRequest } from "firebase-functions/v2/https";
+import { FUNCTIONS_REGION } from "./config/region.js";
 
-export const FUNCTIONS_REGION = "southamerica-east1";
+export { FUNCTIONS_REGION };
+
+export { completeProfile } from "./account/completeProfile.js";
+export { registerDevice } from "./account/registerDevice.js";
+export { registerOperator } from "./operator/registerOperator.js";
+export { assertActiveSession } from "./sessions/activeSession.js";
 
 export interface HealthPayload {
   status: "ok";
