@@ -4,7 +4,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 
 | ID | Funcionalidad | Estado |
 |---|---|---|
-| F1 | Autenticación y cuentas (pasajero/operador, DNI, contraseña segura, consentimiento, sesión única) | Pendiente |
+| F1 | Autenticación y cuentas (pasajero/operador, DNI, contraseña segura, consentimiento, sesión única) | Completado en emulador; pendiente celular real |
 | F2 | Tap In / Tap Out mediante QR | Pendiente |
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
@@ -22,10 +22,14 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 
 ## Criterios de terminado (por funcionalidad)
 
-- [ ] Compila.
-- [ ] Pasan las pruebas unitarias.
-- [ ] Pasan las pruebas de reglas y de Functions en emulador.
-- [ ] Existe `docs/pruebas-manuales-F<N>.md` con casos para celular real.
+- [x] Compila.
+- [x] Pasan las pruebas unitarias.
+- [x] Pasan las pruebas de reglas y de Functions en emulador.
+- [x] Existe `docs/pruebas-manuales-F<N>.md` con casos para celular real.
+
+F1 cumple los cuatro criterios. La ejecución en celular real queda pendiente y sus
+casos están en `docs/pruebas-manuales-F1.md`; las limitaciones conocidas se registran en
+`docs/LIMITACIONES.md`.
 
 ## Bitácora
 
@@ -88,3 +92,29 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 - La lista de contraseñas comunes se lee del asset compartido y se cachea.
 - Se agregaron modelos, errores de dominio, resolución de destino y bloqueo local tras
   cinco intentos fallidos en treinta segundos.
+
+### 2026-10-26 — F1, paso 6: pantallas y validación manual
+
+- Se implementaron las pantallas Compose de bienvenida, login, registro, verificación de
+  correo, selección de rol, datos de pasajero, datos de operador, detalles del operador,
+  inicios de pasajero/operador, recuperación de contraseña y política de privacidad.
+- `PasajeYaApp` y `AppViewModel` resuelven el destino inicial, restauran la sesión,
+  registran el dispositivo y muestran el diálogo de sesión reemplazada.
+- Se agregó el logo en `design/logo.png` y `app/src/main/res/drawable-nodpi/`.
+- Se corrigió un bug de autoformato de fecha: al escribir rápido, el cursor se movía y
+  generaba fechas mezcladas. El campo usa `TextFieldValue` y mantiene la selección al
+  final.
+- Verificación ejecutada:
+  - `.\gradlew assembleDebug` — correcto.
+  - `.\gradlew testDebugUnitTest` — correcto.
+  - `npm run emulators:test` — correcto (8 pruebas de reglas y 22 de Functions).
+- Validación manual en emulador:
+  - Pasajero: registro, verificación, perfil y home correctos.
+  - Operador: registro, licencia/placa/ruta, estado pendiente y home correctos.
+  - Sesión única: segundo `registerDevice` reemplazó la sesión y mostró el diálogo exacto.
+  - Login incorrecto: mensaje genérico correcto; login posterior correcto.
+  - Persistencia: la sesión se restauró tras reiniciar el proceso.
+  - Datos: DNI solo en `users_private`, índice HMAC único, sin DNI en `users`; vehículo y
+    operador escritos por el servidor.
+- La ruta `routes/TEST-01` se creó solo en el emulador para la prueba de operador; no se
+  versiona. Las limitaciones y los casos para celular real quedan documentados.

@@ -1,5 +1,163 @@
-<resources>
+﻿<resources>
     <string name="app_name">PasajeYa!</string>
-    <string name="welcome_card_title">Transporte público de Arequipa</string>
-    <string name="welcome_message">La configuración inicial está lista.</string>
+
+    <string name="action_continue">Continuar</string>
+    <string name="action_retry">Reintentar</string>
+    <string name="action_back">Volver</string>
+    <string name="action_logout">Cerrar sesión</string>
+    <string name="action_understood">Entendido</string>
+    <string name="action_show_password">Mostrar</string>
+    <string name="action_hide_password">Ocultar</string>
+    <string name="action_refresh">Actualizar</string>
+    <string name="loading">Cargando…</string>
+
+    <string name="error_generic">No pudimos completar la operación. Intenta de nuevo.</string>
+    <string name="error_network">No pudimos conectar. Revisa tu conexión e intenta de nuevo.</string>
+    <string name="error_session">Tu sesión ya no está activa. Vuelve a iniciar sesión.</string>
+    <string name="error_too_many_requests">Demasiadas solicitudes. Intenta de nuevo más tarde.</string>
+    <string name="error_profile_incomplete">Tu perfil está incompleto. Vuelve a iniciar sesión.</string>
+
+    <string name="startup_title">No pudimos iniciar la app</string>
+    <string name="startup_message">Revisa tu conexión a internet e intenta de nuevo.</string>
+
+    <string name="session_closed_title">Sesión cerrada</string>
+    <string name="session_closed_message">Tu cuenta se inició en otro dispositivo. Por seguridad, esta sesión se cerró.</string>
+
+    <string name="welcome_subtitle">Paga tu pasaje de forma simple y transparente.</string>
+    <string name="welcome_login">Iniciar sesión</string>
+    <string name="welcome_register">Crear cuenta</string>
+    <string name="welcome_logo_description">Logo de PasajeYa!</string>
+    <string name="welcome_features">Un QR personal. Un cobro claro. Tu historial siempre disponible.</string>
+
+    <string name="email_label">Correo electrónico</string>
+    <string name="password_label">Contraseña</string>
+    <string name="confirm_password_label">Confirma tu contraseña</string>
+
+    <string name="login_title">Iniciar sesión</string>
+    <string name="login_subtitle">Ingresa con el correo y la contraseña de tu cuenta.</string>
+    <string name="login_forgot_password">Olvidé mi contraseña</string>
+    <string name="login_submit">Ingresar</string>
+    <string name="login_no_account">¿No tienes cuenta?</string>
+    <string name="login_create_account">Crear cuenta</string>
+    <string name="login_invalid">Correo o contraseña incorrectos.</string>
+    <string name="login_locked">Demasiados intentos fallidos. Espera %1$d s.</string>
+    <string name="login_email_invalid">Ingresa un correo válido.</string>
+    <string name="login_password_required">Ingresa tu contraseña.</string>
+
+    <string name="register_title">Crear cuenta</string>
+    <string name="register_subtitle">Usa un correo que puedas verificar. Enviaremos un enlace de confirmación.</string>
+    <string name="register_submit">Crear cuenta</string>
+    <string name="register_have_account">¿Ya tienes cuenta?</string>
+    <string name="register_go_login">Iniciar sesión</string>
+    <string name="register_email_in_use">Ya existe una cuenta con ese correo.</string>
+    <string name="register_weak_password">La contraseña no cumple todos los requisitos.</string>
+    <string name="register_password_mismatch">Las contraseñas no coinciden.</string>
+    <string name="register_passwords_unavailable">No pudimos validar la contraseña. Revisa tu conexión e intenta de nuevo.</string>
+    <string name="password_requirements_title">La contraseña debe tener:</string>
+    <string name="password_requirement_length">Entre 10 y 64 caracteres</string>
+    <string name="password_requirement_uppercase">Al menos una mayúscula</string>
+    <string name="password_requirement_lowercase">Al menos una minúscula</string>
+    <string name="password_requirement_digit">Al menos un número</string>
+    <string name="password_requirement_symbol">Al menos un símbolo</string>
+    <string name="password_requirement_no_whitespace">Sin espacios</string>
+    <string name="password_requirement_not_email">No puede contener la parte local del correo</string>
+    <string name="password_requirement_not_common">No puede ser una contraseña común</string>
+    <string name="password_strength">Seguridad: %1$s</string>
+    <string name="password_strength_weak">débil</string>
+    <string name="password_strength_fair">media</string>
+    <string name="password_strength_good">buena</string>
+    <string name="password_strength_strong">fuerte</string>
+
+    <string name="verify_title">Verifica tu correo</string>
+    <string name="verify_subtitle">Enviamos un enlace de verificación a:</string>
+    <string name="verify_instructions">Abre el correo y toca el enlace. Luego vuelve a esta pantalla y confirma.</string>
+    <string name="verify_resend">Reenviar correo</string>
+    <string name="verify_resend_cooldown">Puedes reenviar en %1$d s.</string>
+    <string name="verify_sent">Correo enviado. Revisa tu bandeja de entrada y la carpeta de spam.</string>
+    <string name="verify_check">Ya verifiqué</string>
+    <string name="verify_not_yet">Aún no detectamos la verificación. Revisa tu correo e intenta otra vez.</string>
+    <string name="verify_send_error">No pudimos enviar el correo. Reintenta.</string>
+    <string name="verify_missing_user">No hay una sesión activa. Vuelve a iniciar sesión.</string>
+
+    <string name="forgot_title">Recuperar contraseña</string>
+    <string name="forgot_subtitle">Escribe el correo de tu cuenta.</string>
+    <string name="forgot_submit">Enviar enlace</string>
+    <string name="forgot_success_title">Revisa tu correo</string>
+    <string name="forgot_success">Si existe una cuenta con ese correo, enviamos un enlace para restablecer la contraseña.</string>
+    <string name="forgot_back">Volver a iniciar sesión</string>
+
+    <string name="role_title">¿Cómo usarás PasajeYa!?</string>
+    <string name="role_subtitle">Elige el perfil que corresponde a tu cuenta. No podrás cambiarlo después.</string>
+    <string name="role_passenger_title">Pasajero</string>
+    <string name="role_passenger_description">Viaja con tu QR personal y revisa el detalle de cada cobro.</string>
+    <string name="role_operator_title">Operador</string>
+    <string name="role_operator_description">Registra tu vehículo y las rutas que operas.</string>
+    <string name="role_select">Seleccionar</string>
+
+    <string name="profile_passenger_title">Datos de pasajero</string>
+    <string name="profile_operator_title">Datos de operador</string>
+    <string name="profile_subtitle">Necesitamos estos datos para crear tu perfil.</string>
+    <string name="field_first_name">Nombres</string>
+    <string name="field_last_name">Apellidos</string>
+    <string name="field_dni">DNI</string>
+    <string name="field_dni_hint">8 dígitos, sin espacios</string>
+    <string name="field_birth_date">Fecha de nacimiento</string>
+    <string name="field_birth_date_hint">AAAA-MM-DD</string>
+    <string name="profile_name_invalid">Usa entre 2 y 40 letras.</string>
+    <string name="profile_dni_invalid">El DNI debe tener 8 dígitos y no puede ser una repetición.</string>
+    <string name="profile_birth_invalid">Debes tener entre 12 y 110 años. Usa el formato AAAA-MM-DD.</string>
+    <string name="profile_consent_required">Debes aceptar la política de privacidad.</string>
+    <string name="profile_consent_label">Acepto la política de privacidad y el tratamiento de mis datos.</string>
+    <string name="profile_privacy_link">Leer la política de privacidad</string>
+    <string name="profile_submit">Guardar datos</string>
+    <string name="profile_dni_taken">Ese DNI ya está registrado.</string>
+    <string name="profile_invalid_data">Revisa los datos e intenta de nuevo.</string>
+    <string name="profile_email_verified_required">Debes verificar tu correo antes de continuar.</string>
+    <string name="profile_already_complete">Tu perfil ya fue creado. Vuelve a iniciar sesión.</string>
+
+    <string name="operator_details_title">Datos de operador</string>
+    <string name="operator_details_subtitle">Completa tu licencia, la placa del vehículo y las rutas que operas.</string>
+    <string name="field_license_number">Número de licencia</string>
+    <string name="field_license_number_hint">Una letra y 8 dígitos</string>
+    <string name="field_license_class">Clase de licencia</string>
+    <string name="operator_license_class_placeholder">Selecciona una clase</string>
+    <string name="field_plate">Placa del vehículo</string>
+    <string name="field_plate_hint">6 letras o números</string>
+    <string name="operator_license_invalid">Usa una letra seguida de 8 dígitos.</string>
+    <string name="operator_license_class_invalid">Selecciona una clase de licencia.</string>
+    <string name="operator_plate_invalid">La placa debe tener 6 letras o números.</string>
+    <string name="operator_routes_title">Rutas que operas</string>
+    <string name="operator_routes_subtitle">Selecciona al menos una ruta activa.</string>
+    <string name="operator_routes_empty">No hay rutas disponibles. Un administrador debe cargar las rutas reales.</string>
+    <string name="operator_routes_error">No pudimos cargar las rutas.</string>
+    <string name="operator_routes_required">Selecciona al menos una ruta.</string>
+    <string name="operator_route_stops">%1$d paraderos</string>
+    <string name="operator_plate_taken">Esa placa ya está registrada.</string>
+    <string name="operator_route_unavailable">Una ruta ya no está disponible. Actualiza la lista.</string>
+    <string name="operator_submit">Registrar operador</string>
+
+    <string name="home_loading_profile">Cargando tu perfil…</string>
+    <string name="home_passenger_title">Cuenta de pasajero activa</string>
+    <string name="home_passenger_body">Tu perfil está listo. El cobro de viajes se habilitará en la siguiente funcionalidad.</string>
+    <string name="home_operator_title">Registro de operador enviado</string>
+    <string name="home_operator_body">Un administrador revisará tu licencia, placa y rutas. Mientras tanto, no podrás iniciar turnos.</string>
+    <string name="home_operator_status">Estado: pendiente de verificación</string>
+    <string name="home_greeting">Hola, %1$s</string>
+    <string name="home_profile_error">No pudimos cargar tu perfil.</string>
+    <string name="home_account_fallback">Usuario</string>
+
+    <string name="privacy_title">Privacidad y datos</string>
+    <string name="privacy_version">Versión %1$s</string>
+    <string name="privacy_last_updated">Última actualización: 26 de octubre de 2026</string>
+    <string name="privacy_intro">Esta política describe cómo PasajeYa! trata tus datos personales para el transporte público de Arequipa.</string>
+    <string name="privacy_data_title">Datos que usamos</string>
+    <string name="privacy_data_body">Usamos tu correo, nombres, apellidos, fecha de nacimiento y DNI para crear y proteger tu cuenta. En los viajes, el GPS del vehículo del operador se usa para calcular la distancia y la tarifa.</string>
+    <string name="privacy_dni_title">Tu DNI</string>
+    <string name="privacy_dni_body">El DNI se guarda como un hash con clave secreta en el servidor. Nunca se muestra a otros usuarios ni se dice en voz alta.</string>
+    <string name="privacy_location_title">Ubicación</string>
+    <string name="privacy_location_body">El pasajero no comparte su ubicación. La distancia del viaje se calcula con el GPS del vehículo del operador.</string>
+    <string name="privacy_security_title">Seguridad</string>
+    <string name="privacy_security_body">Solo puedes leer tu propio perfil. Los montos, roles y estados los escribe únicamente el servidor. Una cuenta mantiene una sola sesión activa.</string>
+    <string name="privacy_rights_title">Tus derechos</string>
+    <string name="privacy_rights_body">Puedes solicitar acceso, corrección o eliminación de tus datos personales por los canales oficiales de soporte de PasajeYa!.</string>
 </resources>

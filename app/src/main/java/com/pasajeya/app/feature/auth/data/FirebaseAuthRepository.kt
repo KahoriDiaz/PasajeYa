@@ -82,6 +82,7 @@ class FirebaseAuthRepository @Inject constructor(
         val user = auth.currentUser ?: throw AuthException(AuthFailure.NotSignedIn)
         try {
             user.reload().await()
+            user.getIdToken(true).await()
             return user.toDomain()
         } catch (error: FirebaseAuthException) {
             throw AuthException(error.toFailure())
