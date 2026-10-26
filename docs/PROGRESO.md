@@ -42,3 +42,12 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
   - `.\gradlew assembleDebug` — correcto.
   - `.\gradlew testDebugUnitTest` — correcto (3 pruebas).
   - `npm run emulators:test` — correcto (3 pruebas de reglas y 2 de Functions).
+
+### 2026-10-26 — F1, paso 1: validadores compartidos
+
+- Se agregaron los vectores de correo, contraseña, DNI, nombres, fecha de nacimiento,
+  placa, licencia y clase de licencia en `shared/validation-vectors.json`.
+- Se agregó `shared/common-passwords.json` con más de 100 contraseñas comunes.
+- Se implementaron los validadores equivalentes en Kotlin y TypeScript, ambos probados
+  contra los mismos vectores.
+- Las pruebas de ambos lenguajes pasan.

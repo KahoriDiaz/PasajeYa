@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "referenceDate": "2026-10-26",
+  "email": [
+    { "value": "pasajero@example.com", "valid": true, "reason": "correo normal" },
+    { "value": "operador.ruta1@example.com", "valid": true, "reason": "punto en la parte local" },
+    { "value": "PASAJERO@example.com", "valid": false, "reason": "debe estar en minúsculas" },
+    { "value": "sin-arroba.example.com", "valid": false, "reason": "falta arroba" },
+    { "value": "sin-dominio@", "valid": false, "reason": "falta dominio" },
+    { "value": "@example.com", "valid": false, "reason": "falta parte local" },
+    { "value": "doble..punto@example.com", "valid": false, "reason": "puntos consecutivos" },
+    { "value": ".inicio@example.com", "valid": false, "reason": "inicia con punto" },
+    { "value": "correo@example", "valid": false, "reason": "dominio sin extensión" },
+    { "value": "con espacio@example.com", "valid": false, "reason": "contiene espacio" },
+    { "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.com", "valid": true, "reason": "cien caracteres exactos" },
+    { "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.com", "valid": false, "reason": "más de cien caracteres" }
+  ],
+  "password": [
+    { "value": "Abcdefgh1!", "email": "pasajero@example.com", "valid": true, "reason": "cumple todos los requisitos" },
+    { "value": "Abcdef1!x", "email": "pasajero@example.com", "valid": false, "reason": "nueve caracteres" },
+    { "value": "Abcdefghij1!", "email": "pasajero@example.com", "valid": true, "reason": "doce caracteres" },
+    { "value": "Aa1!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "email": "pasajero@example.com", "valid": true, "reason": "sesenta y cuatro caracteres" },
+    { "value": "Aa1!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "email": "pasajero@example.com", "valid": false, "reason": "sesenta y cinco caracteres" },
+    { "value": "abcdefgh1!", "email": "pasajero@example.com", "valid": false, "reason": "falta mayúscula" },
+    { "value": "ABCDEFGH1!", "email": "pasajero@example.com", "valid": false, "reason": "falta minúscula" },
+    { "value": "Abcdefgh!x", "email": "pasajero@example.com", "valid": false, "reason": "falta número" },
+    { "value": "Abcdefgh12", "email": "pasajero@example.com", "valid": false, "reason": "falta símbolo" },
+    { "value": "Abc defgh1!", "email": "pasajero@example.com", "valid": false, "reason": "contiene espacio" },
+    { "value": "Banana123!", "email": "ana@example.com", "valid": false, "reason": "contiene la parte local del correo" },
+    { "value": "Password123!", "email": "pasajero@example.com", "valid": false, "reason": "está en la lista de contraseñas comunes" },
+    { "value": "12345678", "email": "pasajero@example.com", "valid": false, "reason": "es común y no cumple requisitos" }
+  ],
+  "dni": [
+    { "value": "12345678", "valid": true, "reason": "ocho dígitos" },
+    { "value": "87654321", "valid": true, "reason": "ocho dígitos distintos" },
+    { "value": "1234567", "valid": false, "reason": "siete dígitos" },
+    { "value": "123456789", "valid": false, "reason": "nueve dígitos" },
+    { "value": "1234567a", "valid": false, "reason": "contiene letra" },
+    { "value": "1234 678", "valid": false, "reason": "contiene espacio" },
+    { "value": "00000000", "valid": false, "reason": "todos los dígitos son iguales" },
+    { "value": "11111111", "valid": false, "reason": "todos los dígitos son iguales" },
+    { "value": "", "valid": false, "reason": "vacío" }
+  ],
+  "personName": [
+    { "value": "Ana", "valid": true, "reason": "nombre simple" },
+    { "value": "José María", "valid": true, "reason": "tildes y espacio simple" },
+    { "value": "O'Brien", "valid": true, "reason": "apóstrofe" },
+    { "value": "Ana-Lucía", "valid": true, "reason": "guion" },
+    { "value": "de la Cruz", "valid": true, "reason": "varias palabras" },
+    { "value": "Ñusta", "valid": true, "reason": "eñe" },
+    { "value": "A", "valid": false, "reason": "menos de dos caracteres" },
+    { "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "valid": true, "reason": "cuarenta caracteres" },
+    { "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "valid": false, "reason": "más de cuarenta caracteres" },
+    { "value": "Ana  María", "valid": false, "reason": "espacio doble" },
+    { "value": " Ana", "valid": false, "reason": "espacio inicial" },
+    { "value": "Ana ", "valid": false, "reason": "espacio final" },
+    { "value": "Ana123", "valid": false, "reason": "contiene números" },
+    { "value": "Ana@", "valid": false, "reason": "contiene símbolo no permitido" },
+    { "value": "", "valid": false, "reason": "vacío" }
+  ],
+  "birthDate": [
+    { "value": "2014-10-26", "valid": true, "reason": "exactamente doce años" },
+    { "value": "2014-10-27", "valid": false, "reason": "aún tiene once años" },
+    { "value": "1916-10-26", "valid": true, "reason": "exactamente ciento diez años" },
+    { "value": "1915-10-26", "valid": false, "reason": "ciento once años" },
+    { "value": "2008-02-29", "valid": true, "reason": "fecha bisiesta válida" },
+    { "value": "2025-02-29", "valid": false, "reason": "fecha inexistente" },
+    { "value": "2027-01-01", "valid": false, "reason": "fecha futura" },
+    { "value": "2010-2-3", "valid": false, "reason": "formato distinto de yyyy-MM-dd" },
+    { "value": "03/02/2010", "valid": false, "reason": "formato distinto de yyyy-MM-dd" }
+  ],
+  "plate": [
+    { "value": "ABC123", "valid": true, "normalized": "ABC123", "reason": "placa normal" },
+    { "value": "abc-123", "valid": true, "normalized": "ABC123", "reason": "minúsculas con guion" },
+    { "value": "A1B2C3", "valid": true, "normalized": "A1B2C3", "reason": "letras y números" },
+    { "value": "AB123", "valid": false, "reason": "cinco caracteres" },
+    { "value": "ABC1234", "valid": false, "reason": "siete caracteres" },
+    { "value": "ABC 123", "valid": false, "reason": "contiene espacio" },
+    { "value": "AB-123", "valid": false, "reason": "cinco caracteres tras normalizar" }
+  ],
+  "licenseNumber": [
+    { "value": "Q12345678", "valid": true, "normalized": "Q12345678", "reason": "letra y ocho dígitos" },
+    { "value": "q12345678", "valid": true, "normalized": "Q12345678", "reason": "se normaliza a mayúsculas" },
+    { "value": "12345678", "valid": false, "reason": "falta letra inicial" },
+    { "value": "QQ1234567", "valid": false, "reason": "dos letras iniciales" },
+    { "value": "Q1234567", "valid": false, "reason": "siete dígitos" },
+    { "value": "Q123456789", "valid": false, "reason": "nueve dígitos" },
+    { "value": "Q1234 678", "valid": false, "reason": "contiene espacio" }
+  ],
+  "licenseClass": [
+    { "value": "A-I", "valid": true, "reason": "clase particular" },
+    { "value": "A-IIa", "valid": true, "reason": "clase profesional" },
+    { "value": "A-IIIb", "valid": true, "reason": "transporte público de pasajeros" },
+    { "value": "B-IIc", "valid": true, "reason": "clase de motocicleta" },
+    { "value": "A-1", "valid": false, "reason": "no usa el formato del MTC" },
+    { "value": "a-i", "valid": false, "reason": "debe estar en mayúsculas" },
+    { "value": "Z-I", "valid": false, "reason": "clase inexistente" },
+    { "value": "", "valid": false, "reason": "vacío" }
+  ]
+}

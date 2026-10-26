@@ -28,6 +28,11 @@ android {
         version = release(37)
     }
 
+    sourceSets {
+        getByName("main").assets.srcDir("../shared")
+        getByName("test").resources.srcDir("../shared")
+    }
+
     defaultConfig {
         applicationId = "com.pasajeya.app"
         minSdk = 26
