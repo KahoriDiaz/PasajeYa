@@ -5,4 +5,5 @@ function runNpmTest(prefix) {
 }
 
 runNpmTest("firebase-tests");
+process.env.PASAJEYA_EMULATOR_TESTS = "1";
 runNpmTest("functions");

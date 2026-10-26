@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { getAuth } from "firebase-admin/auth";
 import { FieldValue, getFirestore } from "firebase-admin/firestore";
 import { onCall, HttpsError, type CallableRequest } from "firebase-functions/v2/https";
 import { FUNCTIONS_REGION } from "../config/region.js";
@@ -58,8 +57,6 @@ export async function registerDeviceHandler(
       operatorComplete: operatorSnapshot.exists
     };
   });
-
-  await getAuth().revokeRefreshTokens(uid);
 
   return {
     sessionId,

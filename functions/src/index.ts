@@ -1,5 +1,10 @@
+import { getApps, initializeApp } from "firebase-admin/app";
 import { onRequest } from "firebase-functions/v2/https";
 import { FUNCTIONS_REGION } from "./config/region.js";
+
+if (getApps().length === 0) {
+  initializeApp();
+}
 
 export { FUNCTIONS_REGION };
 

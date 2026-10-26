@@ -55,7 +55,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 ### 2026-10-26 — F1, paso 2: Cloud Functions
 
 - Se implementaron `completeProfile`, `registerOperator` y `registerDevice` con
-  transacciones, `sessionId`, HMAC-SHA256 del DNI y revocación de tokens.
+  transacciones, `sessionId` y HMAC-SHA256 del DNI.
 - Se agregó `assertActiveSession` para las siguientes funcionalidades.
 - Se agregó la configuración de placas, licencias y clases del MTC, la interfaz
   `OperatorVerifier` y el script `seedRoutes`.
@@ -70,3 +70,12 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 - `users_private`, `dniIndex`, `operators`, `vehicles` y `benefitRequests` no tienen
   acceso desde clientes.
 - Todo lo demás queda denegado por defecto.
+
+### 2026-10-26 — F1, paso 4: pruebas de reglas y Functions
+
+- Las reglas Firestore tienen casos permitidos y denegados para cada colección de F1.
+- Las Functions se prueban contra emuladores reales de Auth, Firestore y Functions.
+- Se cubren DNI duplicado, concurrencia, idempotencia, sesión anterior, placas duplicadas,
+  correo sin verificar, roles y datos inválidos.
+- Se inicializa explícitamente la app Admin en las Functions y se mantienen las pruebas
+  unitarias rápidas fuera del emulador.

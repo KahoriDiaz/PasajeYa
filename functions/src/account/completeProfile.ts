@@ -104,10 +104,11 @@ export async function completeProfileHandler(
 
     if (userSnapshot.exists) {
       if (indexSnapshot.exists && indexSnapshot.get("uid") === uid) {
+        const storedRole = userSnapshot.get("role");
         return {
           completed: true,
           alreadyCompleted: true,
-          role
+          role: isUserRole(storedRole) ? storedRole : role
         };
       }
 
@@ -120,7 +121,7 @@ export async function completeProfileHandler(
     if (indexSnapshot.exists) {
       throw new HttpsError(
         "already-exists",
-        "Ese documento ya está registrado."
+        "Ese DNI ya está registrado."
       );
     }
 

@@ -31,4 +31,7 @@ export const COMMON_PASSWORDS: ReadonlySet<string> = new Set(${JSON.stringify(
 `;
 
 await mkdir(dirname(outputPath), { recursive: true });
-await writeFile(outputPath, source, "utf8");
+const current = await readFile(outputPath, "utf8").catch(() => "");
+if (current !== source) {
+  await writeFile(outputPath, source, "utf8");
+}
