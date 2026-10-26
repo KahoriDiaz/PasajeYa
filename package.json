@@ -1,0 +1,14 @@
+{
+  "name": "pasajeya",
+  "private": true,
+  "scripts": {
+    "build:functions": "npm --prefix functions run build",
+    "emulators:start": "npm run build:functions && firebase emulators:start",
+    "test:rules": "firebase emulators:exec --only firestore,auth --project demo-pasajeya \"npm --prefix firebase-tests test\"",
+    "test:functions": "npm run build:functions && firebase emulators:exec --only functions,firestore,auth --project demo-pasajeya \"npm --prefix functions test\"",
+    "emulators:test": "npm run build:functions && firebase emulators:exec --only functions,firestore,auth --project demo-pasajeya \"node scripts/emulator-tests.mjs\""
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.34.1"
+  }
+}

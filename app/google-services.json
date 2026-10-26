@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "832947016404",
+    "project_id": "pasajeya-f150d",
+    "storage_bucket": "pasajeya-f150d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832947016404:android:e7e5ada92438a4dca7e141",
+        "android_client_info": {
+          "package_name": "com.pasajeya.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-GZ0hsaYGd8dmSuFHHY3qKCktoyI6apk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,9 @@
+## Copia este archivo como local.properties y ajusta la ruta del SDK.
+## En Windows, usa barras normales o duplica las barras invertidas.
+
+sdk.dir=C:/Users/USUARIO/AppData/Local/Android/Sdk
+
+# Host de los emuladores de Firebase para la compilación debug.
+# Emulador Android: 10.0.2.2
+# Celular físico: IP local del equipo de desarrollo
+firebase.emulator.host=10.0.2.2

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PasajeYa!</string>
+    <string name="welcome_card_title">Transporte público de Arequipa</string>
+    <string name="welcome_message">La configuración inicial está lista.</string>
+</resources>
