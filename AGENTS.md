@@ -153,10 +153,17 @@ ownerUid
 ```text
 name
 active
+concessionaireId
 stops: [{ name, lat, lng }]
+officialFareCents
+officialUniversityFareCents
+fareSourceUrl
+fareCheckedAt
 ```
 - **Lectura para autenticados**.
 - **Escritura solo con script de administración** (Admin SDK).
+- El resumen oficial se copia desde `data/official-fares.json` al cargar la ruta.
+- **La F3 usa el pasaje oficial de la concesionaria como tope del cálculo.**
 
 ### 4.8 `fareVersions/{versionId}`
 ```text
@@ -165,13 +172,15 @@ fuelIndex
 fuelPriceCurrent
 fuelPriceReference
 minFareCents
-maxFareCents
 roundingStepCents
-isOfficial
+calibrationNote
 createdAt
 ```
 - **Inmutable**.
 - `config/currentFare`: `{ versionId }`.
+- **No existe `maxFareCents` ni `isOfficial`.** El tope sale de la ruta.
+- Valores iniciales provisionales: base 12 céntimos/km, índice 1,00, mínima 50
+  céntimos, paso 5. Se calibran con viajes reales.
 
 ### 4.9 `shifts/{shiftId}`
 ```text
@@ -190,6 +199,8 @@ status
   ```
 - El operador puede **CREAR chunks en su turno activo** (con validación de forma en reglas).
 - **No puede editarlos ni borrarlos**.
+- `shiftLocks/{lockId}` es interno del servidor para impedir dos turnos activos del mismo
+  operador o vehículo. El cliente no tiene acceso.
 
 ### 4.10 `qrNonces/{nonce}`
 ```text
@@ -212,21 +223,41 @@ endedAt
 startLocation
 endLocation
 fareVersionId
+routeFareSnapshot: {
+  officialFareCents
+  officialUniversityFareCents
+  fareSourceUrl
+  fareCheckedAt
+  concessionaireName
+}
 distanceMeters
+usedPoints
+coverage
 fareBreakdown: {
+  distanceMeters
   baseFarePerKmCents
   fuelIndex
-  rawCents
+  calculatedCents
+  officialFareCents
   regularCents
-  benefit: { kind, percent, discountCents }
+  benefit: {
+    kind
+    percent
+    officialUniversityFareCents
+    discountCents
+  }
   totalCents
   capped
+  minApplied
+  fareVersionId
+  concessionaireName
 }
 passengerFirstName
 passengerAge
 ```
 - **Solo servidor escribe**.
 - **Pasajero y operador del viaje pueden leerlo**.
+- La foto de tarifas se guarda en el Tap In y no cambia si luego se actualiza la ruta.
 
 ### 4.12 `claims/{claimId}`
 ```text
@@ -242,12 +273,29 @@ createdAt
 
 ### 4.13 `benefitRequests/{uid}`
 ```text
+stage                // "carne_ok" | "code_sent"
+carneCodeHash
+carneVerifiedAt
 emailHash
 codeHash
 expiresAt
 attempts
+updatedAt
 ```
 - **Solo servidor**.
+- Guárdense únicamente HMAC; nunca la imagen, el texto OCR ni los códigos en claro.
+
+### 4.14 `carneIndex/{hmacCarne}`
+```text
+uid
+```
+- Garantiza **un carné por cuenta**.
+- **Solo servidor**.
+
+### 4.15 Storage `benefitUploads/{uid}/{requestId}.jpg`
+- El dueño puede **subir** un JPEG de máximo 5 MB para su solicitud.
+- **Sin lectura ni borrado desde clientes**.
+- Ciclo de vida de **24 horas**; el servidor borra la imagen en `finally`.
 
 ---
 
