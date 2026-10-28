@@ -5,7 +5,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | ID | Funcionalidad | Estado |
 |---|---|---|
 | F1 | Autenticación y cuentas (pasajero/operador, DNI, contraseña segura, consentimiento, sesión única) | Completado en emulador; pendiente celular real |
-| F2 | Tap In / Tap Out mediante QR | Pendiente |
+| F2 | Tap In / Tap Out mediante QR | Completado en emulador; pendiente celular real |
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
 | F5 | Voz del operador (nombre y edad, nunca DNI) | Pendiente |
@@ -27,9 +27,10 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 - [x] Pasan las pruebas de reglas y de Functions en emulador.
 - [x] Existe `docs/pruebas-manuales-F<N>.md` con casos para celular real.
 
-F1 cumple los cuatro criterios. La ejecución en celular real queda pendiente y sus
-casos están en `docs/pruebas-manuales-F1.md`; las limitaciones conocidas se registran en
-`docs/LIMITACIONES.md`.
+F1 y F2 cumplen los cuatro criterios. La ejecución en celular real queda pendiente y sus
+casos están en `docs/pruebas-manuales-F1.md` y `docs/pruebas-manuales-F2.md`; las
+limitaciones conocidas se registran en `docs/LIMITACIONES.md` y el estado general en
+`docs/ESTADO.md`.
 
 ## Bitácora
 
@@ -118,3 +119,44 @@ casos están en `docs/pruebas-manuales-F1.md`; las limitaciones conocidas se reg
     operador escritos por el servidor.
 - La ruta `routes/TEST-01` se creó solo en el emulador para la prueba de operador; no se
   versiona. Las limitaciones y los casos para celular real quedan documentados.
+
+### 2026-10-26 — F2, paso 1: lógica de GPS y token QR
+
+- Se agregó el cálculo de distancia con Haversine, filtros de precisión (30 m), salto
+  máximo (500 m) y velocidad máxima (33 m/s).
+- El cálculo exige al menos 3 puntos y 60 % de cobertura; si no se cumple, el viaje queda
+  para revisión con `insufficient_gps`.
+- Se agregó la emisión y verificación de tokens QR firmados con HMAC-SHA256, TTL de 60 s y
+  nonce de un solo uso.
+- Las pruebas unitarias de distancia y token pasan.
+
+### 2026-10-26 — F2, paso 2: Cloud Functions y reglas
+
+- Se implementaron `issueQrToken`, `startShift`, `endShift`, `getOperatorContext`,
+  `tapIn`, `tapOut` y `closeStaleTrips`.
+- Un operador solo puede tener un turno activo; un vehículo solo puede tener un turno
+  activo; un pasajero solo puede tener un viaje abierto.
+- `tapIn` valida el token, la sesión y el turno; `tapOut` cierra el viaje y exige que el
+  viaje pertenezca al operador y turno activos.
+- `endShift` deja los viajes abiertos en `requires_review` con `shift_ended`;
+  `closeStaleTrips` corre cada 15 minutos y usa `no_tap_out` para viajes de más de 3 horas.
+- El cliente puede crear chunks GPS de su turno activo, pero no editarlos ni borrarlos.
+  `qrNonces` y `shiftLocks` son inaccesibles desde clientes.
+- Se agregaron índices de Firestore para turnos y viajes.
+- Las 15 pruebas de reglas y las 42 pruebas de Functions en emulador pasan.
+
+### 2026-10-26 — F2, paso 3: app Android
+
+- El pasajero ve su QR, la cuenta regresiva, el aviso offline y el viaje en curso.
+- El operador inicia y termina turno, escanea QR con CameraX + ML Kit, ve la lista de
+  pasajeros a bordo y puede hacer Tap Out.
+- El servicio en primer plano recolecta GPS cada 5 s (15 s si está detenido), envía chunks
+  de hasta 30 puntos cada 30 s y se detiene al terminar el turno.
+- Se añadieron permisos de cámara, ubicación y notificaciones, y las pantallas de error,
+  carga y vacío correspondientes.
+- Verificación ejecutada:
+  - `.\gradlew assembleDebug` — correcto.
+  - `.\gradlew testDebugUnitTest` — correcto (22 pruebas).
+  - `npm run emulators:test` — correcto (42 pruebas de Functions; reglas incluidas).
+- La validación en dos celulares reales queda pendiente en
+  `docs/pruebas-manuales-F2.md`.
