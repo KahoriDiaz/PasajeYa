@@ -12,6 +12,16 @@ export { completeProfile } from "./account/completeProfile.js";
 export { registerDevice } from "./account/registerDevice.js";
 export { registerOperator } from "./operator/registerOperator.js";
 export { assertActiveSession } from "./sessions/activeSession.js";
+export { closeStaleTrips } from "./trip/closeStaleTrips.js";
+export { endShift } from "./trip/endShift.js";
+export { getOperatorContext } from "./trip/getOperatorContext.js";
+export { issueQrToken } from "./trip/issueQrToken.js";
+export { startShift } from "./trip/startShift.js";
+export { tapIn } from "./trip/tapIn.js";
+export { tapOut } from "./trip/tapOut.js";
+export { publishFareVersion } from "./fare/publishFareVersion.js";
+export { calibrateFare } from "./fare/calibrateFare.js";
+export { estimateFare } from "./trip/estimateFare.js";
 
 export interface HealthPayload {
   status: "ok";
