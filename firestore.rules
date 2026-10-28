@@ -21,7 +21,17 @@ service cloud.firestore {
     }
 
     match /routes/{routeId} {
-      allow read: if signedIn();
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    match /fareVersions/{versionId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    match /config/{docId} {
+      allow read: if request.auth != null;
       allow write: if false;
     }
 
@@ -42,6 +52,66 @@ service cloud.firestore {
     }
 
     match /benefitRequests/{uid} {
+      allow read, write: if false;
+    }
+
+    function isShiftOperator(shiftId) {
+      return signedIn() &&
+        get(/databases/$(database)/documents/shifts/$(shiftId)).data.operatorUid ==
+          request.auth.uid;
+    }
+
+    function isActiveShift(shiftId) {
+      return get(/databases/$(database)/documents/shifts/$(shiftId)).data.status ==
+        "active";
+    }
+
+    function validPoint(point) {
+      return point.keys().hasOnly(["lat", "lng", "acc", "t"]) &&
+        point.lat is number && point.lat >= -90 && point.lat <= 90 &&
+        point.lng is number && point.lng >= -180 && point.lng <= 180 &&
+        point.acc is number && point.acc >= 0 && point.acc <= 500 &&
+        (point.t is timestamp || point.t is number);
+    }
+
+    function validChunk(data) {
+      return data.keys().hasOnly(["points", "from", "to"]) &&
+        data.points is list &&
+        data.points.size() >= 1 &&
+        data.points.size() <= 30 &&
+        data.from is timestamp &&
+        data.to is timestamp &&
+        data.from <= data.to &&
+        validPoint(data.points[0]) &&
+        validPoint(data.points[data.points.size() - 1]);
+    }
+
+    match /shifts/{shiftId} {
+      allow read: if signedIn() && resource.data.operatorUid == request.auth.uid;
+      allow write: if false;
+
+      match /chunks/{chunkId} {
+        allow read: if isShiftOperator(shiftId);
+        allow create: if isShiftOperator(shiftId) &&
+          isActiveShift(shiftId) &&
+          validChunk(request.resource.data) &&
+          request.resource.data.points.size() <= 30;
+        allow update, delete: if false;
+      }
+    }
+
+    match /trips/{tripId} {
+      allow read: if signedIn() &&
+        (resource.data.passengerUid == request.auth.uid ||
+          resource.data.operatorUid == request.auth.uid);
+      allow write: if false;
+    }
+
+    match /qrNonces/{nonce} {
+      allow read, write: if false;
+    }
+
+    match /shiftLocks/{lockId} {
       allow read, write: if false;
     }
 
