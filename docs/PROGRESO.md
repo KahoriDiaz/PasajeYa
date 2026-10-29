@@ -8,7 +8,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F2 | Tap In / Tap Out mediante QR | Completado en emulador; pendiente celular real |
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
-| F5 | Voz del operador (nombre y edad, nunca DNI) | En progreso (paso 1 de 5) |
+| F5 | Voz del operador (nombre y edad, nunca DNI) | En progreso (paso 2 de 5) |
 | F6 | Historial de viajes | Pendiente |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
 
@@ -196,3 +196,15 @@ limitaciones conocidas se registran en `docs/LIMITACIONES.md` y el estado genera
 - Si el nombre queda vacío, devuelve `null` para que el ViewModel muestre el aviso visual
   sin reproducir voz.
 - Verificación ejecutada: `.\gradlew testDebugUnitTest` — correcto.
+
+### 2026-10-29 — F5, paso 2: servicio de voz y preferencia
+
+- Se agregó la interfaz `SpeechAnnouncer` y la implementación `AndroidSpeechAnnouncer`
+  sobre `TextToSpeech`, con inicialización asíncrona y tiempo máximo de espera.
+- Selecciona `es-PE`, con respaldo `es-US` y `es-ES`; devuelve `false` si el motor no
+  tiene voz disponible o falla la inicialización.
+- Usa `QUEUE_ADD` para respetar el orden de dos Tap In seguidos, el canal de medios del
+  sistema y libera el motor con `release()`.
+- Se agregó la preferencia `voice_enabled` en DataStore, activada por defecto.
+- Verificación ejecutada: `.\gradlew compileDebugKotlin` y
+  `.\gradlew testDebugUnitTest` — correctos.
