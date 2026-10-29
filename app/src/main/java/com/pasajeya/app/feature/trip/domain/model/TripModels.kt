@@ -9,7 +9,8 @@ data class FareBenefit(
     val kind: String,
     val percent: Int,
     val officialUniversityFareCents: Int,
-    val discountCents: Int
+    val discountCents: Int,
+    val isStudent: Boolean = false
 )
 
 data class FareBreakdown(

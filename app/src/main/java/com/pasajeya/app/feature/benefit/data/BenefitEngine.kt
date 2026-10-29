@@ -16,7 +16,8 @@ object BenefitEngine {
      */
     fun applyUniversityBenefit(breakdown: FareBreakdown): Int {
         val benefit = breakdown.benefit
-        if (benefit != null && benefit.kind == "university" && benefit.percent == 50) {
+        val isUniversity = benefit != null && benefit.kind == "university" && benefit.percent == 50
+        if (isUniversity || (benefit?.isStudent ?: false)) {
             // Descuento del 50 % sobre el total
             return (breakdown.totalCents / 2)
         }

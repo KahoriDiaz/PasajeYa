@@ -5,5 +5,6 @@ data class Benefit(
     val percent: Int, // ej. 50 para 50%
     val officialUniversityFareCents: Int,
     val discountCents: Int,
-    val validUntil: Long? // opcional
+    val validUntil: Long?,
+    val isStudent: Boolean = false
 )

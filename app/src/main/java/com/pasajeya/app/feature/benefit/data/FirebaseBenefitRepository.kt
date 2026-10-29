@@ -40,7 +40,8 @@ class FirebaseBenefitRepository @Inject constructor(
                         percent = if (approved) 50 else 0,
                         officialUniversityFareCents = 0,
                         discountCents = 0,
-                        validUntil = snapshot.getLong("validUntil")
+                        validUntil = snapshot.getLong("validUntil"),
+                        isStudent = snapshot.getBoolean("isStudent") ?: false
                     )
                     trySend(benefit)
                 } else {

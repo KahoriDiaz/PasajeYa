@@ -11,6 +11,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -40,6 +41,16 @@ fun VerificationScreen(
 
     LaunchedEffect(viewModel) {
         viewModel.events.collect(onNavigate)
+    }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(3000)
+            val currentState = viewModel.uiState.value
+            if (currentState.hasUser && !currentState.isLoadingUser) {
+                viewModel.checkVerification()
+            }
+        }
     }
 
     val errorText = when {
