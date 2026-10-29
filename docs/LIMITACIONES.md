@@ -1,7 +1,7 @@
 # Limitaciones conocidas
 
-Registro de limitaciones de F1 y del entorno. Cada una indica qué falta y qué interfaz
-queda preparada para la fuente real.
+Registro de limitaciones de F1, F2, F5 y del entorno. Cada una indica qué falta y qué
+interfaz queda preparada para la fuente real.
 
 ## Datos y verificación
 
@@ -40,6 +40,18 @@ queda preparada para la fuente real.
 - **Operador en el cliente:** el cliente no puede leer `operators/{uid}`. El inicio del
   operador muestra un estado genérico de revisión y no refleja cambios posteriores de
   estado hasta que una funcionalidad futura agregue una callable de consulta.
+
+## Voz (F5)
+
+- **Motor y datos del sistema:** la voz depende de un motor TextToSpeech y de datos en
+  español instalados en el celular. Si no están disponibles, la app mantiene el nombre y
+  la edad en pantalla, muestra un aviso y ofrece abrir la instalación de datos de voz.
+- **Audio no garantizado:** el aviso usa el canal multimedia y no modifica el volumen ni
+  el modo No molestar. El operador debe configurar ambos; la app no puede confirmar que el
+  sonido se haya escuchado.
+- **Contenido limitado:** solo se anuncia el primer nombre y la edad. Si el servidor no
+  entrega una edad o el nombre queda vacío tras el saneo, se omite la voz y se muestra el
+  aviso visual; no se usa el DNI como respaldo.
 
 ## Operación y emuladores
 

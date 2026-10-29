@@ -8,7 +8,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F2 | Tap In / Tap Out mediante QR | Completado en emulador; pendiente celular real |
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
-| F5 | Voz del operador (nombre y edad, nunca DNI) | En progreso (paso 4 de 5) |
+| F5 | Voz del operador (nombre y edad, nunca DNI) | Completado en emulador; pendiente celular real |
 | F6 | Historial de viajes | Pendiente |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
 
@@ -27,10 +27,10 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 - [x] Pasan las pruebas de reglas y de Functions en emulador.
 - [x] Existe `docs/pruebas-manuales-F<N>.md` con casos para celular real.
 
-F1 y F2 cumplen los cuatro criterios. La ejecución en celular real queda pendiente y sus
-casos están en `docs/pruebas-manuales-F1.md` y `docs/pruebas-manuales-F2.md`; las
-limitaciones conocidas se registran en `docs/LIMITACIONES.md` y el estado general en
-`docs/ESTADO.md`.
+F1, F2 y F5 cumplen los cuatro criterios. La ejecución en celular real queda pendiente y
+sus casos están en `docs/pruebas-manuales-F1.md`, `docs/pruebas-manuales-F2.md` y
+`docs/pruebas-manuales-F5.md`; las limitaciones conocidas se registran en
+`docs/LIMITACIONES.md` y el estado general en `docs/ESTADO.md`.
 
 ## Bitácora
 
@@ -232,3 +232,16 @@ limitaciones conocidas se registran en `docs/LIMITACIONES.md` y el estado genera
 - Verificación ejecutada:
   - `.\gradlew testDebugUnitTest` — correcto (36 pruebas).
   - `npm run emulators:test` — correcto (16 pruebas de reglas y 74 de Functions).
+
+### 2026-10-29 — F5, paso 5: pruebas manuales y cierre
+
+- Se agregó `docs/pruebas-manuales-F5.md` con casos para anuncio en Tap In, dos pasajeros
+  consecutivos, preferencia apagada, botón de prueba, motor de voz no disponible, volumen
+  e idioma, privacidad y accesibilidad.
+- El documento exige revisar que la pantalla, la voz, los logs y la respuesta de `tapIn`
+  no expongan el DNI.
+- Verificación ejecutada:
+  - `.\gradlew assembleDebug` — correcto (aviso de compileSdk 37 no probado con AGP 9.1.0).
+  - `.\gradlew testDebugUnitTest` — correcto (36 pruebas).
+  - `npm run emulators:test` — correcto (16 pruebas de reglas y 74 de Functions).
+- La validación en un celular real queda pendiente en `docs/pruebas-manuales-F5.md`.
