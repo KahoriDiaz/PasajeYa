@@ -8,7 +8,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F2 | Tap In / Tap Out mediante QR | Completado en emulador; pendiente celular real |
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
-| F5 | Voz del operador (nombre y edad, nunca DNI) | Pendiente |
+| F5 | Voz del operador (nombre y edad, nunca DNI) | En progreso (paso 1 de 5) |
 | F6 | Historial de viajes | Pendiente |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
 
@@ -173,3 +173,26 @@ limitaciones conocidas se registran en `docs/LIMITACIONES.md` y el estado genera
   - `.\gradlew assembleDebug` — correcto (aviso de compileSdk 37 no probado con AGP 9.1.0).
   - `.\gradlew testDebugUnitTest` — correcto.
   - `npm run emulators:test` — correcto (15 pruebas de reglas y 72 de Functions).
+
+### 2026-10-29 — Arranque robusto del emulador de Functions
+
+- El emulador de Functions fallaba de forma intermitente al descubrir los triggers con
+  `Cannot determine backend specification. Timeout after 10000`, lo que hacía que las
+  callables respondieran 404.
+- Se agregó un lanzador común que define `FUNCTIONS_DISCOVERY_TIMEOUT=60` y
+  `FUNCTIONS_EMULATOR_TIMEOUT_SECONDS=60` antes de iniciar Firebase Emulator Suite.
+  La variable relevante para el descubrimiento es `FUNCTIONS_DISCOVERY_TIMEOUT`.
+- `emulators:start`, `test:functions` y `emulators:test` usan el lanzador; el runner de
+  pruebas también aplica los mismos valores a los procesos hijos.
+- Verificación ejecutada: `npm run emulators:test` — correcto (15 pruebas de reglas y
+  72 pruebas de Functions).
+
+### 2026-10-29 — F5, paso 1: formateador del aviso de voz
+
+- Se agregó `VoiceAnnouncementFormatter` en `feature/voice/domain`.
+- Construye el texto con el primer nombre y la edad: `"Ana, 21 años"` y `"Ana, 1 año"`.
+- Sanea números y símbolos, conserva letras con tilde y ñ, aplica mayúscula inicial y
+  recorta el nombre a 20 caracteres.
+- Si el nombre queda vacío, devuelve `null` para que el ViewModel muestre el aviso visual
+  sin reproducir voz.
+- Verificación ejecutada: `.\gradlew testDebugUnitTest` — correcto.
