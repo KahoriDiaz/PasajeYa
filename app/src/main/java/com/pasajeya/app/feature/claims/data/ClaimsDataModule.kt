@@ -1,22 +1,19 @@
 package com.pasajeya.app.feature.claims.data
 
+import com.pasajeya.app.feature.claims.domain.ClaimRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import hilt.android.lifecycle.ProvidesAndroidViewModel
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@Singleton
-object ClaimsDataModule {
+@InstallIn(SingletonComponent::class)
+abstract class ClaimsDataModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideClaimRepository(): ClaimRepository = FirebaseClaimRepository()
-
-    @Provides
-    @Singleton
-    @HiltViewModel
-    fun provideClaimViewModel(): ClaimViewModel = ClaimViewModel(
-        claimRepository = provideClaimRepository()
-    )
+    abstract fun bindClaimRepository(
+        impl: FirebaseClaimRepository
+    ): ClaimRepository
 }

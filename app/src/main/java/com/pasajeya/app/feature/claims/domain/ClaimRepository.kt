@@ -1,13 +1,9 @@
 package com.pasajeya.app.feature.claims.domain
 
-import com.pasajeya.app.feature.claims.domain.Claim
-import io.reactivex.rxjava3.core.Flowable
-import kotlinx.coroutines.SuspendCancellation
+import kotlinx.coroutines.flow.Flow
 
 interface ClaimRepository {
-    suspend fun submitClaim(claim: Claim): Unit
-
-    suspend fun observeClaimByTripId(tripId: String): Flowable<Claim>
-
-    suspend fun observePassengerClaims(passengerId: String): Flowable<List<Claim>>
+    suspend fun submitClaim(claim: Claim): Result<Unit>
+    fun observeClaimByTripId(tripId: String): Flow<Claim?>
+    fun observePassengerClaims(passengerId: String): Flow<List<Claim>>
 }

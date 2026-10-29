@@ -2,17 +2,21 @@ package com.pasajeya.app.feature.claims.data
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pasajeya.app.feature.claims.domain.Claim
-import kotlinx.coroutines.flow.Flowable
-import kotlinx.coroutines.flow.flowable
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import com.pasajeya.app.feature.claims.domain.ClaimRepository
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class FirebaseClaimRepository @Inject constructor(
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val firestore: FirebaseFirestore
 ) : ClaimRepository {
 
-    override suspend fun submitClaim(claim: Claim) {
-        val claimData = mapOf(
+    override suspend fun submitClaim(claim: Claim): Result<Unit> = runCatching {
+        val claimData = hashMapOf(
             "tripId" to claim.tripId,
             "passengerId" to claim.passengerId,
             "operatorId" to claim.operatorId,
@@ -21,31 +25,41 @@ class FirebaseClaimRepository @Inject constructor(
             "status" to claim.status,
             "refundAmountCents" to claim.refundAmountCents,
             "resolutionNotes" to claim.resolutionNotes,
-            "createdAt" to claim.createdAt,
+            "createdAt" to (claim.createdAt ?: System.currentTimeMillis()),
             "resolvedAt" to claim.resolvedAt
         )
-        firestore.collection("claims").add(claimData)
+        firestore.collection("claims").add(claimData).await()
     }
 
-    override suspend fun observeClaimByTripId(tripId: String): Flowable<Claim> {
-        // TODO: Implement Firestore snapshot listener returning Flowable<Claim>
-        return flowable { emitClaim(tripId) }
+    override fun observeClaimByTripId(tripId: String): Flow<Claim?> = callbackFlow {
+        val listener = firestore.collection("claims")
+            .whereEqualTo("tripId", tripId)
+            .limit(1)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(null)
+                    return@addSnapshotListener
+                }
+                val doc = snapshot?.documents?.firstOrNull()
+                val claim = doc?.toObject(Claim::class.java)?.copy(claimId = doc.id)
+                trySend(claim)
+            }
+        awaitClose { listener.remove() }
     }
 
-    override suspend fun observePassengerClaims(passengerId: String): Flowable<List<Claim>> {
-        // TODO: Implement Firestore query returning Flowable<List<Claim>>
-        return flowable { emitPassengerClaims(passengerId) }
-    }
-
-    private fun emitClaim(tripId: String) {
-        // Placeholder: emit a Claim object from Firestore snapshot
-        // In a real implementation, attach a snapshot listener and emit the parsed Claim.
-        if (isActive) {
-            // Emit nothing for now; real impl would emit parsed Claim from snapshot
-        }
-    }
-
-    private fun emitPassengerClaims(passengerId: String) {
-        // Placeholder
+    override fun observePassengerClaims(passengerId: String): Flow<List<Claim>> = callbackFlow {
+        val listener = firestore.collection("claims")
+            .whereEqualTo("passengerId", passengerId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(emptyList())
+                    return@addSnapshotListener
+                }
+                val claims = snapshot?.documents?.mapNotNull { doc ->
+                    doc.toObject(Claim::class.java)?.copy(claimId = doc.id)
+                } ?: emptyList()
+                trySend(claims)
+            }
+        awaitClose { listener.remove() }
     }
 }
