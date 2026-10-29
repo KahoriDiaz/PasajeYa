@@ -105,7 +105,7 @@ fun HistoryScreen(
 }
 
 @Composable
-internal fun HistoryContent(
+fun HistoryContent(
     state: HistoryUiState,
     onFilterSelected: (HistoryFilter) -> Unit,
     onRetry: () -> Unit,

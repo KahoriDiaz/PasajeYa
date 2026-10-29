@@ -14,6 +14,7 @@ object HistoryDateFormatter {
 
     fun format(millis: Long): String {
         val text = formatter.format(Instant.ofEpochMilli(millis))
+            .replace(".", "")
         return text.replaceFirstChar { character ->
             if (character.isLowerCase()) {
                 character.titlecase(spanishPeru)
