@@ -12,6 +12,7 @@ import com.pasajeya.app.feature.auth.domain.model.UserRole
 import com.pasajeya.app.feature.trip.domain.TripPosition
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.EndShiftResult
+import com.pasajeya.app.feature.trip.domain.model.FareBreakdown
 import com.pasajeya.app.feature.trip.domain.model.OperatorContext
 import com.pasajeya.app.feature.trip.domain.model.QrToken
 import com.pasajeya.app.feature.trip.domain.model.Shift
@@ -22,6 +23,7 @@ import com.pasajeya.app.feature.trip.domain.model.TripOperationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 class FakeAuthRepository(
     private val user: AuthUser?
@@ -96,6 +98,7 @@ class FakeAccountRepository(
 
 class FakeTripRepository : TripRepository {
     val activeTrip = MutableStateFlow<Trip?>(null)
+    val trips = MutableStateFlow<Map<String, Trip>>(emptyMap())
     val activeShift = MutableStateFlow<Shift?>(null)
     val openTrips = MutableStateFlow<List<Trip>>(emptyList())
 
@@ -127,6 +130,8 @@ class FakeTripRepository : TripRepository {
     }
 
     override fun observeActiveTrip(passengerUid: String): Flow<Trip?> = activeTrip
+
+    override fun observeTrip(tripId: String): Flow<Trip?> = trips.map { it[tripId] }
 
     override suspend fun loadRouteName(routeId: String): String = "Ruta 1"
 
@@ -187,6 +192,27 @@ class FakeTripRepository : TripRepository {
             status = "closed",
             distanceMeters = 1_200.0,
             requiresReview = false
+        )
+    }
+
+    override suspend fun estimateFare(
+        sessionId: String,
+        routeId: String,
+        boardingStopIndex: Int,
+        alightingStopIndex: Int
+    ): FareBreakdown {
+        return FareBreakdown(
+            distanceMeters = 5000.0,
+            baseFarePerKmCents = 12,
+            fuelIndex = 1.0,
+            calculatedCents = 60,
+            officialFareCents = 130,
+            regularCents = 60,
+            benefit = null,
+            totalCents = 60,
+            capped = false,
+            minApplied = false,
+            fareVersionId = "v1"
         )
     }
 }

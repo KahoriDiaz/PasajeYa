@@ -1,6 +1,7 @@
 package com.pasajeya.app.feature.trip.domain
 
 import com.pasajeya.app.feature.trip.domain.model.EndShiftResult
+import com.pasajeya.app.feature.trip.domain.model.FareBreakdown
 import com.pasajeya.app.feature.trip.domain.model.OperatorContext
 import com.pasajeya.app.feature.trip.domain.model.QrToken
 import com.pasajeya.app.feature.trip.domain.model.Shift
@@ -19,6 +20,8 @@ interface TripRepository {
     suspend fun issueQrToken(sessionId: String): QrToken
 
     fun observeActiveTrip(passengerUid: String): Flow<Trip?>
+
+    fun observeTrip(tripId: String): Flow<Trip?>
 
     suspend fun loadRouteName(routeId: String): String?
 
@@ -44,4 +47,11 @@ interface TripRepository {
         tripId: String,
         position: TripPosition
     ): TapOutResult
+
+    suspend fun estimateFare(
+        sessionId: String,
+        routeId: String,
+        boardingStopIndex: Int,
+        alightingStopIndex: Int
+    ): FareBreakdown
 }

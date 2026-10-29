@@ -9,9 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.pasajeya.app.R
 import com.pasajeya.app.feature.auth.domain.model.AuthDestination
 import com.pasajeya.app.feature.auth.ui.forgot.ForgotPasswordScreen
@@ -26,6 +28,8 @@ import com.pasajeya.app.feature.auth.ui.register.RegisterScreen
 import com.pasajeya.app.feature.auth.ui.role.RoleSelectionScreen
 import com.pasajeya.app.feature.auth.ui.verification.VerificationScreen
 import com.pasajeya.app.feature.auth.ui.welcome.WelcomeScreen
+import com.pasajeya.app.feature.fare.ui.FareEstimateScreen
+import com.pasajeya.app.feature.trip.ui.summary.TripSummaryScreen
 
 object AppRoutes {
     const val WELCOME = "welcome"
@@ -40,6 +44,8 @@ object AppRoutes {
     const val OPERATOR_DETAILS = "operator_details"
     const val OPERATOR_HOME = "operator_home"
     const val PRIVACY_POLICY = "privacy_policy"
+    const val FARE_ESTIMATE = "fare_estimate"
+    const val TRIP_SUMMARY = "trip_summary/{tripId}"
 }
 
 fun routeFor(destination: AuthDestination): String = when (destination) {
@@ -168,15 +174,41 @@ fun AppNavHost(
         }
 
         composable(AppRoutes.PASSENGER_HOME) {
-            PassengerHomeScreen(onNavigate = ::navigateTo)
+            PassengerHomeScreen(
+                onNavigate = ::navigateTo,
+                onEstimate = { navController.navigate(AppRoutes.FARE_ESTIMATE) },
+                onTripFinished = { tripId ->
+                    navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
+                }
+            )
         }
 
         composable(AppRoutes.OPERATOR_HOME) {
-            OperatorHomeScreen(onNavigate = ::navigateTo)
+            OperatorHomeScreen(
+                onNavigate = ::navigateTo,
+                onTripFinished = { tripId ->
+                    navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
+                }
+            )
         }
 
         composable(AppRoutes.PRIVACY_POLICY) {
             PrivacyPolicyScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(AppRoutes.FARE_ESTIMATE) {
+            FareEstimateScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = AppRoutes.TRIP_SUMMARY,
+            arguments = listOf(navArgument("tripId") { type = NavType.StringType })
+        ) {
+            TripSummaryScreen(
                 onBack = { navController.popBackStack() }
             )
         }

@@ -5,6 +5,27 @@ data class QrToken(
     val expiresAtMillis: Long
 )
 
+data class FareBenefit(
+    val kind: String,
+    val percent: Int,
+    val officialUniversityFareCents: Int,
+    val discountCents: Int
+)
+
+data class FareBreakdown(
+    val distanceMeters: Double,
+    val baseFarePerKmCents: Int,
+    val fuelIndex: Double,
+    val calculatedCents: Int,
+    val officialFareCents: Int,
+    val regularCents: Int,
+    val benefit: FareBenefit?,
+    val totalCents: Int,
+    val capped: Boolean,
+    val minApplied: Boolean,
+    val fareVersionId: String
+)
+
 data class Trip(
     val id: String,
     val passengerUid: String,
@@ -17,7 +38,8 @@ data class Trip(
     val endedAtMillis: Long?,
     val distanceMeters: Double,
     val passengerFirstName: String,
-    val passengerAge: Int?
+    val passengerAge: Int?,
+    val fareBreakdown: FareBreakdown? = null
 )
 
 data class Shift(
@@ -48,7 +70,8 @@ data class TapOutResult(
     val tripId: String,
     val status: String,
     val distanceMeters: Double,
-    val requiresReview: Boolean
+    val requiresReview: Boolean,
+    val fareBreakdown: FareBreakdown? = null
 )
 
 data class EndShiftResult(

@@ -13,8 +13,11 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -41,6 +44,9 @@ class PassengerQrViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(PassengerQrUiState())
     val uiState: StateFlow<PassengerQrUiState> = _uiState.asStateFlow()
+
+    private val _tripFinishedEvents = MutableSharedFlow<String>()
+    val tripFinishedEvents: SharedFlow<String> = _tripFinishedEvents.asSharedFlow()
 
     private var tokenJob: Job? = null
     private var tripJob: Job? = null
@@ -75,11 +81,15 @@ class PassengerQrViewModel @Inject constructor(
                     if (error is CancellationException) throw error
                 }
                 .collect { trip ->
-                    val previousRouteId = _uiState.value.trip?.let { current ->
-                        if (current.id == trip?.id) current.routeId else null
-                    }
+                    val previousTrip = _uiState.value.trip
                     _uiState.update { it.copy(trip = trip) }
-                    if (trip != null && trip.routeId != previousRouteId) {
+                    
+                    if (previousTrip != null && trip == null) {
+                        // El viaje se cerró
+                        _tripFinishedEvents.emit(previousTrip.id)
+                    }
+
+                    if (trip != null && trip.routeId != previousTrip?.routeId) {
                         val name = tripRepository.loadRouteName(trip.routeId)
                         _uiState.update { current ->
                             if (current.trip?.id == trip.id) {

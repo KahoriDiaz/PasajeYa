@@ -15,6 +15,8 @@ import com.pasajeya.app.feature.trip.ui.passenger.PassengerTripContent
 @Composable
 fun PassengerHomeScreen(
     onNavigate: (AuthDestination) -> Unit,
+    onEstimate: () -> Unit,
+    onTripFinished: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
     tripViewModel: PassengerQrViewModel = hiltViewModel()
@@ -25,12 +27,17 @@ fun PassengerHomeScreen(
         viewModel.events.collect(onNavigate)
     }
 
+    LaunchedEffect(tripViewModel) {
+        tripViewModel.tripFinishedEvents.collect(onTripFinished)
+    }
+
     PassengerTripContent(
         displayName = state.displayName,
         email = state.email,
         profileLoading = state.isLoading,
         profileError = state.hasError,
         onLogout = viewModel::logout,
+        onEstimate = onEstimate,
         viewModel = tripViewModel,
         modifier = modifier
     )
@@ -39,6 +46,7 @@ fun PassengerHomeScreen(
 @Composable
 fun OperatorHomeScreen(
     onNavigate: (AuthDestination) -> Unit,
+    onTripFinished: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
     tripViewModel: OperatorTripViewModel = hiltViewModel()
@@ -47,6 +55,10 @@ fun OperatorHomeScreen(
 
     LaunchedEffect(viewModel) {
         viewModel.events.collect(onNavigate)
+    }
+
+    LaunchedEffect(tripViewModel) {
+        tripViewModel.tripFinishedEvents.collect(onTripFinished)
     }
 
     OperatorTripContent(

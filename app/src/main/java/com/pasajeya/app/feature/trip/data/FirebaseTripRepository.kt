@@ -8,6 +8,8 @@ import com.google.firebase.functions.FirebaseFunctionsException
 import com.pasajeya.app.feature.trip.domain.TripPosition
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.EndShiftResult
+import com.pasajeya.app.feature.trip.domain.model.FareBenefit
+import com.pasajeya.app.feature.trip.domain.model.FareBreakdown
 import com.pasajeya.app.feature.trip.domain.model.OperatorContext
 import com.pasajeya.app.feature.trip.domain.model.QrToken
 import com.pasajeya.app.feature.trip.domain.model.Shift
@@ -47,6 +49,19 @@ class FirebaseTripRepository @Inject constructor(
                     return@addSnapshotListener
                 }
                 trySend(snapshot?.documents?.firstOrNull()?.toTrip())
+            }
+        awaitClose { registration.remove() }
+    }
+
+    override fun observeTrip(tripId: String): Flow<Trip?> = callbackFlow {
+        val registration = firestore.collection("trips")
+            .document(tripId)
+            .addSnapshotListener(MetadataChanges.EXCLUDE) { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                trySend(snapshot?.toTrip())
             }
         awaitClose { registration.remove() }
     }
@@ -169,12 +184,36 @@ class FirebaseTripRepository @Inject constructor(
                 "accuracy" to position.accuracy
             )
         )
+        val fareBreakdownData = data["fareBreakdown"] as? Map<*, *>
         return TapOutResult(
             tripId = data.string("tripId"),
             status = data.string("status"),
             distanceMeters = data.doubleOrNull("distanceMeters") ?: 0.0,
-            requiresReview = data["requiresReview"] == true
+            requiresReview = data["requiresReview"] == true,
+            fareBreakdown = fareBreakdownData?.let { 
+                @Suppress("UNCHECKED_CAST")
+                (it as Map<String, Any?>).toFareBreakdown() 
+            }
         )
+    }
+
+    override suspend fun estimateFare(
+        sessionId: String,
+        routeId: String,
+        boardingStopIndex: Int,
+        alightingStopIndex: Int
+    ): FareBreakdown {
+        val data = call(
+            "estimateFare",
+            mapOf(
+                "sessionId" to sessionId,
+                "routeId" to routeId,
+                "boardingStopIndex" to boardingStopIndex,
+                "alightingStopIndex" to alightingStopIndex
+            )
+        )
+        return (data as Map<String, Any?>).toFareBreakdown() 
+            ?: throw TripOperationException("No se pudo obtener la estimación.")
     }
 
     private suspend fun call(
@@ -218,6 +257,7 @@ class FirebaseTripRepository @Inject constructor(
 
 private fun DocumentSnapshot.toTrip(): Trip? {
     if (!exists()) return null
+    val fareBreakdownData = get("fareBreakdown") as? Map<*, *>
     return Trip(
         id = id,
         passengerUid = getString("passengerUid").orEmpty(),
@@ -230,7 +270,37 @@ private fun DocumentSnapshot.toTrip(): Trip? {
         endedAtMillis = getTimestamp("endedAt")?.toDate()?.time,
         distanceMeters = getDouble("distanceMeters") ?: 0.0,
         passengerFirstName = getString("passengerFirstName").orEmpty(),
-        passengerAge = getLong("passengerAge")?.toInt()
+        passengerAge = getLong("passengerAge")?.toInt(),
+        fareBreakdown = fareBreakdownData?.let { 
+            @Suppress("UNCHECKED_CAST")
+            (it as Map<String, Any?>).toFareBreakdown() 
+        }
+    )
+}
+
+private fun Map<String, Any?>.toFareBreakdown(): FareBreakdown? {
+    val benefitData = this["benefit"] as? Map<*, *>
+    return FareBreakdown(
+        distanceMeters = doubleOrNull("distanceMeters") ?: 0.0,
+        baseFarePerKmCents = longOrNull("baseFarePerKmCents")?.toInt() ?: 0,
+        fuelIndex = doubleOrNull("fuelIndex") ?: 1.0,
+        calculatedCents = longOrNull("calculatedCents")?.toInt() ?: 0,
+        officialFareCents = longOrNull("officialFareCents")?.toInt() ?: 0,
+        regularCents = longOrNull("regularCents")?.toInt() ?: 0,
+        benefit = benefitData?.let {
+            @Suppress("UNCHECKED_CAST")
+            val b = it as Map<String, Any?>
+            FareBenefit(
+                kind = b.string("kind"),
+                percent = b.longOrNull("percent")?.toInt() ?: 0,
+                officialUniversityFareCents = b.longOrNull("officialUniversityFareCents")?.toInt() ?: 0,
+                discountCents = b.longOrNull("discountCents")?.toInt() ?: 0
+            )
+        },
+        totalCents = longOrNull("totalCents")?.toInt() ?: 0,
+        capped = this["capped"] == true,
+        minApplied = this["minApplied"] == true,
+        fareVersionId = string("fareVersionId")
     )
 }
 

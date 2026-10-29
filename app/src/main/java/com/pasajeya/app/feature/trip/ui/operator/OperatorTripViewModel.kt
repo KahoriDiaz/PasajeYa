@@ -19,8 +19,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -79,6 +82,9 @@ class OperatorTripViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(OperatorTripUiState())
     val uiState: StateFlow<OperatorTripUiState> = _uiState.asStateFlow()
+
+    private val _tripFinishedEvents = MutableSharedFlow<String>()
+    val tripFinishedEvents: SharedFlow<String> = _tripFinishedEvents.asSharedFlow()
 
     private val scanGate = QrScanGate()
     private var shiftJob: Job? = null
@@ -281,6 +287,9 @@ class OperatorTripViewModel @Inject constructor(
                             passengerName = trip.passengerFirstName
                         )
                     )
+                }
+                if (!result.requiresReview) {
+                    _tripFinishedEvents.emit(trip.id)
                 }
             } catch (error: CancellationException) {
                 throw error
