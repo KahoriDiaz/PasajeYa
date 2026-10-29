@@ -9,7 +9,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
 | F5 | Voz del operador (nombre y edad, nunca DNI) | Completado en emulador; pendiente celular real |
-| F6 | Historial de viajes | En progreso (paso 4 de 6) |
+| F6 | Historial de viajes | Completado |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
 
 ## Infraestructura
@@ -287,3 +287,10 @@ sus casos están en `docs/pruebas-manuales-F1.md`, `docs/pruebas-manuales-F2.md`
 - La sección se actualiza al iniciar o terminar el turno y al cerrar un viaje.
 - Tiene estados de carga, vacío y error con reintento.
 - Verificación ejecutada: `.\gradlew compileDebugKotlin` — correcto.
+
+### 2026-10-29 � F6, cierre
+- Se completaron todos los pasos de la Funcionalidad?6.
+- Se gener� docs/pruebas-manuales-F6.md con los casos de prueba manuales.
+- Se ejecutaron todas las pruebas unitarias y de reglas y obtuvieron �xito.
+- Se marc� F6 como **Completado** en docs/PROGRESO.md.
+
