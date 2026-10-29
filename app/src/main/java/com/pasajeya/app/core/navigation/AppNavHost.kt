@@ -29,6 +29,7 @@ import com.pasajeya.app.feature.auth.ui.role.RoleSelectionScreen
 import com.pasajeya.app.feature.auth.ui.verification.VerificationScreen
 import com.pasajeya.app.feature.auth.ui.welcome.WelcomeScreen
 import com.pasajeya.app.feature.fare.ui.FareEstimateScreen
+import com.pasajeya.app.feature.history.ui.HistoryScreen
 import com.pasajeya.app.feature.trip.ui.summary.TripSummaryScreen
 
 object AppRoutes {
@@ -45,6 +46,7 @@ object AppRoutes {
     const val OPERATOR_HOME = "operator_home"
     const val PRIVACY_POLICY = "privacy_policy"
     const val FARE_ESTIMATE = "fare_estimate"
+    const val HISTORY = "history"
     const val TRIP_SUMMARY = "trip_summary/{tripId}"
 }
 
@@ -177,6 +179,7 @@ fun AppNavHost(
             PassengerHomeScreen(
                 onNavigate = ::navigateTo,
                 onEstimate = { navController.navigate(AppRoutes.FARE_ESTIMATE) },
+                onHistory = { navController.navigate(AppRoutes.HISTORY) },
                 onTripFinished = { tripId ->
                     navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
                 }
@@ -201,6 +204,17 @@ fun AppNavHost(
         composable(AppRoutes.FARE_ESTIMATE) {
             FareEstimateScreen(
                 onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(AppRoutes.HISTORY) {
+            HistoryScreen(
+                onBack = { navController.popBackStack() },
+                onTripClick = { tripId ->
+                    navController.navigate(
+                        AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId)
+                    )
+                }
             )
         }
 

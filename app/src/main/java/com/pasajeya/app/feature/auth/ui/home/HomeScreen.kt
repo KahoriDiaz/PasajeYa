@@ -16,6 +16,7 @@ import com.pasajeya.app.feature.trip.ui.passenger.PassengerTripContent
 fun PassengerHomeScreen(
     onNavigate: (AuthDestination) -> Unit,
     onEstimate: () -> Unit,
+    onHistory: () -> Unit,
     onTripFinished: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
@@ -38,6 +39,7 @@ fun PassengerHomeScreen(
         profileError = state.hasError,
         onLogout = viewModel::logout,
         onEstimate = onEstimate,
+        onHistory = onHistory,
         viewModel = tripViewModel,
         modifier = modifier
     )

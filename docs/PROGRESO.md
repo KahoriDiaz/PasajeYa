@@ -9,7 +9,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
 | F5 | Voz del operador (nombre y edad, nunca DNI) | Completado en emulador; pendiente celular real |
-| F6 | Historial de viajes | En progreso (paso 2 de 6) |
+| F6 | Historial de viajes | En progreso (paso 3 de 6) |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
 
 ## Infraestructura
@@ -266,3 +266,15 @@ sus casos están en `docs/pruebas-manuales-F1.md`, `docs/pruebas-manuales-F2.md`
 - Se verificó que `sum(fareBreakdown.totalCents)` coincide con la suma manual de los viajes
   cerrados y excluye los viajes en revisión.
 - Verificación ejecutada: `npm run test:rules` — correcto (21 pruebas).
+
+### 2026-10-29 — F6, paso 3: historial del pasajero
+
+- Se agregó la pantalla “Mi historial” con filtros de semana, mes y todo.
+- El gasto acumulado se lee de la consulta de agregación; no se suma en el celular.
+- La lista muestra fecha y hora en zona de Lima, ruta, distancia, importe, beneficio y el
+  estado ámbar “En revisión” con “Importe pendiente”.
+- Se agregó paginación al llegar al final, estados de carga, vacío, error con reintento y
+  aviso sin conexión.
+- Cada tarjeta abre el “Resumen del viaje” existente en modo solo lectura.
+- Se agregó el acceso “Mi historial” en la pantalla del pasajero y su ruta de navegación.
+- Verificación ejecutada: `.\gradlew compileDebugKotlin` — correcto.

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -54,6 +56,7 @@ fun PassengerTripContent(
     profileError: Boolean,
     onLogout: () -> Unit,
     onEstimate: () -> Unit,
+    onHistory: () -> Unit,
     viewModel: PassengerQrViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -117,6 +120,17 @@ fun PassengerTripContent(
             shape = RoundedCornerShape(14.dp)
         ) {
             Text(text = "Estimar mi pasaje")
+        }
+
+        OutlinedButton(
+            onClick = onHistory,
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 52.dp)
+                .testTag("open_history"),
+            shape = RoundedCornerShape(14.dp)
+        ) {
+            Text(text = stringResource(R.string.history_open))
         }
     }
 }
