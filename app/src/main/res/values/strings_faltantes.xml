@@ -67,6 +67,9 @@
     <string name="history_benefit">Univ. %1$d %%</string>
     <string name="history_date_missing">Fecha no disponible</string>
     <string name="history_operator_title">Mis viajes del turno</string>
+    <string name="history_operator_current">Turno actual</string>
+    <string name="history_operator_last">Último turno</string>
+    <string name="history_operator_no_shift">Aún no tienes turnos registrados</string>
     <string name="history_operator_empty">Aún no hay viajes en este turno</string>
     <string name="history_operator_closed">Cerrados: %1$d</string>
     <string name="history_operator_review">En revisión: %1$d</string>

@@ -32,6 +32,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pasajeya.app.R
 import com.pasajeya.app.core.theme.BorderLight
@@ -61,6 +63,8 @@ import com.pasajeya.app.core.ui.MessageTone
 import com.pasajeya.app.core.ui.PrimaryButton
 import com.pasajeya.app.core.ui.ScreenHeading
 import com.pasajeya.app.feature.auth.domain.model.RouteOption
+import com.pasajeya.app.feature.history.ui.OperatorShiftSummaryCard
+import com.pasajeya.app.feature.history.ui.OperatorShiftSummaryViewModel
 import com.pasajeya.app.feature.trip.domain.model.Shift
 import com.pasajeya.app.feature.trip.domain.model.TapInResult
 import com.pasajeya.app.feature.trip.domain.model.Trip
@@ -76,10 +80,16 @@ fun OperatorTripContent(
     profileError: Boolean,
     onLogout: () -> Unit,
     viewModel: OperatorTripViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    summaryViewModel: OperatorShiftSummaryViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val summaryState by summaryViewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    LaunchedEffect(state.shift?.id, state.openTrips.size) {
+        summaryViewModel.refresh()
+    }
     var pendingStart by rememberSaveable { mutableStateOf(false) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -264,6 +274,11 @@ fun OperatorTripContent(
                 onTapOut = viewModel::requestTapOut
             )
         }
+
+        OperatorShiftSummaryCard(
+            state = summaryState,
+            onRetry = summaryViewModel::refresh
+        )
 
         VoiceSettingsCard(
             enabled = state.voiceEnabled,

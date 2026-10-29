@@ -9,7 +9,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
 | F5 | Voz del operador (nombre y edad, nunca DNI) | Completado en emulador; pendiente celular real |
-| F6 | Historial de viajes | En progreso (paso 3 de 6) |
+| F6 | Historial de viajes | En progreso (paso 4 de 6) |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
 
 ## Infraestructura
@@ -277,4 +277,13 @@ sus casos están en `docs/pruebas-manuales-F1.md`, `docs/pruebas-manuales-F2.md`
   aviso sin conexión.
 - Cada tarjeta abre el “Resumen del viaje” existente en modo solo lectura.
 - Se agregó el acceso “Mi historial” en la pantalla del pasajero y su ruta de navegación.
+- Verificación ejecutada: `.\gradlew compileDebugKotlin` — correcto.
+
+### 2026-10-29 — F6, paso 4: viajes del turno del operador
+
+- Se agregó la sección de solo lectura “Mis viajes del turno” con la cantidad de viajes
+  cerrados, en revisión y el total cobrado.
+- Usa el turno activo o, si no hay uno, el último turno del operador.
+- La sección se actualiza al iniciar o terminar el turno y al cerrar un viaje.
+- Tiene estados de carga, vacío y error con reintento.
 - Verificación ejecutada: `.\gradlew compileDebugKotlin` — correcto.
