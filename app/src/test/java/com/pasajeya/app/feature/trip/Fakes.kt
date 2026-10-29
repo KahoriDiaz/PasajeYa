@@ -20,6 +20,8 @@ import com.pasajeya.app.feature.trip.domain.model.TapInResult
 import com.pasajeya.app.feature.trip.domain.model.TapOutResult
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.domain.model.TripOperationException
+import com.pasajeya.app.feature.voice.domain.SpeechAnnouncer
+import com.pasajeya.app.feature.voice.domain.VoicePreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -214,6 +216,39 @@ class FakeTripRepository : TripRepository {
             minApplied = false,
             fareVersionId = "v1"
         )
+    }
+}
+
+class FakeSpeechAnnouncer(
+    override var isAvailable: Boolean = true
+) : SpeechAnnouncer {
+    val spoken = mutableListOf<String>()
+    var stopCalls = 0
+    var releaseCalls = 0
+
+    override suspend fun speak(text: String): Boolean {
+        if (!isAvailable) return false
+        spoken += text
+        return true
+    }
+
+    override fun stop() {
+        stopCalls += 1
+    }
+
+    override fun release() {
+        releaseCalls += 1
+    }
+}
+
+class FakeVoicePreferences(
+    initialEnabled: Boolean = true
+) : VoicePreferences {
+    private val enabled = MutableStateFlow(initialEnabled)
+    override val voiceEnabled: Flow<Boolean> = enabled
+
+    override suspend fun setVoiceEnabled(enabled: Boolean) {
+        this.enabled.value = enabled
     }
 }
 

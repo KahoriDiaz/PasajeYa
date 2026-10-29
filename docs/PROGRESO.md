@@ -8,7 +8,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F2 | Tap In / Tap Out mediante QR | Completado en emulador; pendiente celular real |
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
-| F5 | Voz del operador (nombre y edad, nunca DNI) | En progreso (paso 2 de 5) |
+| F5 | Voz del operador (nombre y edad, nunca DNI) | En progreso (paso 3 de 5) |
 | F6 | Historial de viajes | Pendiente |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
 
@@ -208,3 +208,13 @@ limitaciones conocidas se registran en `docs/LIMITACIONES.md` y el estado genera
 - Se agregó la preferencia `voice_enabled` en DataStore, activada por defecto.
 - Verificación ejecutada: `.\gradlew compileDebugKotlin` y
   `.\gradlew testDebugUnitTest` — correctos.
+
+### 2026-10-29 — F5, paso 3: integración en el flujo del operador
+
+- Tras un Tap In correcto se anuncia una vez el nombre y la edad con la preferencia activa.
+- La tarjeta grande con nombre y edad permanece visible durante 4 segundos.
+- Se agregó la tarjeta de ajustes con el interruptor de voz y el botón “Probar voz”.
+- Si el motor no tiene datos de voz, se muestra un aviso con el botón para instalar los
+  datos; si el nombre o la edad no permiten formar el texto, se muestra un aviso visual.
+- Al salir del ViewModel se liberan los recursos de `TextToSpeech`.
+- Verificación ejecutada: `.\gradlew testDebugUnitTest` — correcto.

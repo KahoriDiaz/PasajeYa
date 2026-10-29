@@ -7,11 +7,9 @@ import com.pasajeya.app.feature.voice.domain.SpeechAnnouncer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withTimeoutOrNull
 
-@Singleton
 class AndroidSpeechAnnouncer @Inject constructor(
     @ApplicationContext context: Context
 ) : SpeechAnnouncer {

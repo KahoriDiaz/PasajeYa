@@ -12,7 +12,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class VoiceDataModule {
     @Binds
-    @Singleton
     abstract fun bindSpeechAnnouncer(
         announcer: AndroidSpeechAnnouncer
     ): SpeechAnnouncer

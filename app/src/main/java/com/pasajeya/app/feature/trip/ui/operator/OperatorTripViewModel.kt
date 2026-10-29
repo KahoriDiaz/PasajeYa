@@ -3,6 +3,7 @@ package com.pasajeya.app.feature.trip.ui.operator
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pasajeya.app.R
 import com.pasajeya.app.feature.auth.domain.AccountRepository
 import com.pasajeya.app.feature.auth.domain.AuthRepository
 import com.pasajeya.app.feature.auth.domain.model.RouteOption
@@ -14,11 +15,15 @@ import com.pasajeya.app.feature.trip.domain.model.TapInResult
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.location.LocationProvider
 import com.pasajeya.app.feature.trip.location.ShiftLocationService
+import com.pasajeya.app.feature.voice.domain.SpeechAnnouncer
+import com.pasajeya.app.feature.voice.domain.VoiceAnnouncementFormatter
+import com.pasajeya.app.feature.voice.domain.VoicePreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -41,6 +46,11 @@ enum class OperatorNoticeKind {
     LOCATION_DENIED,
     NOTIFICATIONS_DENIED,
     CAMERA_DENIED
+}
+
+enum class VoiceWarning {
+    UNAVAILABLE,
+    INVALID_DATA
 }
 
 data class OperatorNotice(
@@ -68,16 +78,21 @@ data class OperatorTripUiState(
     val endShiftConfirm: Boolean = false,
     val tapOutConfirmation: Trip? = null,
     val notice: OperatorNotice? = null,
-    val lastTapIn: TapInResult? = null
+    val lastTapIn: TapInResult? = null,
+    val voiceEnabled: Boolean = true,
+    val voiceWarning: VoiceWarning? = null
 )
 
 @HiltViewModel
 class OperatorTripViewModel @Inject constructor(
-    @ApplicationContext private val appContext: Context,
+    @param:ApplicationContext private val appContext: Context,
     private val authRepository: AuthRepository,
     private val accountRepository: AccountRepository,
     private val tripRepository: TripRepository,
-    private val locationProvider: LocationProvider
+    private val locationProvider: LocationProvider,
+    private val speechAnnouncer: SpeechAnnouncer,
+    private val voicePreferences: VoicePreferences,
+    private val voiceAnnouncementFormatter: VoiceAnnouncementFormatter
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(OperatorTripUiState())
@@ -89,12 +104,14 @@ class OperatorTripViewModel @Inject constructor(
     private val scanGate = QrScanGate()
     private var shiftJob: Job? = null
     private var tripsJob: Job? = null
+    private var tapInCardJob: Job? = null
     private var serviceShiftId: String? = null
     private var observedShiftId: String? = null
     private var noticeSequence = 0L
 
     init {
         load()
+        observeVoicePreferences()
     }
 
     fun retry() {
@@ -103,6 +120,34 @@ class OperatorTripViewModel @Inject constructor(
 
     fun selectRoute(routeId: String) {
         _uiState.update { it.copy(selectedRouteId = routeId) }
+    }
+
+    fun setVoiceEnabled(enabled: Boolean) {
+        _uiState.update {
+            it.copy(
+                voiceEnabled = enabled,
+                voiceWarning = if (enabled) it.voiceWarning else null
+            )
+        }
+        if (!enabled) {
+            speechAnnouncer.stop()
+        }
+        viewModelScope.launch {
+            voicePreferences.setVoiceEnabled(enabled)
+        }
+    }
+
+    fun testVoice() {
+        viewModelScope.launch {
+            val available = speechAnnouncer.speak(
+                appContext.getString(R.string.operator_voice_test_text)
+            )
+            _uiState.update {
+                it.copy(
+                    voiceWarning = if (available) null else VoiceWarning.UNAVAILABLE
+                )
+            }
+        }
     }
 
     fun startShift() {
@@ -232,6 +277,8 @@ class OperatorTripViewModel @Inject constructor(
                         )
                     )
                 }
+                scheduleTapInCardDismissal(result.tripId)
+                announceTapIn(result)
             } catch (error: CancellationException) {
                 throw error
             } catch (error: Exception) {
@@ -246,6 +293,7 @@ class OperatorTripViewModel @Inject constructor(
     }
 
     fun consumeTapIn() {
+        tapInCardJob?.cancel()
         _uiState.update { it.copy(lastTapIn = null) }
     }
 
@@ -303,6 +351,54 @@ class OperatorTripViewModel @Inject constructor(
 
     fun consumeNotice() {
         _uiState.update { it.copy(notice = null) }
+    }
+
+    override fun onCleared() {
+        tapInCardJob?.cancel()
+        speechAnnouncer.release()
+        super.onCleared()
+    }
+
+    private fun observeVoicePreferences() {
+        viewModelScope.launch {
+            voicePreferences.voiceEnabled.collect { enabled ->
+                _uiState.update { it.copy(voiceEnabled = enabled) }
+            }
+        }
+    }
+
+    private fun scheduleTapInCardDismissal(tripId: String) {
+        tapInCardJob?.cancel()
+        tapInCardJob = viewModelScope.launch {
+            delay(TAP_IN_CARD_MILLIS)
+            _uiState.update { current ->
+                if (current.lastTapIn?.tripId == tripId) {
+                    current.copy(lastTapIn = null)
+                } else {
+                    current
+                }
+            }
+        }
+    }
+
+    private suspend fun announceTapIn(result: TapInResult) {
+        if (!_uiState.value.voiceEnabled) return
+
+        val age = result.passengerAge
+        val text = age?.let {
+            voiceAnnouncementFormatter.format(result.passengerFirstName, it)
+        }
+        if (text == null) {
+            _uiState.update { it.copy(voiceWarning = VoiceWarning.INVALID_DATA) }
+            return
+        }
+
+        val available = speechAnnouncer.speak(text)
+        _uiState.update {
+            it.copy(
+                voiceWarning = if (available) null else VoiceWarning.UNAVAILABLE
+            )
+        }
     }
 
     private fun load() {
@@ -449,5 +545,9 @@ class OperatorTripViewModel @Inject constructor(
             kind = OperatorNoticeKind.ERROR,
             serverMessage = error.message
         )
+    }
+
+    private companion object {
+        const val TAP_IN_CARD_MILLIS = 4_000L
     }
 }

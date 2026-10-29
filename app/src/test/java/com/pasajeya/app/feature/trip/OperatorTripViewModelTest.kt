@@ -6,6 +6,7 @@ import com.pasajeya.app.feature.auth.domain.model.UserRole
 import androidx.lifecycle.viewModelScope
 import com.pasajeya.app.feature.trip.domain.TripPosition
 import com.pasajeya.app.feature.trip.location.LocationProvider
+import com.pasajeya.app.feature.voice.domain.VoiceAnnouncementFormatter
 import com.pasajeya.app.feature.trip.ui.operator.OperatorNoticeKind
 import com.pasajeya.app.feature.trip.ui.operator.OperatorTripViewModel
 import io.mockk.coEvery
@@ -188,6 +189,9 @@ class OperatorTripViewModelTest {
                 role = UserRole.OPERATOR
             ),
             tripRepository = repository,
-            locationProvider = locationProvider
+            locationProvider = locationProvider,
+            speechAnnouncer = FakeSpeechAnnouncer(),
+            voicePreferences = FakeVoicePreferences(),
+            voiceAnnouncementFormatter = VoiceAnnouncementFormatter()
         )
 }

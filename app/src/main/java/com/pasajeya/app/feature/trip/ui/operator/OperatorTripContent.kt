@@ -6,10 +6,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.speech.tts.TextToSpeech
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +28,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -38,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -57,6 +62,7 @@ import com.pasajeya.app.core.ui.PrimaryButton
 import com.pasajeya.app.core.ui.ScreenHeading
 import com.pasajeya.app.feature.auth.domain.model.RouteOption
 import com.pasajeya.app.feature.trip.domain.model.Shift
+import com.pasajeya.app.feature.trip.domain.model.TapInResult
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -177,6 +183,29 @@ fun OperatorTripContent(
             )
         }
 
+        state.voiceWarning?.let { warning ->
+            VoiceWarningCard(
+                warning = warning,
+                onInstall = {
+                    runCatching {
+                        context.startActivity(
+                            Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)
+                        )
+                    }.onFailure {
+                        Toast.makeText(
+                            context,
+                            R.string.operator_voice_install_error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            )
+        }
+
+        state.lastTapIn?.let { tapIn ->
+            TapInAnnouncementCard(tapIn)
+        }
+
         if (state.isLoading) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -235,6 +264,12 @@ fun OperatorTripContent(
                 onTapOut = viewModel::requestTapOut
             )
         }
+
+        VoiceSettingsCard(
+            enabled = state.voiceEnabled,
+            onEnabledChange = viewModel::setVoiceEnabled,
+            onTest = viewModel::testVoice
+        )
     }
 
     if (state.endShiftConfirm) {
@@ -286,6 +321,157 @@ fun OperatorTripContent(
             onDismiss = viewModel::closeScanner,
             onPermissionDenied = viewModel::onCameraPermissionDenied
         )
+    }
+}
+
+@Composable
+private fun TapInAnnouncementCard(tapIn: TapInResult) {
+    val age = tapIn.passengerAge
+    val ageText = when (age) {
+        1 -> stringResource(R.string.operator_tap_in_age_one)
+        null -> stringResource(R.string.operator_age_unknown)
+        else -> stringResource(R.string.operator_tap_in_age, age)
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = SuccessGreen.copy(alpha = 0.12f)
+        ),
+        border = BorderStroke(1.dp, SuccessGreen.copy(alpha = 0.35f))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.operator_tap_in_card_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = SuccessGreen
+            )
+            Text(
+                text = tapIn.passengerFirstName,
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = TextPrimary
+            )
+            Text(
+                text = ageText,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPrimary
+            )
+        }
+    }
+}
+
+@Composable
+private fun VoiceWarningCard(
+    warning: VoiceWarning,
+    onInstall: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = ReviewAmber.copy(alpha = 0.10f)
+        ),
+        border = BorderStroke(1.dp, ReviewAmber.copy(alpha = 0.40f))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = when (warning) {
+                    VoiceWarning.UNAVAILABLE ->
+                        stringResource(R.string.operator_voice_unavailable)
+                    VoiceWarning.INVALID_DATA ->
+                        stringResource(R.string.operator_voice_invalid_data)
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextPrimary
+            )
+            if (warning == VoiceWarning.UNAVAILABLE) {
+                TextButton(
+                    onClick = onInstall,
+                    modifier = Modifier.heightIn(min = 48.dp)
+                ) {
+                    Text(stringResource(R.string.operator_voice_install))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun VoiceSettingsCard(
+    enabled: Boolean,
+    onEnabledChange: (Boolean) -> Unit,
+    onTest: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, BorderLight)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.operator_voice_settings_title),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPrimary
+            )
+            Text(
+                text = stringResource(R.string.operator_voice_settings_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextGray
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 48.dp)
+                    .toggleable(
+                        value = enabled,
+                        role = Role.Switch,
+                        onValueChange = onEnabledChange
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.operator_voice_switch_label),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = TextPrimary
+                )
+                Switch(
+                    checked = enabled,
+                    onCheckedChange = null
+                )
+            }
+            OutlinedButton(
+                onClick = onTest,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 48.dp)
+            ) {
+                Text(stringResource(R.string.operator_voice_test))
+            }
+        }
     }
 }
 

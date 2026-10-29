@@ -1,8 +1,9 @@
 package com.pasajeya.app.feature.voice.domain
 
 import java.util.Locale
+import javax.inject.Inject
 
-class VoiceAnnouncementFormatter {
+class VoiceAnnouncementFormatter @Inject constructor() {
     fun format(firstName: String, age: Int): String? {
         val cleanName = cleanFirstName(firstName)
         if (cleanName.isEmpty()) return null
