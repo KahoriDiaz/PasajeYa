@@ -52,8 +52,9 @@ del proyecto. Léelo completo antes de escribir código.
   - Reglas de Firestore y Cloud Functions con **Firebase Emulator Suite** y
     **@firebase/rules-unit-testing**.
 
-> Usa siempre las **versiones estables más recientes** y verifica que compilen.
-> **No fijes versiones de memoria.**
+> No actualices AGP, Gradle ni Kotlin sin preguntarme; el AGP debe ser compatible con mi
+> Android Studio (máximo 9.1.0). Verifica las versiones en la documentación oficial y que
+> compilen.
 
 ---
 

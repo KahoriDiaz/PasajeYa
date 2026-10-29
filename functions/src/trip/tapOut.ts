@@ -227,7 +227,7 @@ export async function tapOutHandler(
         }
       }
       const result = computeFare({
-        distanceMeters: distance.distanceMeters,
+        distanceMeters: Math.round(distance.distanceMeters),
         version: {
           baseFarePerKmCents: fareVersion.baseFarePerKmCents,
           fuelIndex: fareVersion.fuelIndex,

@@ -14,7 +14,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 
 ## Infraestructura
 
-- [x] Proyecto Android configurado con Gradle 9.8.2, AGP 9.4.1, Compose y Hilt.
+- [x] Proyecto Android configurado con Gradle 9.3.1, AGP 9.1.0, Compose y Hilt.
 - [x] Firebase Emulator Suite configurado para Auth, Firestore y Functions.
 - [x] Reglas de Firestore con denegación por defecto y pruebas de reglas.
 - [x] Cloud Functions v2 en TypeScript con función de salud y pruebas.
@@ -160,3 +160,16 @@ limitaciones conocidas se registran en `docs/LIMITACIONES.md` y el estado genera
   - `npm run emulators:test` — correcto (42 pruebas de Functions; reglas incluidas).
 - La validación en dos celulares reales queda pendiente en
   `docs/pruebas-manuales-F2.md`.
+
+### 2026-10-29 — Compatibilidad con Android Studio (AGP 9.1.0)
+
+- Se cambió AGP de 9.4.1 a 9.1.0 y el wrapper de Gradle de 9.8.2 a 9.3.1, versión
+  mínima y por defecto que exigen las notas oficiales de AGP 9.1.
+- Se actualizó `AGENTS.md` para no subir AGP, Gradle ni Kotlin sin consultar y mantener
+  el AGP máximo en 9.1.0.
+- Se redondeó a metros enteros la distancia de `tapOut` antes del cálculo tarifario, como
+  ya hacía `estimateFare`, porque `computeFare` exige enteros.
+- Verificación ejecutada:
+  - `.\gradlew assembleDebug` — correcto (aviso de compileSdk 37 no probado con AGP 9.1.0).
+  - `.\gradlew testDebugUnitTest` — correcto.
+  - `npm run emulators:test` — correcto (15 pruebas de reglas y 72 de Functions).
