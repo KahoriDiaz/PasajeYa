@@ -4,10 +4,10 @@
   "scripts": {
     "build:functions": "npm --prefix functions run build",
     "prepare:emulator-secrets": "node scripts/prepare-emulator-secrets.mjs",
-    "emulators:start": "npm run prepare:emulator-secrets && npm run build:functions && firebase emulators:start",
+    "emulators:start": "npm run prepare:emulator-secrets && npm run build:functions && node scripts/run-emulators.mjs emulators:start",
     "test:rules": "firebase emulators:exec --only firestore,auth --project demo-pasajeya \"npm --prefix firebase-tests test\"",
-    "test:functions": "npm run prepare:emulator-secrets && npm run build:functions && firebase emulators:exec --only functions,firestore,auth --project demo-pasajeya \"node scripts/run-functions-tests.mjs\"",
-    "emulators:test": "npm run prepare:emulator-secrets && npm run build:functions && firebase emulators:exec --only functions,firestore,auth --project demo-pasajeya \"node scripts/emulator-tests.mjs\""
+    "test:functions": "npm run prepare:emulator-secrets && npm run build:functions && node scripts/run-emulators.mjs emulators:exec --only functions,firestore,auth --project demo-pasajeya \"node scripts/run-functions-tests.mjs\"",
+    "emulators:test": "npm run prepare:emulator-secrets && npm run build:functions && node scripts/run-emulators.mjs emulators:exec --only functions,firestore,auth --project demo-pasajeya \"node scripts/emulator-tests.mjs\""
   },
   "devDependencies": {
     "firebase-tools": "^15.34.1"

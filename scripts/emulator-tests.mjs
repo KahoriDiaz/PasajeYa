@@ -1,4 +1,7 @@
 import { execSync } from "node:child_process";
+import { applyEmulatorEnv } from "./emulator-env.mjs";
+
+applyEmulatorEnv();
 
 function runNpmTest(prefix) {
   execSync(`npm --prefix ${prefix} test`, { stdio: "inherit" });
