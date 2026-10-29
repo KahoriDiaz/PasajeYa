@@ -7,9 +7,12 @@ import {
   type RulesTestEnvironment
 } from "@firebase/rules-unit-testing";
 import {
+  Timestamp,
+  deleteDoc,
   doc,
   getDoc,
-  setDoc
+  setDoc,
+  updateDoc
 } from "firebase/firestore";
 import { afterAll, beforeAll, describe, it } from "vitest";
 
@@ -45,6 +48,47 @@ beforeAll(async () => {
       name: "Ruta de prueba",
       active: true,
       stops: []
+    });
+    const startedAt = Timestamp.fromDate(new Date("2026-10-26T12:00:00Z"));
+    await setDoc(doc(db, "shifts/shift-owner"), {
+      operatorUid: "owner",
+      plate: "ABC123",
+      routeId: "route-1",
+      status: "active",
+      startedAt
+    });
+    await setDoc(doc(db, "shifts/shift-other"), {
+      operatorUid: "other",
+      plate: "XYZ999",
+      routeId: "route-1",
+      status: "active",
+      startedAt
+    });
+    await setDoc(doc(db, "shifts/shift-ended"), {
+      operatorUid: "owner",
+      plate: "ABC123",
+      routeId: "route-1",
+      status: "ended",
+      startedAt
+    });
+    await setDoc(doc(db, "trips/trip-owner"), {
+      passengerUid: "owner",
+      operatorUid: "other",
+      shiftId: "shift-other",
+      status: "open"
+    });
+    await setDoc(doc(db, "trips/trip-other"), {
+      passengerUid: "other",
+      operatorUid: "owner",
+      shiftId: "shift-owner",
+      status: "closed"
+    });
+    await setDoc(doc(db, "qrNonces/nonce-1"), {
+      uid: "owner",
+      expiresAt: startedAt
+    });
+    await setDoc(doc(db, "shiftLocks/operator_owner"), {
+      shiftId: "shift-owner"
     });
   });
 }, 60_000);
@@ -131,6 +175,134 @@ describe("F1 Firestore rules", () => {
 
     await assertFails(
       setDoc(doc(db, "unknown/anything"), { value: true })
+    );
+  });
+});
+
+describe("F2 Firestore rules", () => {
+  it("allows only the operator to read their shift", async () => {
+    const ownerDb = testEnv.authenticatedContext("owner").firestore();
+    const otherDb = testEnv.authenticatedContext("other").firestore();
+
+    await assertSucceeds(getDoc(doc(ownerDb, "shifts/shift-owner")));
+    await assertFails(getDoc(doc(otherDb, "shifts/shift-owner")));
+    await assertFails(getDoc(doc(ownerDb, "shifts/shift-other")));
+  });
+
+  it("denies every client write to shifts", async () => {
+    const db = testEnv.authenticatedContext("owner").firestore();
+
+    await assertFails(
+      setDoc(doc(db, "shifts/shift-owner"), {
+        operatorUid: "owner",
+        status: "ended"
+      })
+    );
+    await assertFails(
+      setDoc(doc(db, "shifts/forged"), {
+        operatorUid: "owner",
+        status: "active"
+      })
+    );
+  });
+
+  it("allows a valid GPS chunk only on the operator active shift", async () => {
+    const db = testEnv.authenticatedContext("owner").firestore();
+    const now = Timestamp.fromDate(new Date());
+    const chunk = {
+      points: [{ lat: -16.4, lng: -71.5, acc: 5, t: now }],
+      from: now,
+      to: now
+    };
+
+    await assertSucceeds(
+      setDoc(doc(db, "shifts/shift-owner/chunks/chunk-1"), chunk)
+    );
+    await assertFails(
+      setDoc(doc(db, "shifts/shift-ended/chunks/chunk-2"), chunk)
+    );
+    await assertFails(
+      setDoc(doc(db, "shifts/shift-other/chunks/chunk-3"), chunk)
+    );
+  });
+
+  it("rejects malformed GPS chunks", async () => {
+    const db = testEnv.authenticatedContext("owner").firestore();
+    const now = Timestamp.fromDate(new Date());
+    const invalidChunks = [
+      { points: [], from: now, to: now },
+      { points: [{ lat: -16.4, lng: -71.5, acc: 5, t: now }], from: now },
+      {
+        points: [{ lat: -16.4, lng: -71.5, acc: 5, t: now }],
+        from: now,
+        to: now,
+        extra: true
+      },
+      {
+        points: [{ lat: "x", lng: -71.5, acc: 5, t: now }],
+        from: now,
+        to: now
+      },
+      {
+        points: [{ lat: -16.4, lng: -71.5, acc: 5, t: now }],
+        from: now,
+        to: Timestamp.fromMillis(now.toMillis() - 1_000)
+      }
+    ];
+
+    for (const [index, chunk] of invalidChunks.entries()) {
+      await assertFails(
+        setDoc(
+          doc(db, `shifts/shift-owner/chunks/invalid-${index}`),
+          chunk
+        )
+      );
+    }
+  });
+
+  it("does not allow editing or deleting a chunk", async () => {
+    const db = testEnv.authenticatedContext("owner").firestore();
+    const now = Timestamp.fromDate(new Date());
+    const chunkRef = doc(db, "shifts/shift-owner/chunks/chunk-edit");
+    const chunk = {
+      points: [{ lat: -16.4, lng: -71.5, acc: 5, t: now }],
+      from: now,
+      to: now
+    };
+    await assertSucceeds(setDoc(chunkRef, chunk));
+
+    await assertFails(updateDoc(chunkRef, { to: now }));
+    await assertFails(deleteDoc(chunkRef));
+  });
+
+  it("allows trip reads only for its passenger and operator", async () => {
+    const ownerDb = testEnv.authenticatedContext("owner").firestore();
+    const otherDb = testEnv.authenticatedContext("other").firestore();
+    const strangerDb = testEnv.authenticatedContext("stranger").firestore();
+
+    await assertSucceeds(getDoc(doc(ownerDb, "trips/trip-owner")));
+    await assertSucceeds(getDoc(doc(otherDb, "trips/trip-owner")));
+    await assertSucceeds(getDoc(doc(ownerDb, "trips/trip-other")));
+    await assertFails(getDoc(doc(strangerDb, "trips/trip-owner")));
+  });
+
+  it("denies client writes to trips, QR nonces, and shift locks", async () => {
+    const db = testEnv.authenticatedContext("owner").firestore();
+
+    await assertFails(
+      setDoc(doc(db, "trips/forged"), {
+        passengerUid: "owner",
+        operatorUid: "owner",
+        status: "closed"
+      })
+    );
+    await assertFails(getDoc(doc(db, "qrNonces/nonce-1")));
+    await assertFails(
+      setDoc(doc(db, "qrNonces/nonce-2"), { uid: "owner" })
+    );
+    await assertFails(getDoc(doc(db, "shiftLocks/operator_owner")));
+    await assertFails(
+      setDoc(doc(db, "shiftLocks/operator_owner"), { shiftId: "forged" })
     );
   });
 });

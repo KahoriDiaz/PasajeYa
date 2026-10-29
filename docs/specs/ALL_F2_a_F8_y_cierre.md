@@ -2,7 +2,7 @@
 
 Este archivo reúne, en orden, las especificaciones de las funcionalidades 2 a 8 y el cierre. Cada bloque contiene: qué debe hacer, el prompt con sus pasos y las pruebas manuales.
 
-Notas de orden: (1) la F3 usa el modelo A (precio por km con tope en el pasaje oficial de la empresa de la ruta) y REEMPLAZA cualquier cálculo anterior; (2) la F4 verifica con OCR del carné más código al correo institucional; (3) la F8 (saldo de demostración y NFC) modifica tapIn, tapOut y reclamos: al implementarla se deben actualizar las pruebas de F2, F3, F4 y F7.
+Notas de orden: (1) la F3 usa el modelo por distancia y combustible (referencia S/ 1,30, sin zonas, techo de seguridad configurable, universitario al 50 %) y REEMPLAZA cualquier cálculo anterior; (2) la F4 verifica con OCR del carné más código al correo institucional; (3) la F8 (saldo de demostración y NFC) modifica tapIn, tapOut y reclamos: al implementarla se deben actualizar las pruebas de F2, F3, F4 y F7.
 
 ---
 
@@ -164,123 +164,126 @@ Al final ejecuta todas las pruebas y muéstrame los resultados. No avances a la 
 
 ---
 
-## Funcionalidad 3 — Cálculo de tarifa con desglose (modelo A: precio por km con tope en el pasaje oficial)
+## Funcionalidad 3 — Cálculo de tarifa con desglose (modelo: precio por distancia y combustible)
 
-### 1. Fuentes reales y qué es oficial
+### 1. Idea del modelo
 
-- **Lo oficial es el pasaje por viaje que fija la Municipalidad Provincial de Arequipa (MPA) para cada concesionaria del SIT.** No es por kilómetro y cambia según la empresa. Estado conocido (agosto de 2026, en disputa; **debe verificarse con el último comunicado de la MPA**):
-  - Seis concesionarias obligadas a S/ 1,00 adulto y S/ 0,50 universitario y escolar desde el 3 de agosto de 2026. Solo conocemos dos nombres: Consorcio Empresarial Cono Norte y Transcayma. Los otros cuatro nombres hay que tomarlos del comunicado de la MPA; **no los inventes**.
-  - Cuatro concesionarias en S/ 1,30 adulto y S/ 0,70 universitario por ahora: Empresa de Transporte Unión Grau, AQP Masivo, Sabandía Characato C-8 y Emarsistran. Escolar S/ 0,50.
-  - Fuentes consultadas: El Búho (5 de agosto de 2026, https://elbuho.pe/?p=431669) y Diario Correo (https://diariocorreo.pe/edicion/arequipa/conozca-las-seis-empresas-del-sit-obligadas-a-cobrar-pasaje-a-s100-en-arequipa-noticia/).
-- **Pasaje universitario:** la Ley N.º 26271 establece que no puede superar el 50 % del pasaje adulto.
-- **Combustible:** Osinergmin publica precios por grifo en su plataforma Facilito (facilito.gob.pe). El índice de combustible NO forma parte de la tarifa oficial; en este proyecto es una propuesta y queda en 1,00 hasta que exista una fuente validada.
-- **Lo que es propuesta del proyecto:** calcular el precio por distancia. Por eso el cálculo por km tiene siempre como TOPE el pasaje oficial de la empresa de esa ruta: el pasajero nunca paga más que hoy.
+- Es un proyecto académico. Toma como **referencia lo que cobran hoy las concesionarias**: S/ 1,30 en todas las combis (en la práctica). Los S/ 1,00 que la Municipalidad Provincial de Arequipa (MPA) quiso imponer a seis empresas en agosto de 2026 quedan solo como dato informativo en `data/official-fares.json`; no entran al cálculo.
+- **La propuesta:** el precio depende de la **distancia recorrida** y del **precio del combustible**. Si el combustible sube, el precio sube; si baja, baja. Un viaje típico cuesta cerca de S/ 1,30 (así se calibra); uno corto cuesta menos y uno largo, más. No hay tope en S/ 1,30.
+- **Techo de seguridad:** solo para evitar errores de datos (por ejemplo, S/ 15 por una distancia mal medida). Vale S/ 3,30 por defecto (330 céntimos) y es configurable en la versión de tarifa (`maxFareCents`). Se toma del tarifario por zonas que el equipo fotografió dentro de una combi de ruta larga, cuyo pasaje máximo es S/ 3,30 (zona Rosario); la foto queda en `data/samples/tarifarios/` (fuera de git) como evidencia, con la fecha y la empresa o ruta. No es una norma legal.
+- **Universitario:** siempre el **50 %** del precio regular (Ley N.º 26271 fija el máximo en 50 %). No existe un pasaje universitario fijo.
+- **Uso del tarifario observado:** el tarifario por zonas de esa combi (Cercado S/ 1,30; Cural S/ 1,80; Uchumayo S/ 2,30; Rosario S/ 3,30) solo se usa para fijar el techo de S/ 3,30 y se documenta en `docs/TARIFA.md`. **Las zonas no entran al cálculo**: las rutas no usan zonas y, si el CSV trae `zona_id`, se ignora.
+- **Aviso sobre el techo:** con un techo de S/ 3,30 ya no detecta por sí solo una distancia mal medida de unos 15 a 25 km. La protección real contra eso son los filtros de GPS de la F2 (puntos imprecisos, saltos, cobertura mínima) y los viajes que pasan a revisión; documéntalo en `docs/TARIFA.md`.
+- Combustible: Osinergmin publica precios por grifo en Facilito (facilito.gob.pe). No se asume descarga automática; el equipo ingresa el precio promedio de Arequipa con fecha y fuente.
 
 ### 2. Qué debe hacer (detalle completo)
 
-**Datos de tarifas oficiales (reales, versionados)**
+**Datos de referencia (`data/official-fares.json`)**
 
-- `data/official-fares.json` con el esquema: `{ "sources": [{name, url}], "checkedAt": "yyyy-mm-dd", "concessionaires": [{ "id", "name", "officialFareCents", "officialUniversityFareCents", "officialSchoolFareCents", "status": "verified"|"pending_verification" }] }`.
-- Se carga con valores del punto 1. Las concesionarias cuyo nombre no conocemos van como entradas `pending_verification` con el campo `name` vacío y bloquean el despliegue a producción hasta completarse (el script de carga falla en modo producción si hay alguna pendiente).
-- Cada ruta (`routes/{id}`) agrega: `concessionaireId`, y al cargarse se copia un resumen `{officialFareCents, officialUniversityFareCents, fareSourceUrl, fareCheckedAt}`. Esos datos se muestran en la app.
-- Si la MPA cambia una tarifa, se edita `official-fares.json`, se ejecuta el script `seedRoutes` y se publica una nueva versión; los viajes ya abiertos conservan su foto de tarifas.
+- Esquema: `{ sources: [{name, url}], checkedAt, concessionaires: [{ id, name, officialFareCents, officialUniversityFareCents, officialSchoolFareCents, chargedFareCents, status }] }`.
+- `chargedFareCents` (130) es la **referencia del cálculo**. `officialFareCents` es informativo. `officialUniversityFareCents` ya no se usa en el cálculo.
+- Cada ruta (`routes/{id}`) agrega `concessionaireId` y, al cargarse, copia `{chargedFareCents, officialFareCents, fareSourceUrl, fareCheckedAt}`. Sin `zoneId` ni `fareZones`.
+- `data/routes.json` se genera con `node data/csv-to-routes.js data/rutas.csv` (ya valida ids de concesionaria y coordenadas, y avisa si el CSV trae `zona_id`).
+- Rutas cargadas: R-CAY-01 (Transcayma) y R-GRAU-C (Unión Grau, ex Segrampo).
 
 **Fórmula (servidor, céntimos enteros)**
 
 ```
 raw       = distancia_km × baseFarePerKmCents × fuelIndex
 calculada = redondear(raw, paso)
-regular   = min( max(calculada, minFareCents), officialFareCents )     // tope = pasaje oficial de la ruta
-                                                                       // si officialFareCents < minFareCents, regular = officialFareCents
+regular   = min( max(calculada, minFareCents), maxFareCents )
 universitario:
-  conBeneficio = min( redondear(regular × 50 / 100, paso), officialUniversityFareCents )
-descuento = regular − conBeneficio                                      // 0 si no hay beneficio
+  conBeneficio = redondear(regular × 50 / 100, paso)
+  descuento    = regular − conBeneficio          // 0 si no hay beneficio
 total     = regular − descuento
 ```
 
 - Redondeo al múltiplo más cercano del paso (5 céntimos por defecto), empate hacia arriba.
-- Marcas en el desglose: `capped` (se aplicó el tope oficial) y `minApplied` (se aplicó la mínima).
-- El total nunca es negativo ni mayor que el pasaje oficial adulto.
+- Marcas del desglose: `minApplied` (se aplicó la mínima) y `maxApplied` (se aplicó el techo de seguridad).
+- El total nunca es negativo ni mayor que `maxFareCents`; con beneficio, el total nunca es mayor que sin beneficio.
 
 **Versiones del cálculo (transparencia)**
 
-- `fareVersions/{id}`: inmutable. `{baseFarePerKmCents, fuelIndex, fuelPriceCurrent, fuelPriceReference, minFareCents, roundingStepCents, calibrationNote, createdAt}`. `fuelIndex = fuelPriceCurrent / fuelPriceReference`, y por defecto ambos precios son iguales (índice 1,00).
-- Valores PROVISIONALES hasta calibrar con viajes reales: base 12 céntimos por km, mínima 50 céntimos, paso 5. Márcalos como "provisional" en la configuración, en LIMITACIONES.md y en la app.
-- Script `functions/scripts/calibrateFare.ts`: lee viajes `closed` reales con distancia, por ruta, calcula el percentil 75 de la distancia y SUGIERE `base = officialFare / distancia_p75_km`. Exige al menos 30 viajes reales por ruta; con menos, imprime "datos insuficientes" y no sugiere nada. Publicar una versión sigue siendo una acción manual con `publishFareVersion.ts`.
-- Cada viaje guarda en el Tap In `fareVersionId` y una foto de tarifas de su ruta (`routeFareSnapshot`), de modo que un cambio a mitad de viaje no lo altera.
+- `fareVersions/{id}`, inmutable: `{baseFarePerKmCents, fuelType, fuelPriceCurrentCents, fuelPriceReferenceCents, fuelPriceSourceName, fuelPriceSourceUrl, fuelPriceDate, fuelIndex, minFareCents, maxFareCents, roundingStepCents, calibrationNote, createdAt}`.
+- `fuelIndex = fuelPriceCurrentCents / fuelPriceReferenceCents` con tres decimales. Vale 1,000 el día de la calibración (el precio de referencia es el de ese día).
+- `fuelType`: "GNV" | "GLP" | "DIESEL" | "GASOLINA_90" | "GASOLINA_95". Obligatorio; queda marcado "CONFIRMAR" hasta saber qué combustible usan realmente las unidades.
+- Valores PROVISIONALES hasta calibrar con viajes reales: base 12 céntimos por km, mínima 50, techo 330, paso 5. Márcalos como "provisional" en la configuración, en `LIMITACIONES.md` y en la app.
+- `FuelPriceProvider` (interfaz) con `ManualFuelPriceProvider` (el equipo ingresa el precio por `publishFareVersion.ts`). Una fuente automática futura sería otra implementación.
+- `functions/scripts/calibrateFare.ts`: lee viajes `closed` reales con distancia, por ruta, calcula el percentil 75 de la distancia y SUGIERE `base = chargedFareCents / distancia_p75_km`. Exige al menos 30 viajes reales por ruta; con menos, imprime "datos insuficientes" y no sugiere nada. Publicar una versión es una acción manual.
+- `publishFareVersion.ts` valida: base > 0; mínima > 0; techo ≥ mínima; paso > 0; `fuelType` válido; precio de combustible positivo; fecha del combustible no mayor a 45 días; índice entre 0,5 y 2,0; no se pueden pisar versiones.
+- Cada viaje guarda en el Tap In `fareVersionId` y una foto de la referencia de su ruta (`routeFareSnapshot`), para que un cambio a mitad de viaje no lo altere.
 
-**Desglose guardado en el viaje (`fareBreakdown`)**: `distanceMeters`, `baseFarePerKmCents`, `fuelIndex`, `calculatedCents`, `officialFareCents`, `regularCents`, `benefit {kind, percent, officialUniversityFareCents, discountCents}`, `totalCents`, `capped`, `minApplied`, `fareVersionId`, `concessionaireName`.
+**Desglose guardado en el viaje (`fareBreakdown`):** `distanceMeters`, `baseFarePerKmCents`, `fuelType`, `fuelIndex`, `calculatedCents`, `regularCents`, `benefit {kind, percent, discountCents}`, `totalCents`, `minApplied`, `maxApplied`, `referenceFareCents`, `fareVersionId`, `concessionaireName`.
 
-**Pantalla "Resumen del viaje"** (diseño del informe 6): estado, distancia, tarifa por km, índice de combustible, tarifa calculada, **tope: pasaje oficial de [empresa] S/ X**, beneficio aplicado, **importe final** grande y tarjeta que explica la fórmula en lenguaje sencillo. Pie con "Pasaje oficial según MPA, verificado el [fecha] (fuente)". Aviso fijo: "El cálculo por distancia es una propuesta del proyecto; nunca supera el pasaje oficial".
+**Pantalla "Resumen del viaje":** estado, distancia, tarifa por km, combustible ("[tipo] S/ X por [unidad] ([fuente], [fecha])"), índice de combustible, **precio según recorrido y combustible**, comparación con la referencia ("En las combis hoy se cobra S/ 1,30"), beneficio universitario (50 %), **importe final** grande y una tarjeta que explica la fórmula en lenguaje sencillo. Si se aplicó el techo de seguridad, se muestra el aviso correspondiente. Aviso fijo: "El cálculo por distancia y combustible es una propuesta del proyecto; la referencia es el pasaje que cobran hoy las concesionarias".
 
-**Estimar mi pasaje:** `estimateFare({routeId, boardingStopIndex, alightingStopIndex})` usa la distancia entre paraderos reales y la misma fórmula, e incluye el tope oficial. Sin paraderos con coordenadas, devuelve failed-precondition y no inventa nada.
+**Estimar mi pasaje:** `estimateFare({routeId, boardingStopIndex, alightingStopIndex})` usa la distancia entre paraderos reales y la misma fórmula. Sin paraderos con coordenadas devuelve failed-precondition y no inventa nada. Aviso de que es una estimación.
 
 ### 3. Lo que haces tú
 
-1. Obtén el último comunicado oficial de la MPA y completa los nombres y montos de `data/official-fares.json`. Anota la fecha en `checkedAt`.
-2. Llena `data/routes.json` con las rutas reales y su `concessionaireId`.
-3. Cuando tengas viajes reales (mínimo 30 por ruta), corre `calibrateFare` y decide si publicas una nueva base.
+1. Verifica las coordenadas de `data/rutas.csv` (Google Maps o un recorrido real); la distancia depende de ellas.
+2. Ingresa el precio de combustible de Arequipa con fecha y fuente (Facilito) al publicar la primera versión.
+3. Con al menos 30 viajes reales por ruta, corre `calibrateFare` y decide si publicas una nueva base.
 
 ### 4. Prompt para OpenCode
 
 ```
-Implementa la FUNCIONALIDAD 3 con el MODELO A (precio por km con tope en el pasaje oficial)
-siguiendo AGENTS.md. Esta versión reemplaza cualquier cálculo anterior (que usaba tarifa máxima
-global de 500 céntimos y 50 % sobre lo calculado). Un commit por paso.
+Implementa la FUNCIONALIDAD 3 con el MODELO por distancia y combustible, siguiendo AGENTS.md.
+Esta versión reemplaza cualquier cálculo anterior (tope en el pasaje oficial, tarifa máxima
+global de 500 céntimos, tarifario por zonas, universitario como el menor entre 50 % y un pasaje
+fijo). Un commit por paso.
 
-PASO 0 - Datos oficiales
-- Crea data/official-fares.json con el esquema y los valores de la especificación. Las concesionarias
-  sin nombre conocido van como pending_verification. NO inventes nombres ni montos.
-- Actualiza AGENTS.md (modelo de datos): routes agrega concessionaireId y el resumen oficial;
-  fareVersions ya no tiene maxFareCents ni isOfficial; trips agrega routeFareSnapshot.
-- Extiende seedRoutes.ts: valida que cada ruta tenga concessionaireId existente, copia el resumen de
-  tarifas oficiales y la fuente, y falla en modo producción si queda alguna entrada
-  pending_verification. Migración para rutas ya cargadas.
+PASO 0 - Datos de referencia
+- Usa data/official-fares.json (con chargedFareCents) y data/routes.json (sin zonas). NO inventes
+  nombres ni montos.
+- Actualiza AGENTS.md (modelo de datos): routes agrega concessionaireId y el resumen de referencia;
+  fareVersions agrega fuelType, precios de combustible, minFareCents y maxFareCents; trips agrega
+  routeFareSnapshot.
+- Extiende seedRoutes.ts: valida que cada ruta tenga concessionaireId existente, copia la
+  referencia y la fuente. Migración para rutas ya cargadas.
 
 PASO 1 - computeFare (TypeScript) y vectores
 - functions/src/fare/computeFare.ts con la fórmula de la especificación. Entrada: {distanceMeters,
-  version, officialFareCents, officialUniversityFareCents, hasUniversityBenefit}. Salida con todo el
-  desglose en céntimos enteros. Valida entradas y lanza error si no cumplen.
-- shared/fare-vectors.json con al menos 30 casos calculados a mano: 0 m, 1 m, empates de redondeo,
-  mínima aplicada, tope aplicado con pasaje oficial de 100 y de 130, caso en que el oficial es menor
-  que la mínima, universitario con oficial 50 y con oficial 70 (en 130: 65 frente a tope 70),
-  universitario con regular pequeño, índice de combustible distinto de 1, distancias grandes.
-- Propiedades probadas: total >= 0; total <= officialFareCents; con beneficio, total <= sin beneficio;
-  regular - descuento == total.
+  version, referenceFareCents, hasUniversityBenefit}. Salida con todo el desglose en céntimos
+  enteros. Valida entradas y lanza error si no cumplen.
+- shared/fare-vectors.json con al menos 30 casos calculados a mano: 0 m, 1 m, 200 m (mínima),
+  empates de redondeo, distancia típica cercana a la referencia, distancia larga que activa el
+  techo de 330, combustible +10 % y -10 %, índice 1,000, universitario con regular de 60, 120 y
+  330 (30, 60 y 165), universitario con empate de redondeo, distancias grandes.
+- Propiedades probadas: total >= 0; total <= maxFareCents; con beneficio, total <= sin beneficio;
+  regular - descuento == total; el universitario es el 50 % redondeado.
 
-PASO 2 - Versiones, script de calibración
-- publishFareVersion.ts (valida rangos: base > 0, índice entre 0,5 y 3, mínima > 0, paso > 0; no
-  sobrescribe versiones) y calibrateFare.ts (percentil 75 por ruta, mínimo 30 viajes reales, solo
-  sugiere). Pruebas de calibrateFare con viajes sembrados SOLO en el test: datos insuficientes,
-  cálculo correcto del percentil, ruta sin viajes.
+PASO 2 - Versiones y calibración
+- publishFareVersion.ts con las validaciones de la especificación y ManualFuelPriceProvider.
+- calibrateFare.ts (percentil 75 por ruta, mínimo 30 viajes reales, solo sugiere). Pruebas con
+  viajes sembrados SOLO en el test: datos insuficientes, cálculo correcto del percentil, ruta sin
+  viajes.
 - Reglas de Firestore: fareVersions y config lectura para autenticados, escritura prohibida.
 
 PASO 3 - Integración con tapIn y tapOut
-- tapIn guarda fareVersionId y routeFareSnapshot de la ruta del turno.
-- tapOut llama a computeFare con la versión y la foto de tarifas del viaje y el beneficio vigente
-  (la funcionalidad 4 lo completa; por ahora hasUniversityBenefit = false). Guarda fareBreakdown y
+- tapIn guarda fareVersionId y routeFareSnapshot.
+- tapOut llama a computeFare con la versión y la foto del viaje y el beneficio vigente (la
+  funcionalidad 4 lo completa; por ahora hasUniversityBenefit = false). Guarda fareBreakdown y
   status "closed". Si la distancia es de revisión (insufficient_gps), no calcula tarifa.
 - Quita cualquier TODO previo de la funcionalidad 2 y actualiza PROGRESO.md.
 
-PASO 4 - estimateFare
-- Como en la especificación; distancia entre paraderos por el orden de la lista; devuelve el
-  estimado, el tope oficial y un aviso de que es una estimación.
+PASO 4 - estimateFare, como en la especificación.
 
 PASO 5 - App
-- "Resumen del viaje" con las filas de la especificación, la fuente y fecha del pasaje oficial, y el
-  aviso de que el cálculo por distancia es una propuesta. Formato de dinero con una sola función
-  probada ("S/ 1,50"). Se abre al cerrarse el viaje y desde el historial.
+- "Resumen del viaje" con las filas de la especificación y el aviso de que es una propuesta.
+  Formato de dinero con una sola función probada ("S/ 1,50"). Se abre al cerrarse el viaje y desde
+  el historial.
 - Pantalla "Estimar mi pasaje".
 
 PASO 6 - Pruebas
 - Unitarias: formateador de dinero (0, 5, 105, 150, 1050), mapeo del desglose a la interfaz.
-- Compose UI: el resumen muestra tope oficial, marca "tope aplicado" cuando corresponde y muestra
-  la fuente y la fecha.
-- Functions en emulador: viaje completo con tarifa guardada; cambiar la versión o la tarifa oficial
-  a mitad de un viaje NO cambia el cobro de ese viaje.
+- Compose UI: el resumen muestra precio calculado, combustible con fuente y fecha, referencia, y el
+  aviso del techo cuando maxApplied es true.
+- Functions en emulador: viaje completo con tarifa guardada; cambiar la versión a mitad de un viaje
+  NO cambia el cobro de ese viaje.
 
 PASO 7 - Documentación: docs/pruebas-manuales-F3.md y docs/TARIFA.md (modelo, fuentes con enlaces,
-qué es oficial y qué es propuesta).
+referencia de S/ 1,30, caso observado de S/ 3,30 como curiosidad, qué es propuesta).
 
 Al final ejecuta todas las pruebas y muéstrame los resultados. No avances a la funcionalidad 4.
 ```
@@ -289,20 +292,23 @@ Al final ejecuta todas las pruebas y muéstrame los resultados. No avances a la 
 
 | ID | Pasos | Resultado esperado |
 |---|---|---|
-| F3-M01 | Viaje real corto en una ruta con oficial S/ 1,00 | El importe es menor o igual a S/ 1,00 y coincide con tu cálculo a mano |
-| F3-M02 | Viaje largo (o forzado en emulador) | Se aplica el tope: el importe es exactamente el pasaje oficial y el resumen dice "tope aplicado" |
-| F3-M03 | Viaje de 200 m | Se cobra la mínima (provisional) y el desglose lo indica |
-| F3-M04 | Misma distancia en una ruta con oficial S/ 1,30 | El tope y el importe respetan los S/ 1,30 |
-| F3-M05 | Cambiar la tarifa oficial de la ruta durante un viaje abierto | Ese viaje se cobra con la foto de tarifas del Tap In |
+| F3-M01 | Viaje real de distancia típica en R-CAY-01 | El importe es cercano a S/ 1,30 y coincide con tu cálculo a mano |
+| F3-M02 | Viaje de 200 m | Se cobra la mínima (provisional) y el desglose lo indica |
+| F3-M03 | Viaje corto y viaje largo en la misma ruta | El corto cuesta menos que el largo |
+| F3-M04 | Viaje muy largo (o forzado en emulador) | Se aplica el techo de seguridad y el resumen lo avisa |
+| F3-M05 | Cambiar la versión de tarifa durante un viaje abierto | Ese viaje se cobra con la versión del Tap In |
 | F3-M06 | Estimar de un paradero a otro y luego hacer el viaje real | El estimado y el real son cercanos y el real manda |
-| F3-M07 | Revisar fuente y fecha en el resumen | Coinciden con `official-fares.json` |
-| F3-M08 | Ejecutar `calibrateFare` con menos de 30 viajes | Imprime "datos insuficientes" y no sugiere |
+| F3-M07 | Publicar una versión con el combustible 10 % más caro y repetir el viaje | El precio calculado sube cerca de 10 % |
+| F3-M08 | Publicar una versión con el combustible más barato | El precio calculado baja |
+| F3-M09 | Intentar publicar una versión con combustible de hace 2 meses | Rechazada con mensaje claro |
+| F3-M10 | Ejecutar `calibrateFare` con menos de 30 viajes | Imprime "datos insuficientes" y no sugiere |
+| F3-M11 | Viaje con beneficio universitario | El descuento es el 50 % del regular, redondeado a 5 céntimos |
 
 ### 6. Criterio de terminado
 
-- Los 30 vectores pasan, incluidos los de tope y universitario.
-- `official-fares.json` no tiene entradas pendientes antes de producción.
-- La app muestra la fuente, la fecha y que el cálculo por distancia es una propuesta.
+- Los 30 vectores pasan, incluidos mínima, techo, combustible y universitario al 50 %.
+- La app muestra el combustible con fuente y fecha, la referencia de S/ 1,30 y que el cálculo es una propuesta.
+- No queda ninguna referencia a zonas ni a un tope igual al pasaje oficial.
 
 ---
 
@@ -323,7 +329,7 @@ El estudiante pasa **dos verificaciones automáticas**, y el beneficio se aprueb
 
 ### 2. Qué debe hacer (detalle completo)
 
-**Descuento aplicado (F3):** el universitario paga el menor entre el 50 % de la tarifa calculada y el pasaje universitario oficial de la ruta (por ejemplo S/ 0,50 o S/ 0,70). La fórmula está en la F3; aquí solo se determina si la persona tiene el beneficio vigente en el momento del Tap Out.
+**Descuento aplicado (F3):** el universitario paga el 50 % del precio regular calculado, redondeado al paso de 5 céntimos. La fórmula está en la F3; aquí solo se determina si la persona tiene el beneficio vigente en el momento del Tap Out.
 
 **Flujo en la app (pasajero)**
 
@@ -408,7 +414,7 @@ PASO 3 - Storage y Cloud Functions
 PASO 4 - Pruebas en emulador
 - Flujo feliz con TextRecognizer de prueba y transporte de correo de prueba: subir imagen, carné OK,
   pedir código, leer el correo capturado, confirmar, beneficio aprobado y viaje posterior con el
-  descuento correcto (50 % o el oficial universitario, el menor).
+  descuento correcto (50 % del regular, redondeado a 5 céntimos).
 - Rechazos: imagen pequeña o borrosa, nombre que no coincide, sin código, código ya usado por otra
   cuenta, carné vencido, 4.º envío del día, intentar pedir el código sin pasar el carné, dominio
   no autorizado, parte local del correo distinta del código del carné, 5 intentos de código erróneos,
@@ -449,7 +455,7 @@ Al final ejecuta todas las pruebas y muéstrame los resultados. No avances a la 
 | F4-M08 | Escribir el código correcto | "Descuento universitario activo hasta [fecha]" |
 | F4-M09 | Escribir 5 códigos incorrectos | La solicitud se invalida |
 | F4-M10 | Usar un correo de otro dominio (por ejemplo gmail) | Rechazado |
-| F4-M11 | Hacer un viaje con beneficio aprobado | El resumen muestra el descuento y el importe respeta el pasaje universitario oficial |
+| F4-M11 | Hacer un viaje con beneficio aprobado | El resumen muestra el descuento y el descuento es el 50 % del importe regular |
 | F4-M12 | Revisar Storage después de un envío | La imagen ya no existe |
 | F4-M13 | Intentar 4 envíos de carné en un día | El cuarto es rechazado |
 | F4-M14 | Forzar vencimiento del beneficio (emulador) y correr `expireBenefits` | Estado vencido y el siguiente viaje se cobra completo |
@@ -786,7 +792,7 @@ Reglas de honestidad:
 
 - `wallets/{uid}`: `{balanceCents, heldCents, updatedAt}`. Subcolección `movements/{id}`: `{type, amountCents, tripId?, createdAt}` con tipos `topup_demo`, `hold`, `release`, `charge`, `refund`. Solo el servidor escribe; el dueño solo lee.
 - `topUpDemo({amountCents})`: montos permitidos 500, 1000 o 2000 (S/ 5, 10, 20), saldo máximo S/ 50, solo si `DEMO_PAYMENTS` es verdadero, con límite de 10 recargas por día.
-- **Tap In:** el servidor exige saldo disponible (saldo menos retenido) mayor o igual a la tarifa oficial de la ruta (el tope del viaje), y la **retiene** (`hold`) dentro de la misma transacción que crea el viaje. Sin saldo suficiente, rechaza con el mensaje "Saldo de demostración insuficiente. Recarga para viajar".
+- **Tap In:** el servidor exige saldo disponible (saldo menos retenido) mayor o igual al techo de seguridad de la tarifa vigente (`maxFareCents`, el máximo posible del viaje), y la **retiene** (`hold`) dentro de la misma transacción que crea el viaje. Sin saldo suficiente, rechaza con el mensaje "Saldo de demostración insuficiente. Recarga para viajar".
 - **Tap Out:** calcula la tarifa (funciones 2, 3 y 4), registra el `charge` por el total, libera la diferencia (`release`) y deja el saldo actualizado, todo en una transacción. El desglose del viaje incluye `paidWith: "demo_balance"` y `balanceAfterCents`.
 - **Viaje en revisión:** la retención se mantiene hasta resolverse. Al resolver el reclamo (funcionalidad 7), se cobra el total y se libera el resto; si pasan 7 días sin reclamo, se libera la retención sin cobrar. Las funciones de reclamos deben actualizarse para esto y sus pruebas también.
 - Efectivo de respaldo: el operador puede marcar un viaje como "Pagado en efectivo" desde su lista a bordo; en ese caso no se retiene ni se descuenta saldo. Se guarda `paidWith: "cash"`.
@@ -824,7 +830,7 @@ PASO 1 - Billetera de demostración (TypeScript) con pruebas
   refund en céntimos enteros, con registro de movimientos. DEMO_PAYMENTS como bandera de entorno
   (si es false, topUpDemo lanza failed-precondition).
 - Reglas de negocio de la especificación: montos de recarga permitidos, saldo máximo, límite de
-  recargas por día, retención igual a la tarifa oficial de la ruta en el Tap In, cobro y liberación en el Tap Out.
+  recargas por día, retención igual al techo de seguridad (`maxFareCents`) en el Tap In, cobro y liberación en el Tap Out.
 - Pruebas: recarga válida e inválida; recarga sobre el máximo; DEMO_PAYMENTS=false; dos Tap In
   simultáneos con saldo para uno solo (solo uno crea viaje y retención: prueba de concurrencia);
   Tap Out cobra el total y libera la diferencia; el saldo nunca queda negativo; los movimientos
@@ -896,7 +902,7 @@ muéstrame los resultados.
 | F8-M02 | Operador con turno activo acerca su celular al del pasajero | Tap In registrado, vibración y aviso de voz |
 | F8-M03 | Mientras viaja, el pasajero mira su saldo | Se ve la retención aplicada |
 | F8-M04 | Operador hace Tap Out acercando de nuevo los celulares | El resumen muestra el importe, "Pagado con: Saldo de demostración" y el saldo restante |
-| F8-M05 | Pasajero con saldo menor que la tarifa oficial de la ruta intenta Tap In | Rechazado: "Saldo de demostración insuficiente" |
+| F8-M05 | Pasajero con saldo menor que el techo de seguridad (`maxFareCents`) intenta Tap In | Rechazado: "Saldo de demostración insuficiente" |
 | F8-M06 | Pasajero con NFC apagado abre "Pagar" | Aviso con botón a ajustes de NFC |
 | F8-M07 | Vincular una tarjeta NFC física desde "Mis tarjetas" | La tarjeta aparece con sus últimos 4 dígitos |
 | F8-M08 | Operador acerca la tarjeta física | Tap In correcto y notificación al pasajero |

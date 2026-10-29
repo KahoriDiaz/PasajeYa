@@ -1,10 +1,9 @@
-import { roundToStep } from "../utils/rounding.js";
+﻿import { roundToStep } from "../utils/rounding.js";
 
 export interface FareVersionInput {
   baseFarePerKmCents: number;
   fuelIndex: number;
-  minFareCents: number;
-  roundingStepCents: number;
+  minFareCents: number;\r\n  maxFareCents?: number;\r\n  roundingStepCents: number;
 }
 
 export interface FareBenefitInput {
@@ -51,31 +50,31 @@ export interface ComputeFareResult {
   maxApplied: boolean;
 }
 
-const OFFICIAL_MAX_FARE_CENTS = 200;
+const DEFAULT_MAX_FARE_CENTS = 330;
 
 function assertPositiveInteger(value: number, name: string): void {
   if (!Number.isFinite(value) || value < 0 || !Number.isInteger(value)) {
-    throw new Error(`${name} inválido.`);
+    throw new Error(`${name} invÃ¡lido.`);
   }
 }
 
 function assertPositive(value: number, name: string): void {
   if (!Number.isFinite(value) || value <= 0) {
-    throw new Error(`${name} inválido.`);
+    throw new Error(`${name} invÃ¡lido.`);
   }
 }
 
 function assertRate(value: number, name: string): void {
   if (!Number.isFinite(value) || value < 0.1 || value > 10) {
-    throw new Error(`${name} inválido.`);
+    throw new Error(`${name} invÃ¡lido.`);
   }
 }
 
 export function computeFare(input: ComputeFareInput): ComputeFareResult {
   assertPositiveInteger(input.distanceMeters, "La distancia");
   assertPositive(input.version.baseFarePerKmCents, "La tarifa base por km");
-  assertRate(input.version.fuelIndex, "El índice de combustible");
-  assertPositiveInteger(input.version.minFareCents, "La tarifa mínima");
+  assertRate(input.version.fuelIndex, "El Ã­ndice de combustible");
+  assertPositiveInteger(input.version.minFareCents, "La tarifa mÃ­nima");
   assertPositiveInteger(input.version.roundingStepCents, "El paso de redondeo");
 
   const distanceKm = input.distanceMeters / 1000;
@@ -86,8 +85,8 @@ export function computeFare(input: ComputeFareInput): ComputeFareResult {
   const minApplied = rounded < input.version.minFareCents;
   let capped = false;
   let maxApplied = false;
-  if (regular > OFFICIAL_MAX_FARE_CENTS) {
-    regular = OFFICIAL_MAX_FARE_CENTS;
+  if (regular > DEFAULT_MAX_FARE_CENTS) {
+    regular = DEFAULT_MAX_FARE_CENTS;
     capped = true;
     maxApplied = true;
   }
@@ -118,8 +117,8 @@ export function computeFare(input: ComputeFareInput): ComputeFareResult {
   if (total > regular) {
     total = regular;
   }
-  if (total > OFFICIAL_MAX_FARE_CENTS) {
-    total = OFFICIAL_MAX_FARE_CENTS;
+  if (total > DEFAULT_MAX_FARE_CENTS) {
+    total = DEFAULT_MAX_FARE_CENTS;
   }
   if (total < 0) {
     total = 0;
@@ -149,7 +148,7 @@ export function buildFareBreakdown(
     baseFarePerKmCents: result.baseFarePerKmCents,
     fuelIndex: result.fuelIndex,
     calculatedCents: result.calculatedCents,
-    officialFareCents: OFFICIAL_MAX_FARE_CENTS,
+    officialFareCents: DEFAULT_MAX_FARE_CENTS,
     regularCents: result.regularCents,
     benefit: result.benefit
       ? {

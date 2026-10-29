@@ -65,11 +65,18 @@ export function verifyQrToken(
   }
 
   const parts = token.split(".");
-  if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
+  const payloadPart = parts[0];
+  const signature = parts[1];
+  if (
+    parts.length !== 2 ||
+    payloadPart === undefined ||
+    payloadPart.length === 0 ||
+    signature === undefined ||
+    signature.length === 0
+  ) {
     throw new QrTokenError("invalid");
   }
 
-  const [payloadPart, signature] = parts;
   const expected = sign(payloadPart, secret);
   if (!constantTimeEqual(signature, expected)) {
     throw new QrTokenError("invalid");

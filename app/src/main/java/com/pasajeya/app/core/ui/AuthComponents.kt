@@ -43,6 +43,7 @@ import com.pasajeya.app.R
 import com.pasajeya.app.core.theme.BorderLight
 import com.pasajeya.app.core.theme.ErrorRed
 import com.pasajeya.app.core.theme.PrimaryBlue
+import com.pasajeya.app.core.theme.ReviewAmber
 import com.pasajeya.app.core.theme.SuccessGreen
 import com.pasajeya.app.core.theme.TextGray
 import com.pasajeya.app.core.theme.TextPrimary
@@ -261,6 +262,7 @@ fun PasswordField(
 enum class MessageTone {
     ERROR,
     SUCCESS,
+    WARNING,
     INFO
 }
 
@@ -273,6 +275,7 @@ fun InlineMessage(
     val color = when (tone) {
         MessageTone.ERROR -> ErrorRed
         MessageTone.SUCCESS -> SuccessGreen
+        MessageTone.WARNING -> ReviewAmber
         MessageTone.INFO -> PrimaryBlue
     }
     Card(

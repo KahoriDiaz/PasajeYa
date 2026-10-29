@@ -63,7 +63,7 @@ export function calculateDistance(
   for (const point of ordered) {
     if (point.acc <= 0 || point.acc > GPS_CONFIG.maxAccuracyMeters) continue;
 
-    const previous = accepted.at(-1);
+    const previous = accepted[accepted.length - 1];
     if (previous === undefined) {
       accepted.push(point);
       continue;
@@ -87,7 +87,10 @@ export function calculateDistance(
 
   let distanceMeters = 0;
   for (let index = 1; index < accepted.length; index += 1) {
-    const segment = haversineMeters(accepted[index - 1], accepted[index]);
+    const previous = accepted[index - 1];
+    const current = accepted[index];
+    if (previous === undefined || current === undefined) continue;
+    const segment = haversineMeters(previous, current);
     if (segment >= GPS_CONFIG.minMovementMeters) {
       distanceMeters += segment;
     }
@@ -95,6 +98,9 @@ export function calculateDistance(
 
   const first = accepted[0];
   const last = accepted[accepted.length - 1];
+  if (first === undefined || last === undefined) {
+    return insufficient();
+  }
   const coverage =
     ((last.t - first.t) / (endedAt - startedAt)) * 100;
 

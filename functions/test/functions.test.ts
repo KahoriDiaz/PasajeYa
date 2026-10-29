@@ -6,7 +6,7 @@ import {
   initializeApp as initializeAdminApp
 } from "firebase-admin/app";
 import { getAuth as getAdminAuth } from "firebase-admin/auth";
-import { getFirestore as getAdminFirestore } from "firebase-admin/firestore";
+import { Timestamp as AdminTimestamp, getFirestore as getAdminFirestore } from "firebase-admin/firestore";
 import {
   deleteApp as deleteClientApp,
   initializeApp as initializeClientApp,
@@ -53,6 +53,7 @@ const adminApp = initializeAdminApp(
   { projectId: PROJECT_ID },
   "f1-integration-admin"
 );
+const defaultAdminApp = initializeAdminApp({ projectId: PROJECT_ID });
 const adminAuth = getAdminAuth(adminApp);
 const adminDb = getAdminFirestore(adminApp);
 const clientApps = new Set<FirebaseApp>();
@@ -113,9 +114,7 @@ describe.skipIf(!RUN_INTEGRATION)("F1 callable functions", () => {
     clientApps.clear();
   });
 
-  afterAll(async () => {
-    await deleteAdminApp(adminApp);
-  });
+
 
   it("creates the public profile, private DNI, and DNI index", async () => {
     const client = await createClient();
@@ -583,3 +582,407 @@ async function clearEmulatorData(): Promise<void> {
     }
   }
 }
+
+describe.skipIf(!RUN_INTEGRATION)("F2 callable functions", () => {
+  beforeEach(async () => {
+    await clearEmulatorData();
+    await adminDb.collection("routes").doc(ROUTE_ID).set({
+      name: "Ruta de prueba",
+      active: true,
+      stops: [{ name: "Paradero de prueba", lat: -16.4, lng: -71.5 }]
+    });
+    await adminDb.collection("config").doc("currentFare").set({
+      versionId: "fare-v1"
+    });
+  });
+
+  afterEach(async () => {
+    await Promise.allSettled(
+      [...clientApps].map((app) => deleteClientApp(app))
+    );
+    clientApps.clear();
+  });
+
+  it("issues a private QR and exposes the operator context", async () => {
+    const passenger = await createPassenger();
+    const operator = await createRegisteredOperator();
+
+    const context = await callFunction<{
+      plate: string;
+      routeIds: string[];
+      status: string;
+    }>(operator.client, "getOperatorContext", {
+      sessionId: operator.sessionId
+    });
+    expect(context).toEqual({
+      plate: "ABC123",
+      routeIds: [ROUTE_ID],
+      status: "unverified"
+    });
+
+    const issued = await callFunction<{
+      qrToken: string;
+      expiresAt: number;
+    }>(passenger.client, "issueQrToken", {
+      sessionId: passenger.sessionId
+    });
+    expect(issued.qrToken.length).toBeGreaterThan(50);
+    expect(issued.expiresAt).toBeGreaterThan(Date.now());
+    expect(issued.qrToken).not.toContain(passenger.client.uid);
+
+    const nonces = await adminDb.collection("qrNonces").get();
+    expect(nonces.size).toBe(1);
+    expect(nonces.docs[0].get("uid")).toBe(passenger.client.uid);
+
+    await expectFunctionError(
+      callFunction(passenger.client, "startShift", {
+        sessionId: passenger.sessionId,
+        routeId: ROUTE_ID
+      }),
+      "failed-precondition"
+    );
+    await expectFunctionError(
+      callFunction(operator.client, "issueQrToken", {
+        sessionId: operator.sessionId
+      }),
+      "failed-precondition"
+    );
+  });
+
+  it("opens and closes a trip using real GPS chunks", async () => {
+    const operator = await createRegisteredOperator();
+    const passenger = await createPassenger();
+    const shift = await startShift(operator);
+    const tap = await tapIn(operator, passenger, shift.shiftId);
+    expect(tap.firstName).toBe("Lucia");
+    expect(tap.age).toBeGreaterThanOrEqual(19);
+    expect(tap.age).toBeLessThanOrEqual(21);
+    const tripSnapshot = await adminDb.collection("trips").doc(tap.tripId).get();
+    expect(tripSnapshot.get("shiftId")).toBe(shift.shiftId);
+    const startMs = Date.now() - 5 * 60 * 1_000;
+    const startedAt = AdminTimestamp.fromMillis(startMs);
+    await adminDb.collection("trips").doc(tap.tripId).update({ startedAt });
+    const endMs = Date.now();
+    const pointCount = 4;
+    const points = Array.from({ length: pointCount }, (_, index) => {
+      const isLast = index === pointCount - 1;
+      return {
+        lat: -16.4 + index * 0.00005,
+        lng: -71.5,
+        acc: 5,
+        t: isLast
+          ? AdminTimestamp.fromMillis(endMs)
+          : AdminTimestamp.fromMillis(
+              startMs + Math.round((index * (endMs - startMs)) / (pointCount - 1))
+            )
+      };
+    });
+    await adminDb
+      .collection("shifts")
+      .doc(shift.shiftId)
+      .collection("chunks")
+      .doc("chunk-1")
+      .set({
+        points,
+        from: points[0].t,
+        to: points[points.length - 1].t
+      });
+    const result = await callFunction<{
+      tripId: string;
+      status: string;
+      distanceMeters: number;
+      usedPoints: number;
+      coverage: number;
+      requiresReview: boolean;
+    }>(operator.client, "tapOut", {
+      sessionId: operator.sessionId,
+      tripId: tap.tripId,
+      lat: -16.3998,
+      lng: -71.5
+    });
+
+    expect(result).toMatchObject({
+      tripId: tap.tripId,
+      status: "closed",
+      requiresReview: false
+    });
+    expect(result.coverage).toBeGreaterThanOrEqual(60);
+    expect(result.distanceMeters).toBeGreaterThan(15);
+    expect(result.distanceMeters).toBeLessThan(1_000);
+
+    const closed = await adminDb.collection("trips").doc(tap.tripId).get();
+    expect(closed.get("status")).toBe("closed");
+    expect(closed.get("fareVersionId")).toBe("fare-v1");
+    expect(closed.get("passengerAge")).toBe(tap.age);
+    expect(closed.get("passengerFirstName")).toBe("Lucia");
+    expect(JSON.stringify(closed.data())).not.toContain("@example.com");
+  });
+
+  it("marks a trip for review when there is not enough GPS", async () => {
+    const operator = await createRegisteredOperator();
+    const passenger = await createPassenger();
+    const shift = await startShift(operator);
+    const tap = await tapIn(operator, passenger, shift.shiftId);
+
+    const result = await callFunction<{
+      status: string;
+      requiresReview: boolean;
+    }>(operator.client, "tapOut", {
+      sessionId: operator.sessionId,
+      tripId: tap.tripId,
+      lat: -16.4,
+      lng: -71.5
+    });
+
+    expect(result).toMatchObject({
+      status: "requires_review",
+      requiresReview: true
+    });
+    const trip = await adminDb.collection("trips").doc(tap.tripId).get();
+    expect(trip.get("reviewReason")).toBe("insufficient_gps");
+  });
+
+  it("prevents QR reuse and duplicate active trips", async () => {
+    const operator = await createRegisteredOperator();
+    const passenger = await createPassenger();
+    const shift = await startShift(operator);
+
+    const issued = await issueQr(passenger);
+    await callFunction(operator.client, "tapIn", {
+      sessionId: operator.sessionId,
+      shiftId: shift.shiftId,
+      qrToken: issued.qrToken,
+      lat: -16.4,
+      lng: -71.5,
+      accuracy: 5
+    });
+
+    await expectFunctionError(
+      callFunction(operator.client, "tapIn", {
+        sessionId: operator.sessionId,
+        shiftId: shift.shiftId,
+        qrToken: issued.qrToken,
+        lat: -16.4,
+        lng: -71.5,
+        accuracy: 5
+      }),
+      "failed-precondition",
+      "ya fue utilizado"
+    );
+
+    const fresh = await issueQr(passenger);
+    await expectFunctionError(
+      callFunction(operator.client, "tapIn", {
+        sessionId: operator.sessionId,
+        shiftId: shift.shiftId,
+        qrToken: fresh.qrToken,
+        lat: -16.4,
+        lng: -71.5,
+        accuracy: 5
+      }),
+      "failed-precondition",
+      "viaje activo"
+    );
+  });
+
+  it("creates only one open trip when two tap-ins race", async () => {
+    const operator = await createRegisteredOperator();
+    const passenger = await createPassenger();
+    const shift = await startShift(operator);
+    const first = await issueQr(passenger);
+    const second = await issueQr(passenger);
+
+    const results = await Promise.allSettled([
+      callFunction(operator.client, "tapIn", {
+        sessionId: operator.sessionId,
+        shiftId: shift.shiftId,
+        qrToken: first.qrToken,
+        lat: -16.4,
+        lng: -71.5,
+        accuracy: 5
+      }),
+      callFunction(operator.client, "tapIn", {
+        sessionId: operator.sessionId,
+        shiftId: shift.shiftId,
+        qrToken: second.qrToken,
+        lat: -16.4,
+        lng: -71.5,
+        accuracy: 5
+      })
+    ]);
+
+    expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
+    expect(results.filter((result) => result.status === "rejected")).toHaveLength(1);
+    const openTrips = await adminDb
+      .collection("trips")
+      .where("passengerUid", "==", passenger.client.uid)
+      .where("status", "==", "open")
+      .get();
+    expect(openTrips.size).toBe(1);
+  });
+
+  it("rejects a tap-in against another operator's shift", async () => {
+    const operator = await createRegisteredOperator();
+    const otherOperator = await createRegisteredOperator("XYZ987");
+    const passenger = await createPassenger();
+    const shift = await startShift(operator);
+    const issued = await issueQr(passenger);
+
+    await expectFunctionError(
+      callFunction(otherOperator.client, "tapIn", {
+        sessionId: otherOperator.sessionId,
+        shiftId: shift.shiftId,
+        qrToken: issued.qrToken,
+        lat: -16.4,
+        lng: -71.5,
+        accuracy: 5
+      }),
+      "failed-precondition",
+      "Inicia un turno"
+    );
+  });
+
+  it("closes a shift and sends open trips to review", async () => {
+    const operator = await createRegisteredOperator();
+    const passenger = await createPassenger();
+    const shift = await startShift(operator);
+    const tap = await tapIn(operator, passenger, shift.shiftId);
+
+    await expectFunctionError(
+      callFunction(operator.client, "startShift", {
+        sessionId: operator.sessionId,
+        routeId: ROUTE_ID
+      }),
+      "failed-precondition"
+    );
+
+    const ended = await callFunction<{
+      endedAt: number;
+      tripsRequiresReview: number;
+    }>(operator.client, "endShift", {
+      sessionId: operator.sessionId,
+      shiftId: shift.shiftId
+    });
+    expect(ended.tripsRequiresReview).toBe(1);
+
+    const trip = await adminDb.collection("trips").doc(tap.tripId).get();
+    expect(trip.get("status")).toBe("requires_review");
+    expect(trip.get("reviewReason")).toBe("shift_ended");
+
+    await expectFunctionError(
+      callFunction(operator.client, "tapOut", {
+        sessionId: operator.sessionId,
+        tripId: tap.tripId
+      }),
+      "failed-precondition"
+    );
+  });
+
+  it("closes stale open trips from the scheduled cleanup", async () => {
+    const operator = await createRegisteredOperator();
+    const passenger = await createPassenger();
+    const shift = await startShift(operator);
+    const tap = await tapIn(operator, passenger, shift.shiftId);
+
+    await adminDb.collection("trips").doc(tap.tripId).update({
+      startedAt: AdminTimestamp.fromMillis(Date.now() - 4 * 60 * 60 * 1_000)
+    });
+
+    const { closeStaleTripsHandler } = await import(
+      "../src/trip/closeStaleTrips.js"
+    );
+    const result = await closeStaleTripsHandler(new Date());
+    expect(result.closed).toBe(1);
+
+    const trip = await adminDb.collection("trips").doc(tap.tripId).get();
+    expect(trip.get("status")).toBe("requires_review");
+    expect(trip.get("reviewReason")).toBe("no_tap_out");
+  });
+
+  it("rejects a replaced session on shift functions", async () => {
+    const operator = await createRegisteredOperator();
+    const secondSession = await registerSession(operator.client);
+
+    await expectFunctionError(
+      callFunction(operator.client, "startShift", {
+        sessionId: operator.sessionId,
+        routeId: ROUTE_ID
+      }),
+      "permission-denied"
+    );
+
+    const result = await startShift({
+      ...operator,
+      sessionId: secondSession
+    });
+    expect(result.shiftId.length).toBeGreaterThan(0);
+  });
+});
+
+async function createPassenger(): Promise<{
+  client: SignedInClient;
+  sessionId: string;
+}> {
+  const client = await createClient({ emailVerified: true });
+  const sessionId = await registerSession(client);
+  await completeProfile(client, sessionId, "passenger", {
+    dni: nextDni()
+  });
+  return { client, sessionId };
+}
+
+async function createRegisteredOperator(plate = "ABC123"): Promise<{
+  client: SignedInClient;
+  sessionId: string;
+}> {
+  const client = await createClient({ emailVerified: true });
+  const sessionId = await registerSession(client);
+  await completeProfile(client, sessionId, "operator", {
+    dni: nextDni()
+  });
+  await registerOperator(client, sessionId, { plate });
+  return { client, sessionId };
+}
+
+function startShift(client: {
+  client: SignedInClient;
+  sessionId: string;
+}): Promise<{ shiftId: string; startedAt: number }> {
+  return callFunction(client.client, "startShift", {
+    sessionId: client.sessionId,
+    routeId: ROUTE_ID
+  });
+}
+
+function issueQr(client: {
+  client: SignedInClient;
+  sessionId: string;
+}): Promise<{ qrToken: string; expiresAt: number }> {
+  return callFunction(client.client, "issueQrToken", {
+    sessionId: client.sessionId
+  });
+}
+
+async function tapIn(
+  operator: { client: SignedInClient; sessionId: string },
+  passenger: { client: SignedInClient; sessionId: string },
+  shiftId: string
+): Promise<{ tripId: string; firstName: string; age: number }> {
+  const issued = await issueQr(passenger);
+  return callFunction(operator.client, "tapIn", {
+    sessionId: operator.sessionId,
+    shiftId,
+    qrToken: issued.qrToken,
+    lat: -16.4,
+    lng: -71.5,
+    accuracy: 5
+  });
+}
+
+
+afterAll(async () => {
+  await Promise.allSettled([
+    deleteAdminApp(adminApp),
+    deleteAdminApp(defaultAdminApp)
+  ]);
+});

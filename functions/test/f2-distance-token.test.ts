@@ -147,8 +147,8 @@ describe("F2 QR token", () => {
   it("rejects a manipulated payload or signature", () => {
     const created = createQrToken("passenger-uid", SECRET, START);
     const [payload, signature] = created.token.split(".");
-    const changedPayload = `${payload.slice(0, 10)}A${payload.slice(11)}`;
-    const changedSignature = `${signature.slice(0, 10)}A${signature.slice(11)}`;
+    const changedPayload = `${payload}x`;
+    const changedSignature = `${signature}x`;
 
     expect(() =>
       verifyQrToken(`${changedPayload}.${signature}`, SECRET, START)
