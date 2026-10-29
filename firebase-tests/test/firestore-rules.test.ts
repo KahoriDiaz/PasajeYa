@@ -179,6 +179,15 @@ describe("F1 Firestore rules", () => {
   });
 });
 
+describe("F5 privacy rules", () => {
+  it("denies an operator reading a passenger public and private profile", async () => {
+    const operatorDb = testEnv.authenticatedContext("other").firestore();
+
+    await assertFails(getDoc(doc(operatorDb, "users/owner")));
+    await assertFails(getDoc(doc(operatorDb, "users_private/owner")));
+  });
+});
+
 describe("F2 Firestore rules", () => {
   it("allows only the operator to read their shift", async () => {
     const ownerDb = testEnv.authenticatedContext("owner").firestore();

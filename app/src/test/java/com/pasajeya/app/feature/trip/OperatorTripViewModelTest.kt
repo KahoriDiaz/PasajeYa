@@ -5,10 +5,12 @@ import com.pasajeya.app.feature.auth.domain.model.AuthUser
 import com.pasajeya.app.feature.auth.domain.model.UserRole
 import androidx.lifecycle.viewModelScope
 import com.pasajeya.app.feature.trip.domain.TripPosition
+import com.pasajeya.app.feature.trip.domain.model.TapInResult
 import com.pasajeya.app.feature.trip.location.LocationProvider
 import com.pasajeya.app.feature.voice.domain.VoiceAnnouncementFormatter
 import com.pasajeya.app.feature.trip.ui.operator.OperatorNoticeKind
 import com.pasajeya.app.feature.trip.ui.operator.OperatorTripViewModel
+import com.pasajeya.app.feature.trip.ui.operator.VoiceWarning
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -23,6 +25,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -174,7 +177,94 @@ class OperatorTripViewModelTest {
         viewModel.viewModelScope.cancel()
     }
 
-    private fun viewModel(repository: FakeTripRepository): OperatorTripViewModel =
+    @Test(timeout = 10_000)
+    fun `announces the passenger once per tap in`() = runTest {
+        val announcer = FakeSpeechAnnouncer()
+        val viewModel = viewModel(FakeTripRepository(), announcer)
+        runCurrent()
+        viewModel.startShift()
+        runCurrent()
+
+        viewModel.onQrScanned("qr-token")
+        runCurrent()
+        viewModel.onQrScanned("qr-token")
+        runCurrent()
+
+        assertEquals(listOf("Ana, 22 años"), announcer.spoken)
+        viewModel.viewModelScope.cancel()
+    }
+
+    @Test(timeout = 10_000)
+    fun `queues consecutive tap in announcements in order`() = runTest {
+        val announcer = FakeSpeechAnnouncer()
+        val repository = FakeTripRepository().apply {
+            tapInResults = listOf(
+                TapInResult("trip-1", "Ana", 22),
+                TapInResult("trip-2", "Luis", 1)
+            )
+        }
+        val viewModel = viewModel(repository, announcer)
+        runCurrent()
+        viewModel.startShift()
+        runCurrent()
+
+        viewModel.onQrScanned("qr-token-1")
+        runCurrent()
+        viewModel.onQrScanned("qr-token-2")
+        runCurrent()
+
+        assertEquals(
+            listOf("Ana, 22 años", "Luis, 1 año"),
+            announcer.spoken
+        )
+        viewModel.viewModelScope.cancel()
+    }
+
+    @Test(timeout = 10_000)
+    fun `does not announce when voice is disabled`() = runTest {
+        val announcer = FakeSpeechAnnouncer()
+        val viewModel = viewModel(
+            repository = FakeTripRepository(),
+            speechAnnouncer = announcer,
+            voicePreferences = FakeVoicePreferences(initialEnabled = false)
+        )
+        runCurrent()
+        viewModel.startShift()
+        runCurrent()
+
+        viewModel.onQrScanned("qr-token")
+        runCurrent()
+
+        assertTrue(announcer.spoken.isEmpty())
+        assertNotNull(viewModel.uiState.value.lastTapIn)
+        assertNull(viewModel.uiState.value.voiceWarning)
+        viewModel.viewModelScope.cancel()
+    }
+
+    @Test(timeout = 10_000)
+    fun `shows a warning when speech is unavailable`() = runTest {
+        val announcer = FakeSpeechAnnouncer(isAvailable = false)
+        val viewModel = viewModel(FakeTripRepository(), announcer)
+        runCurrent()
+        viewModel.startShift()
+        runCurrent()
+
+        viewModel.onQrScanned("qr-token")
+        runCurrent()
+
+        assertTrue(announcer.spoken.isEmpty())
+        assertEquals(
+            VoiceWarning.UNAVAILABLE,
+            viewModel.uiState.value.voiceWarning
+        )
+        viewModel.viewModelScope.cancel()
+    }
+
+    private fun viewModel(
+        repository: FakeTripRepository,
+        speechAnnouncer: FakeSpeechAnnouncer = FakeSpeechAnnouncer(),
+        voicePreferences: FakeVoicePreferences = FakeVoicePreferences()
+    ): OperatorTripViewModel =
         OperatorTripViewModel(
             appContext = mockk<Context>(relaxed = true),
             authRepository = FakeAuthRepository(
@@ -190,8 +280,8 @@ class OperatorTripViewModelTest {
             ),
             tripRepository = repository,
             locationProvider = locationProvider,
-            speechAnnouncer = FakeSpeechAnnouncer(),
-            voicePreferences = FakeVoicePreferences(),
+            speechAnnouncer = speechAnnouncer,
+            voicePreferences = voicePreferences,
             voiceAnnouncementFormatter = VoiceAnnouncementFormatter()
         )
 }

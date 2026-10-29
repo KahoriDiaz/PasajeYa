@@ -649,6 +649,16 @@ describe.skipIf(!RUN_INTEGRATION)("F2 callable functions", () => {
     );
   });
 
+  it("returns only the passenger fields required for the voice notice", async () => {
+    const operator = await createRegisteredOperator();
+    const passenger = await createPassenger();
+    const shift = await startShift(operator);
+
+    const tap = await tapIn(operator, passenger, shift.shiftId);
+
+    expect(Object.keys(tap).sort()).toEqual(["age", "firstName", "tripId"]);
+  });
+
   it("opens and closes a trip using real GPS chunks", async () => {
     const operator = await createRegisteredOperator();
     const passenger = await createPassenger();

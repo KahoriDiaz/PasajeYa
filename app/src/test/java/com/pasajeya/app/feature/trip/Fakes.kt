@@ -111,6 +111,7 @@ class FakeTripRepository : TripRepository {
     var startShiftCalls = 0
     var endShiftCalls = 0
     var tapInFailure: Throwable? = null
+    var tapInResults: List<TapInResult> = emptyList()
     var endShiftResult = EndShiftResult(
         shiftId = "shift-1",
         endedAtMillis = 1_000L,
@@ -176,7 +177,7 @@ class FakeTripRepository : TripRepository {
     ): TapInResult {
         tapInCalls += 1
         tapInFailure?.let { throw it }
-        return TapInResult(
+        return tapInResults.getOrNull(tapInCalls - 1) ?: TapInResult(
             tripId = "trip-$tapInCalls",
             passengerFirstName = "Ana",
             passengerAge = 22

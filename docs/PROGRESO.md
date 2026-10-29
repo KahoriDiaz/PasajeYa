@@ -8,7 +8,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F2 | Tap In / Tap Out mediante QR | Completado en emulador; pendiente celular real |
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
-| F5 | Voz del operador (nombre y edad, nunca DNI) | En progreso (paso 3 de 5) |
+| F5 | Voz del operador (nombre y edad, nunca DNI) | En progreso (paso 4 de 5) |
 | F6 | Historial de viajes | Pendiente |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
 
@@ -218,3 +218,17 @@ limitaciones conocidas se registran en `docs/LIMITACIONES.md` y el estado genera
   datos; si el nombre o la edad no permiten formar el texto, se muestra un aviso visual.
 - Al salir del ViewModel se liberan los recursos de `TextToSpeech`.
 - Verificación ejecutada: `.\gradlew testDebugUnitTest` — correcto.
+
+### 2026-10-29 — F5, paso 4: pruebas de voz y privacidad
+
+- Se agregaron pruebas del ViewModel para el anuncio único por Tap In, la cola ordenada de
+  dos pasajeros, la preferencia apagada y el aviso cuando el motor no está disponible.
+- Se agregó una prueba de Functions que exige exactamente las claves `age`, `firstName` y
+  `tripId` en la respuesta de `tapIn`.
+- Se agregó una prueba de reglas que impide a un operador leer el perfil público y privado
+  de un pasajero.
+- Se agregó una prueba estática que revisa logs de la app, textos y llamadas de voz, y
+  logs/objetos retornados por Functions en busca del DNI.
+- Verificación ejecutada:
+  - `.\gradlew testDebugUnitTest` — correcto (36 pruebas).
+  - `npm run emulators:test` — correcto (16 pruebas de reglas y 74 de Functions).
