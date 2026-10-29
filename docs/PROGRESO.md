@@ -294,3 +294,5 @@ sus casos estÃ¡n en `docs/pruebas-manuales-F1.md`, `docs/pruebas-manuales-F2.md`
 - Se ejecutaron todas las pruebas unitarias y de reglas y obtuvieron éxito.
 - Se marcó F6 como **Completado** en docs/PROGRESO.md.
 
+F 7 :   C o m p l e t a d o  
+ 
