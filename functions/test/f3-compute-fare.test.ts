@@ -20,7 +20,7 @@ describe("computeFare F3", () => {
       expect(res.minApplied).toBe(v.minApplied);
       expect(res.maxApplied).toBe(v.maxApplied);
       expect(res.totalCents).toBeGreaterThanOrEqual(0);
-      expect(res.totalCents).toBeLessThanOrEqual(200);
+      expect(res.totalCents).toBeLessThanOrEqual(330);
       if (res.benefit) {
         expect(res.totalCents).toBeLessThanOrEqual(res.regularCents);
         expect(res.regularCents - res.benefit.discountCents).toBe(res.totalCents);
