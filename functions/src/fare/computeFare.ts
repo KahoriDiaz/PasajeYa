@@ -1,9 +1,11 @@
-﻿import { roundToStep } from "../utils/rounding.js";
+import { roundToStep } from "../utils/rounding.js";
 
 export interface FareVersionInput {
   baseFarePerKmCents: number;
   fuelIndex: number;
-  minFareCents: number;\r\n  maxFareCents?: number;\r\n  roundingStepCents: number;
+  minFareCents: number;
+  maxFareCents?: number;
+  roundingStepCents: number;
 }
 
 export interface FareBenefitInput {
