@@ -52,7 +52,8 @@ service cloud.firestore {
     }
 
     match /benefitRequests/{uid} {
-      allow read, write: if false;
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null && request.auth.uid == uid;
     }
 
     match /claims/{claimId} {
