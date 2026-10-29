@@ -1,0 +1,4 @@
+<resources>
+    <!-- AID for PasajeYa HCE service -->
+    <string name="com_pasajeya_apdu_service_aid">A0000000010102</string>
+</resources>

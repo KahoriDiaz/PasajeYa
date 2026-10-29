@@ -8,9 +8,11 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F2 | Tap In / Tap Out mediante QR | Completado en emulador; pendiente celular real |
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Completado |
+| F8 | Cobro y pago con NFC offline | Completado |
 | F5 | Voz del operador (nombre y edad, nunca DNI) | Completado en emulador; pendiente celular real |
 | F6 | Historial de viajes | Completado |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
+| F8 | Cobro y pago con NFC offline | Completado |
 
 ## Infraestructura
 
@@ -294,5 +296,6 @@ sus casos están en `docs/pruebas-manuales-F1.md`, `docs/pruebas-manuales-F2.md`
 - Se ejecutaron todas las pruebas unitarias y de reglas y obtuvieron �xito.
 - Se marc� F6 como **Completado** en docs/PROGRESO.md.
 
-F 7 :   C o m p l e t a d o  
+F 7 :   C o m p l e t a d o 
+ 
  

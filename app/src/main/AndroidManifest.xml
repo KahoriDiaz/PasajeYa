@@ -32,6 +32,18 @@
         </activity>
 
         <service
+            android:name=".feature.nfc.ApduHceService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/apduservice" />
+        </service>
+
+        <service
             android:name=".feature.trip.location.ShiftLocationService"
             android:enabled="true"
             android:exported="false"
