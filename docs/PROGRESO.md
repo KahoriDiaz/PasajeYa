@@ -9,7 +9,7 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 | F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
 | F4 | Beneficio universitario del 50 % | Pendiente |
 | F5 | Voz del operador (nombre y edad, nunca DNI) | Completado en emulador; pendiente celular real |
-| F6 | Historial de viajes | Pendiente |
+| F6 | Historial de viajes | En progreso (paso 1 de 6) |
 | F7 | Reclamos por viajes sin Tap Out | Pendiente |
 
 ## Infraestructura
@@ -245,3 +245,14 @@ sus casos están en `docs/pruebas-manuales-F1.md`, `docs/pruebas-manuales-F2.md`
   - `.\gradlew testDebugUnitTest` — correcto (36 pruebas).
   - `npm run emulators:test` — correcto (16 pruebas de reglas y 74 de Functions).
 - La validación en un celular real queda pendiente en `docs/pruebas-manuales-F5.md`.
+
+### 2026-10-29 — F6, paso 1: índices, consultas y rangos
+
+- Se agregaron los índices de `trips` para las consultas del pasajero por fecha y estado y
+  del operador por turno, además del índice de turnos por operador y fecha.
+- Se agregó `HistoryRepository` con página de 20 viajes, cursor por fecha e id, filtro por
+  semana/mes/todo y suma agregada de viajes cerrados.
+- La semana y el mes se calculan en `America/Lima` con límites exclusivos.
+- Se agregó la prueba de rangos para cruce de mes, año nuevo y cambio de domingo a lunes.
+- Verificación ejecutada: `.\gradlew testDebugUnitTest --tests
+  "com.pasajeya.app.feature.history.HistoryDateRangesTest"` — correcto.

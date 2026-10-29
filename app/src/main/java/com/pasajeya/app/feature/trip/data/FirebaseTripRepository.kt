@@ -255,7 +255,7 @@ class FirebaseTripRepository @Inject constructor(
     }.getOrNull()
 }
 
-private fun DocumentSnapshot.toTrip(): Trip? {
+internal fun DocumentSnapshot.toTrip(): Trip? {
     if (!exists()) return null
     val fareBreakdownData = get("fareBreakdown") as? Map<*, *>
     return Trip(
@@ -304,7 +304,7 @@ private fun Map<String, Any?>.toFareBreakdown(): FareBreakdown? {
     )
 }
 
-private fun DocumentSnapshot.toShift(): Shift? {
+internal fun DocumentSnapshot.toShift(): Shift? {
     if (!exists()) return null
     return Shift(
         id = id,
