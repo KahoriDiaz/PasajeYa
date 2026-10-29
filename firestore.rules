@@ -55,6 +55,17 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    match /claims/{claimId} {
+      allow read: if signedIn() && resource.data.passengerId == request.auth.uid;
+      allow create: if signedIn()
+        && resource.data.status == "review"
+        && resource.data.passengerId == request.auth.uid
+        && resource.data.refundAmountCents == 0
+        && resource.data.resolutionNotes == null
+        && resource.data.createdAt != null;
+      allow update, delete: if false;
+    }
+
     function isShiftOperator(shiftId) {
       return signedIn() &&
         get(/databases/$(database)/documents/shifts/$(shiftId)).data.operatorUid ==
