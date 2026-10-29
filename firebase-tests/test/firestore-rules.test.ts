@@ -8,13 +8,25 @@ import {
 } from "@firebase/rules-unit-testing";
 import {
   Timestamp,
+  collection,
   deleteDoc,
   doc,
+  documentId,
+  getAggregateFromServer,
   getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
   setDoc,
-  updateDoc
+  startAfter,
+  sum,
+  updateDoc,
+  where,
+  writeBatch,
+  type QueryDocumentSnapshot
 } from "firebase/firestore";
-import { afterAll, beforeAll, describe, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 let testEnv: RulesTestEnvironment;
 
@@ -313,5 +325,201 @@ describe("F2 Firestore rules", () => {
     await assertFails(
       setDoc(doc(db, "shiftLocks/operator_owner"), { shiftId: "forged" })
     );
+  });
+});
+
+const HISTORY_PASSENGER = "history-passenger";
+const HISTORY_OTHER = "history-other";
+const HISTORY_OPERATOR = "history-operator";
+const HISTORY_SHIFT = "history-shift";
+const HISTORY_TRIP_COUNT = 45;
+const HISTORY_CLOSED_COUNT = 40;
+
+describe("F6 Firestore rules and history data", () => {
+  async function seedHistoryTrips() {
+    await testEnv.withSecurityRulesDisabled(async (context) => {
+      const db = context.firestore();
+      const batch = writeBatch(db);
+      const startedAt = Date.UTC(2026, 8, 1, 12, 0, 0);
+
+      for (let index = 0; index < HISTORY_TRIP_COUNT; index += 1) {
+        const closed = index < HISTORY_CLOSED_COUNT;
+        batch.set(
+          doc(
+            db,
+            `trips/history-trip-${String(index).padStart(2, "0")}`
+          ),
+          {
+            passengerUid: HISTORY_PASSENGER,
+            operatorUid: HISTORY_OPERATOR,
+            shiftId: HISTORY_SHIFT,
+            routeId: "route-1",
+            status: closed ? "closed" : "requires_review",
+            startedAt: Timestamp.fromMillis(startedAt + index * 60_000),
+            fareBreakdown: {
+              totalCents: closed ? (index + 1) * 100 : 9_999_999
+            }
+          }
+        );
+      }
+
+      batch.set(doc(db, "users/history-passenger"), {
+        role: "passenger"
+      });
+      batch.set(doc(db, "users/history-operator"), {
+        role: "operator"
+      });
+      batch.set(doc(db, "users/history-other"), {
+        role: "passenger"
+      });
+      batch.set(doc(db, "shifts/history-shift"), {
+        operatorUid: HISTORY_OPERATOR,
+        plate: "HIS123",
+        routeId: "route-1",
+        status: "ended",
+        startedAt: Timestamp.fromMillis(startedAt)
+      });
+      batch.set(doc(db, "trips/history-other-trip"), {
+        passengerUid: HISTORY_OTHER,
+        operatorUid: "owner",
+        shiftId: "shift-owner",
+        routeId: "route-1",
+        status: "closed",
+        startedAt: Timestamp.fromMillis(startedAt)
+      });
+      await batch.commit();
+    });
+  }
+
+  it("allows a passenger to read only their own trips", async () => {
+    await seedHistoryTrips();
+    const db = testEnv.authenticatedContext(HISTORY_PASSENGER).firestore();
+
+    const ownTrips = await assertSucceeds(
+      getDocs(
+        query(
+          collection(db, "trips"),
+          where("passengerUid", "==", HISTORY_PASSENGER),
+          where("status", "in", ["closed", "requires_review"]),
+          orderBy("startedAt", "desc"),
+          orderBy(documentId(), "desc"),
+          limit(20)
+        )
+      )
+    );
+    expect(ownTrips.size).toBe(20);
+
+    await assertFails(
+      getDocs(
+        query(
+          collection(db, "trips"),
+          where("passengerUid", "==", HISTORY_OTHER)
+        )
+      )
+    );
+  });
+
+  it("allows an operator to read the trips of their shift only", async () => {
+    await seedHistoryTrips();
+    const db = testEnv.authenticatedContext(HISTORY_OPERATOR).firestore();
+
+    const shiftTrips = await assertSucceeds(
+      getDocs(
+        query(
+          collection(db, "trips"),
+          where("operatorUid", "==", HISTORY_OPERATOR),
+          where("shiftId", "==", HISTORY_SHIFT),
+          orderBy("startedAt", "desc")
+        )
+      )
+    );
+    expect(shiftTrips.size).toBe(HISTORY_TRIP_COUNT);
+
+    await assertFails(
+      getDocs(
+        query(
+          collection(db, "trips"),
+          where("shiftId", "==", "shift-owner")
+        )
+      )
+    );
+  });
+
+  it("denies every client write to trips", async () => {
+    await seedHistoryTrips();
+    const db = testEnv.authenticatedContext(HISTORY_PASSENGER).firestore();
+    const trip = doc(db, "trips/history-trip-00");
+
+    await assertFails(
+      setDoc(trip, {
+        passengerUid: HISTORY_PASSENGER,
+        operatorUid: HISTORY_OPERATOR,
+        shiftId: HISTORY_SHIFT,
+        status: "closed",
+        fareBreakdown: { totalCents: 1 }
+      })
+    );
+    await assertFails(updateDoc(trip, { status: "closed" }));
+    await assertFails(deleteDoc(trip));
+  });
+
+  it("paginates 45 trips as 20, 20 and 5 without duplicates or gaps", async () => {
+    await seedHistoryTrips();
+    const db = testEnv.authenticatedContext(HISTORY_PASSENGER).firestore();
+    const baseQuery = query(
+      collection(db, "trips"),
+      where("passengerUid", "==", HISTORY_PASSENGER),
+      where("status", "in", ["closed", "requires_review"]),
+      orderBy("startedAt", "desc"),
+      orderBy(documentId(), "desc"),
+      limit(20)
+    );
+    const pageSizes: number[] = [];
+    const ids: string[] = [];
+    let cursor: QueryDocumentSnapshot | null = null;
+
+    for (let page = 0; page < 3; page += 1) {
+      const pageQuery = cursor
+        ? query(
+            baseQuery,
+            startAfter(cursor.get("startedAt"), cursor.id)
+          )
+        : baseQuery;
+      const snapshot = await assertSucceeds(getDocs(pageQuery));
+      pageSizes.push(snapshot.size);
+      ids.push(...snapshot.docs.map((item) => item.id));
+      cursor = snapshot.docs.at(-1) ?? null;
+    }
+
+    expect(pageSizes).toEqual([20, 20, 5]);
+    expect(new Set(ids).size).toBe(HISTORY_TRIP_COUNT);
+    expect(ids).toEqual(
+      Array.from(
+        { length: HISTORY_TRIP_COUNT },
+        (_, index) => `history-trip-${String(index).padStart(2, "0")}`
+      ).reverse()
+    );
+  });
+
+  it("sums only closed trips with the aggregate query", async () => {
+    await seedHistoryTrips();
+    const db = testEnv.authenticatedContext(HISTORY_PASSENGER).firestore();
+    const closedQuery = query(
+      collection(db, "trips"),
+      where("passengerUid", "==", HISTORY_PASSENGER),
+      where("status", "==", "closed")
+    );
+    const expectedTotal = Array.from(
+      { length: HISTORY_CLOSED_COUNT },
+      (_, index) => (index + 1) * 100
+    ).reduce((total, value) => total + value, 0);
+
+    const aggregate = await assertSucceeds(
+      getAggregateFromServer(closedQuery, {
+        total: sum("fareBreakdown.totalCents")
+      })
+    );
+
+    expect(aggregate.data().total).toBe(expectedTotal);
   });
 });
