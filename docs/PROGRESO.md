@@ -6,12 +6,12 @@ Estado de las 7 funcionalidades. Se actualiza al terminar cada paso.
 |---|---|---|
 | F1 | Autenticación y cuentas (pasajero/operador, DNI, contraseña segura, consentimiento, sesión única) | Completado en emulador; pendiente celular real |
 | F2 | Tap In / Tap Out mediante QR | Completado en emulador; pendiente celular real |
-| F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Pendiente |
+| F3 | Cálculo de tarifa (distancia GPS, versión tarifaria, redondeo, mínimo/máximo, desglose) | Completado |
 | F4 | Beneficio universitario del 50 % | Completado |
 | F8 | Cobro y pago con NFC offline | Completado |
 | F5 | Voz del operador (nombre y edad, nunca DNI) | Completado en emulador; pendiente celular real |
 | F6 | Historial de viajes | Completado |
-| F7 | Reclamos por viajes sin Tap Out | Pendiente |
+| F7 | Reclamos por viajes sin Tap Out | Completado |
 | F8 | Cobro y pago con NFC offline | Completado |
 
 ## Infraestructura
