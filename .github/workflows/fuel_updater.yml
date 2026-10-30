@@ -1,0 +1,27 @@
+name: Actualizar Tarifa por Combustible Diariamente
+
+on:
+  schedule:
+    # Se ejecuta todos los días a las 06:00 AM hora de Perú (11:00 UTC)
+    - cron: '0 11 * * *'
+  workflow_dispatch: # Permite ejecutarlo manualmente con un clic en GitHub para probarlo
+
+jobs:
+  update-fuel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar Firebase Admin
+        run: npm install firebase-admin
+
+      - name: Ejecutar script de actualización
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: node scripts/update_fuel_index.cjs

@@ -1,0 +1,129 @@
+ruta_id,ruta_nombre,concesionaria_id,orden,paradero,lat,lng
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,1,Alto Cayma (Calle Héroes del Cenepa),-16.346472,-71.551306
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,2,Colegio Casimiro Cuadros,-16.348222,-71.552528
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,3,Comisaría de Casimiro Cuadros,-16.349068,-71.553125
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,4,Av. Arequipa (Iglesia de los Mormones),-16.350027,-71.554534
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,5,Parque del Niño,-16.350943,-71.554722
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,6,Cruce El Azufral (Av. Arequipa),-16.352291,-71.555043
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,7,Mercado Buenos Aires (Alto Cayma),-16.350090,-71.551082
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,8,Avenida Ayacucho,-16.349704,-71.548442
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,9,Buenos Aires / Las Malvinas,-16.348486,-71.547537
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,10,Jirón José Carlos Mariátegui,-16.347109,-71.546378
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,11,IECP Thomas MC,-16.345333,-71.544892
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,12,Avenida Amazonas,-16.344172,-71.544564
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,13,Estadio Francisco Bolognesi,-16.344757,-71.542075
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,14,Inkafarma (Bolognesi),-16.344911,-71.540867
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,15,Plaza Francisco Bolognesi,-16.352319,-71.541673
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,16,Puesto de Salud Francisco Bolognesi,-16.354755,-71.542181
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,17,Calle 20 de Abril,-16.354687,-71.543499
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,18,Plaza de La Tomilla,-16.358114,-71.543814
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,19,Mercado de La Tomilla,-16.361896,-71.544021
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,20,Estadio de La Tomilla,-16.363914,-71.544128
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,21,Planta de Tratamiento La Tomilla,-16.368076,-71.544381
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,22,Estación de Servicio Repsol (Av. Bolognesi),-16.371533,-71.544533
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,23,Hospital de la Policía (Sanidad PNP),-16.375975,-71.544730
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,24,Plaza de Cayma,-16.381588,-71.545400
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,25,Scotiabank Cayma (Av. Cayma / Av. Ejército),-16.389516,-71.547646
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,26,Av. Trinidad Morán,-16.390162,-71.547892
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,27,Calle Granada,-16.390346,-71.547402
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,28,Calle Sevilla,-16.390119,-71.547087
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,29,Avenida Ejército,-16.389969,-71.547013
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,30,La Recoleta / Av. La Marina,-16.392251,-71.540627
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,31,Puente Bajo Grau (Av. La Marina),-16.393662,-71.539237
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,32,Universidad San Pablo (San Lázaro),-16.393850,-71.536250
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,33,Paradero de San Lázaro,-16.393210,-71.533280
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,34,Calle Jerusalén,-16.395120,-71.532350
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,35,Calle Peral,-16.394650,-71.530820
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,36,Hospital ESSALUD Seguín Escobedo,-16.394850,-71.529320
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,37,Calle El Filtro,-16.395250,-71.528150
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,38,Municipalidad Provincial de Arequipa,-16.395620,-71.527350
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,39,Distrito de Miraflores (Av. San Martín),-16.396820,-71.524850
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,40,Calle Las Flores,-16.397650,-71.523450
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,41,Plaza San Antonio,-16.398750,-71.522150
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,42,Calle Puno,-16.400550,-71.521250
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,43,Puente Arnao,-16.402250,-71.522850
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,44,Av. Sepúlveda,-16.403850,-71.523650
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,45,Grifo Autrisa (Av. Mariscal Castilla),-16.404550,-71.524550
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,46,Av. Venezuela,-16.405520,-71.526850
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,47,Feria del Altiplano,-16.402850,-71.517550
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,48,UNSA Sociales,-16.404850,-71.525550
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,49,UNSA Administración,-16.404320,-71.526450
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,50,Calle Garcí de Carbajal,-16.403150,-71.533850
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,51,Colegio Independencia,-16.404520,-71.530650
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,52,Av. Independencia,-16.405250,-71.528950
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,53,Calle 2 de Mayo,-16.402150,-71.532650
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,54,Víctor Lira,-16.403250,-71.533950
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,55,Coliseo Arequipa,-16.406850,-71.530250
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,56,UNSA Ingenierías,-16.406120,-71.524550
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,57,Informes UNSA,-16.405020,-71.526850
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,58,Colegio La Salle,-16.401850,-71.528750
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,59,Calle Don Bosco,-16.400850,-71.529650
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,60,Calle Ayacucho,-16.397650,-71.531850
+R-CAY-01-IDA,Alto Cayma - Cercado - UNSA (ida),transcayma,61,Calle Rivero,-16.396550,-71.532650
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,1,Calle Jerusalén,-16.395120,-71.532350
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,2,Calle Santa Catalina,-16.395850,-71.535650
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,3,Calle Bolívar,-16.396250,-71.537350
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,4,Puente Grau,-16.395820,-71.539850
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,5,Clínica Arequipa,-16.394850,-71.540650
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,6,Calle Misti,-16.391650,-71.541150
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,7,Calle Quezada,-16.389650,-71.541350
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,8,Comisaría de Yanahuara,-16.387800,-71.540800
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,9,Mall Plaza (Retorno Av. Ejército),-16.389969,-71.547013
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,10,Av. Cayma,-16.389516,-71.547646
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,11,Plaza de Cayma,-16.381588,-71.545400
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,12,Hospital de la Policía (Sanidad PNP),-16.375975,-71.544730
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,13,Estación de Servicio Repsol (Av. Bolognesi),-16.371533,-71.544533
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,14,Planta de Tratamiento La Tomilla,-16.368076,-71.544381
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,15,Estadio de La Tomilla,-16.363914,-71.544128
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,16,Mercado de La Tomilla,-16.361896,-71.544021
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,17,Plaza de La Tomilla,-16.358114,-71.543814
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,18,Calle 20 de Abril,-16.354687,-71.543499
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,19,Puesto de Salud Francisco Bolognesi,-16.354755,-71.542181
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,20,Plaza Francisco Bolognesi,-16.352319,-71.541673
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,21,Inkafarma (Bolognesi),-16.344911,-71.540867
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,22,Estadio Francisco Bolognesi,-16.344757,-71.542075
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,23,Avenida Amazonas,-16.344172,-71.544564
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,24,IECP Thomas MC,-16.345333,-71.544892
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,25,Jirón José Carlos Mariátegui,-16.347109,-71.546378
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,26,Buenos Aires / Las Malvinas,-16.348486,-71.547537
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,27,Avenida Ayacucho,-16.349704,-71.548442
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,28,Alto Cayma (Terminal Final),-16.350090,-71.551082
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,29,Cruce El Azufral (Av. Arequipa),-16.352291,-71.555043
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,30,Parque del Niño,-16.350943,-71.554722
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,31,Av. Arequipa (Iglesia de los Mormones),-16.350027,-71.554534
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,32,Comisaría de Casimiro Cuadros,-16.349068,-71.553125
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,33,Colegio Casimiro Cuadros,-16.348222,-71.552528
+R-CAY-01-VUELTA,Alto Cayma - Cercado - UNSA (vuelta),transcayma,34,Alto Cayma (Terminal Final),-16.346472,-71.551306
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,1,Miguel Grau (Terminal),-16.425810,-71.491220
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,2,15 de Agosto,-16.424050,-71.501530
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,3,Hospital Escomel,-16.417250,-71.510520
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,4,Av. Guardia Civil,-16.420550,-71.517520
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,5,Grifo Monterrey,-16.422250,-71.520850
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,6,Av. Estados Unidos,-16.427520,-71.524550
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,7,Óvalo Avelino Cáceres,-16.426150,-71.534850
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,8,La Pampilla,-16.417550,-71.530550
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,9,Hospital Honorio Delgado,-16.416820,-71.528850
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,10,Ormeño (Terminal Terrestre),-16.427850,-71.539250
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,11,Óvalo Vallecito,-16.406850,-71.542250
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,12,Universidad Católica Santa María,-16.405550,-71.548250
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,13,Óvalo Quiñones,-16.394850,-71.544250
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,14,Real Plaza,-16.388850,-71.544750
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,15,La Chopería,-16.385550,-71.546850
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,16,Metro (Av. Aviación / Ejército),-16.376850,-71.558350
+R-GRAU-C-IDA,Miguel Grau - Avelino - Cerro Colorado (ida),union-grau,17,Plaza Las Américas,-16.378950,-71.554650
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,1,Metro (Av. Aviación / Ejército),-16.376850,-71.558350
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,2,La Chopería,-16.385550,-71.546850
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,3,Real Plaza,-16.388850,-71.544750
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,4,Óvalo Quiñones,-16.394850,-71.544250
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,5,Universidad Católica Santa María,-16.405550,-71.548250
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,6,Óvalo Vallecito,-16.406850,-71.542250
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,7,Miguel Grau (Terminal Final),-16.427850,-71.539250
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,8,Hospital Honorio Delgado,-16.416820,-71.528850
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,9,La Pampilla,-16.417550,-71.530550
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,10,Óvalo Avelino Cáceres,-16.426150,-71.534850
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,11,Av. Estados Unidos,-16.427520,-71.524550
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,12,Grifo Monterrey,-16.422250,-71.520850
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,13,Av. Guardia Civil,-16.420550,-71.517520
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,14,Hospital Escomel,-16.417250,-71.510520
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,15,15 de Agosto,-16.424050,-71.501530
+R-GRAU-C-VUELTA,Miguel Grau - Avelino - Cerro Colorado (vuelta),union-grau,16,Miguel Grau (Terminal Final),-16.425810,-71.491220

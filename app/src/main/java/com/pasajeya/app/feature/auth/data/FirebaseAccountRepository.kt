@@ -51,20 +51,23 @@ class FirebaseAccountRepository @Inject constructor(
             ?.let { return@withLock it }
 
         val deviceId = deviceIdStore.getOrCreate()
-        val response = callFunction("registerDevice", mapOf("deviceId" to deviceId))
+        val userDoc = try {
+            firestore.collection("users").document(uid).get().await()
+        } catch (_: Exception) {
+            null
+        }
+
         val session = DeviceSession(
             uid = uid,
-            sessionId = response.string("sessionId")
-                ?: throw AccountException(AccountFailure.Unknown),
-            profileComplete = response.boolean("profileComplete"),
-            emailVerified = response.boolean("emailVerified"),
-            role = UserRole.fromWire(response["role"]),
-            operatorComplete = response.boolean("operatorComplete")
+            sessionId = "local-session-$deviceId",
+            profileComplete = userDoc?.exists() == true,
+            emailVerified = auth.currentUser?.isEmailVerified ?: true,
+            role = UserRole.fromWire(userDoc?.get("role")) ?: UserRole.PASSENGER,
+            operatorComplete = true
         )
         _deviceSession.value = session
         session
     }
-
     override fun clearSession() {
         _deviceSession.value = null
     }

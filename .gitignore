@@ -18,3 +18,7 @@ ui-debug.log
 *.jks
 .env
 .env.*
+
+functions/serviceAccountKey.json
+
+functions/serviceAccountKey.json

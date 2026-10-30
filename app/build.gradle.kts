@@ -103,6 +103,7 @@ dependencies {
 
     implementation("com.google.guava:guava:33.3.1-android")
     implementation("androidx.concurrent:concurrent-futures-ktx:1.2.0")
+    implementation("com.google.firebase:firebase-appcheck-debug:18.0.0")
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
@@ -116,4 +117,5 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
 }

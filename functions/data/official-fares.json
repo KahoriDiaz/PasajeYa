@@ -1,0 +1,112 @@
+{
+  "sources": [
+    {
+      "name": "El Búho, 5 ago 2026",
+      "url": "https://elbuho.pe/?p=431669"
+    },
+    {
+      "name": "Diario Correo, 5 ago 2026: las seis empresas obligadas a S/ 1.00 (lista y zonas)",
+      "url": "https://diariocorreo.pe/edicion/arequipa/conozca-las-seis-empresas-del-sit-obligadas-a-cobrar-pasaje-a-s100-en-arequipa-noticia/"
+    }
+  ],
+  "checkedAt": "2026-08-05",
+  "notes": "Nombres y tarifas segun prensa del 5 de agosto de 2026 (Diario Correo y El Buho). Las seis empresas de S/ 1.00 estaban obligadas desde el 3 de agosto; las cuatro de S/ 1.30 estaban en evaluacion con 15 dias para subsanar observaciones. La tarifa universitaria de S/ 0.50 (S/ 0.70 con pasaje de S/ 1.30) viene de El Buho y de la Ley 26271 (maximo 50 %). VERIFICAR con el ultimo comunicado de la Municipalidad Provincial de Arequipa: no se encontro informacion posterior a agosto. En la practica algunas unidades siguen cobrando S/ 1.30. Montos en centimos. CAMBIO DEL PROYECTO: officialFareCents es el pasaje VIGENTE y se usa como BASE de referencia (no como tope fijo). El pasaje universitario del proyecto es siempre el 50 % del pasaje cobrado (Ley 26271), redondeado al paso de 5 centimos; ya no se usa el 0,70 de El Buho para el calculo. Referencia del proyecto: todas las combis cobran hoy S/ 1,30 en la practica (chargedFareCents); el calculo por distancia se calibra a ese valor y el universitario es el 50 %.",
+  "concessionaires": [
+    {
+      "id": "cono-norte",
+      "name": "Consorcio Empresarial Cono Norte",
+      "officialFareCents": 100,
+      "officialUniversityFareCents": 50,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "areas": "Cerro Colorado y Yura",
+      "chargedFareCents": 130
+    },
+    {
+      "id": "transcayma",
+      "name": "Empresa de Transporte Transcayma",
+      "officialFareCents": 100,
+      "officialUniversityFareCents": 50,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "areas": "Cayma",
+      "chargedFareCents": 130
+    },
+    {
+      "id": "union-aqp",
+      "name": "Empresa de Transporte Unión AQP",
+      "officialFareCents": 100,
+      "officialUniversityFareCents": 50,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "areas": "Alto Selva Alegre y Miraflores",
+      "chargedFareCents": 130
+    },
+    {
+      "id": "etrabus",
+      "name": "Empresa de Transporte Etrabus",
+      "officialFareCents": 100,
+      "officialUniversityFareCents": 50,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "areas": "Mariano Melgar",
+      "chargedFareCents": 130
+    },
+    {
+      "id": "megabus",
+      "name": "Empresa de Transporte Megabus",
+      "officialFareCents": 100,
+      "officialUniversityFareCents": 50,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "areas": "Sachaca, Jacobo Hunter y Tiabaya",
+      "chargedFareCents": 130
+    },
+    {
+      "id": "cotum-express",
+      "name": "Empresa de Transporte Cotum Express",
+      "officialFareCents": 100,
+      "officialUniversityFareCents": 50,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "areas": "Cerro Colorado",
+      "chargedFareCents": 130
+    },
+    {
+      "id": "union-grau",
+      "name": "Empresa de Transporte Unión Grau",
+      "officialFareCents": 130,
+      "officialUniversityFareCents": 65,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "chargedFareCents": 130
+    },
+    {
+      "id": "aqp-masivo",
+      "name": "Empresa de Transporte AQP Masivo",
+      "officialFareCents": 130,
+      "officialUniversityFareCents": 65,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "chargedFareCents": 130
+    },
+    {
+      "id": "sabandia-characato-c8",
+      "name": "Empresa de Transporte Sabandía Characato C-8",
+      "officialFareCents": 130,
+      "officialUniversityFareCents": 65,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "chargedFareCents": 130
+    },
+    {
+      "id": "emarsistran",
+      "name": "Empresa de Transporte Emarsistran",
+      "officialFareCents": 130,
+      "officialUniversityFareCents": 65,
+      "officialSchoolFareCents": 50,
+      "status": "verified",
+      "chargedFareCents": 130
+    }
+  ]
+}

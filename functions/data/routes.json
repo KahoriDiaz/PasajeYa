@@ -1,0 +1,674 @@
+[
+  {
+    "id": "R-CAY-01-IDA",
+    "name": "Alto Cayma - Cercado - UNSA (ida)",
+    "active": true,
+    "concessionaireId": "transcayma",
+    "stops": [
+      {
+        "name": "Alto Cayma (Calle Héroes del Cenepa)",
+        "lat": -16.346472,
+        "lng": -71.551306
+      },
+      {
+        "name": "Colegio Casimiro Cuadros",
+        "lat": -16.348222,
+        "lng": -71.552528
+      },
+      {
+        "name": "Comisaría de Casimiro Cuadros",
+        "lat": -16.349068,
+        "lng": -71.553125
+      },
+      {
+        "name": "Av. Arequipa (Iglesia de los Mormones)",
+        "lat": -16.350027,
+        "lng": -71.554534
+      },
+      {
+        "name": "Parque del Niño",
+        "lat": -16.350943,
+        "lng": -71.554722
+      },
+      {
+        "name": "Cruce El Azufral (Av. Arequipa)",
+        "lat": -16.352291,
+        "lng": -71.555043
+      },
+      {
+        "name": "Mercado Buenos Aires (Alto Cayma)",
+        "lat": -16.35009,
+        "lng": -71.551082
+      },
+      {
+        "name": "Avenida Ayacucho",
+        "lat": -16.349704,
+        "lng": -71.548442
+      },
+      {
+        "name": "Buenos Aires / Las Malvinas",
+        "lat": -16.348486,
+        "lng": -71.547537
+      },
+      {
+        "name": "Jirón José Carlos Mariátegui",
+        "lat": -16.347109,
+        "lng": -71.546378
+      },
+      {
+        "name": "IECP Thomas MC",
+        "lat": -16.345333,
+        "lng": -71.544892
+      },
+      {
+        "name": "Avenida Amazonas",
+        "lat": -16.344172,
+        "lng": -71.544564
+      },
+      {
+        "name": "Estadio Francisco Bolognesi",
+        "lat": -16.344757,
+        "lng": -71.542075
+      },
+      {
+        "name": "Inkafarma (Bolognesi)",
+        "lat": -16.344911,
+        "lng": -71.540867
+      },
+      {
+        "name": "Plaza Francisco Bolognesi",
+        "lat": -16.352319,
+        "lng": -71.541673
+      },
+      {
+        "name": "Puesto de Salud Francisco Bolognesi",
+        "lat": -16.354755,
+        "lng": -71.542181
+      },
+      {
+        "name": "Calle 20 de Abril",
+        "lat": -16.354687,
+        "lng": -71.543499
+      },
+      {
+        "name": "Plaza de La Tomilla",
+        "lat": -16.358114,
+        "lng": -71.543814
+      },
+      {
+        "name": "Mercado de La Tomilla",
+        "lat": -16.361896,
+        "lng": -71.544021
+      },
+      {
+        "name": "Estadio de La Tomilla",
+        "lat": -16.363914,
+        "lng": -71.544128
+      },
+      {
+        "name": "Planta de Tratamiento La Tomilla",
+        "lat": -16.368076,
+        "lng": -71.544381
+      },
+      {
+        "name": "Estación de Servicio Repsol (Av. Bolognesi)",
+        "lat": -16.371533,
+        "lng": -71.544533
+      },
+      {
+        "name": "Hospital de la Policía (Sanidad PNP)",
+        "lat": -16.375975,
+        "lng": -71.54473
+      },
+      {
+        "name": "Plaza de Cayma",
+        "lat": -16.381588,
+        "lng": -71.5454
+      },
+      {
+        "name": "Scotiabank Cayma (Av. Cayma / Av. Ejército)",
+        "lat": -16.389516,
+        "lng": -71.547646
+      },
+      {
+        "name": "Av. Trinidad Morán",
+        "lat": -16.390162,
+        "lng": -71.547892
+      },
+      {
+        "name": "Calle Granada",
+        "lat": -16.390346,
+        "lng": -71.547402
+      },
+      {
+        "name": "Calle Sevilla",
+        "lat": -16.390119,
+        "lng": -71.547087
+      },
+      {
+        "name": "Avenida Ejército",
+        "lat": -16.389969,
+        "lng": -71.547013
+      },
+      {
+        "name": "La Recoleta / Av. La Marina",
+        "lat": -16.392251,
+        "lng": -71.540627
+      },
+      {
+        "name": "Puente Bajo Grau (Av. La Marina)",
+        "lat": -16.393662,
+        "lng": -71.539237
+      },
+      {
+        "name": "Universidad San Pablo (San Lázaro)",
+        "lat": -16.39385,
+        "lng": -71.53625
+      },
+      {
+        "name": "Paradero de San Lázaro",
+        "lat": -16.39321,
+        "lng": -71.53328
+      },
+      {
+        "name": "Calle Jerusalén",
+        "lat": -16.39512,
+        "lng": -71.53235
+      },
+      {
+        "name": "Calle Peral",
+        "lat": -16.39465,
+        "lng": -71.53082
+      },
+      {
+        "name": "Hospital ESSALUD Seguín Escobedo",
+        "lat": -16.39485,
+        "lng": -71.52932
+      },
+      {
+        "name": "Calle El Filtro",
+        "lat": -16.39525,
+        "lng": -71.52815
+      },
+      {
+        "name": "Municipalidad Provincial de Arequipa",
+        "lat": -16.39562,
+        "lng": -71.52735
+      },
+      {
+        "name": "Distrito de Miraflores (Av. San Martín)",
+        "lat": -16.39682,
+        "lng": -71.52485
+      },
+      {
+        "name": "Calle Las Flores",
+        "lat": -16.39765,
+        "lng": -71.52345
+      },
+      {
+        "name": "Plaza San Antonio",
+        "lat": -16.39875,
+        "lng": -71.52215
+      },
+      {
+        "name": "Calle Puno",
+        "lat": -16.40055,
+        "lng": -71.52125
+      },
+      {
+        "name": "Puente Arnao",
+        "lat": -16.40225,
+        "lng": -71.52285
+      },
+      {
+        "name": "Av. Sepúlveda",
+        "lat": -16.40385,
+        "lng": -71.52365
+      },
+      {
+        "name": "Grifo Autrisa (Av. Mariscal Castilla)",
+        "lat": -16.40455,
+        "lng": -71.52455
+      },
+      {
+        "name": "Av. Venezuela",
+        "lat": -16.40552,
+        "lng": -71.52685
+      },
+      {
+        "name": "Feria del Altiplano",
+        "lat": -16.40285,
+        "lng": -71.51755
+      },
+      {
+        "name": "UNSA Sociales",
+        "lat": -16.40485,
+        "lng": -71.52555
+      },
+      {
+        "name": "UNSA Administración",
+        "lat": -16.40432,
+        "lng": -71.52645
+      },
+      {
+        "name": "Calle Garcí de Carbajal",
+        "lat": -16.40315,
+        "lng": -71.53385
+      },
+      {
+        "name": "Colegio Independencia",
+        "lat": -16.40452,
+        "lng": -71.53065
+      },
+      {
+        "name": "Av. Independencia",
+        "lat": -16.40525,
+        "lng": -71.52895
+      },
+      {
+        "name": "Calle 2 de Mayo",
+        "lat": -16.40215,
+        "lng": -71.53265
+      },
+      {
+        "name": "Víctor Lira",
+        "lat": -16.40325,
+        "lng": -71.53395
+      },
+      {
+        "name": "Coliseo Arequipa",
+        "lat": -16.40685,
+        "lng": -71.53025
+      },
+      {
+        "name": "UNSA Ingenierías",
+        "lat": -16.40612,
+        "lng": -71.52455
+      },
+      {
+        "name": "Informes UNSA",
+        "lat": -16.40502,
+        "lng": -71.52685
+      },
+      {
+        "name": "Colegio La Salle",
+        "lat": -16.40185,
+        "lng": -71.52875
+      },
+      {
+        "name": "Calle Don Bosco",
+        "lat": -16.40085,
+        "lng": -71.52965
+      },
+      {
+        "name": "Calle Ayacucho",
+        "lat": -16.39765,
+        "lng": -71.53185
+      },
+      {
+        "name": "Calle Rivero",
+        "lat": -16.39655,
+        "lng": -71.53265
+      }
+    ]
+  },
+  {
+    "id": "R-CAY-01-VUELTA",
+    "name": "Alto Cayma - Cercado - UNSA (vuelta)",
+    "active": true,
+    "concessionaireId": "transcayma",
+    "stops": [
+      {
+        "name": "Calle Jerusalén",
+        "lat": -16.39512,
+        "lng": -71.53235
+      },
+      {
+        "name": "Calle Santa Catalina",
+        "lat": -16.39585,
+        "lng": -71.53565
+      },
+      {
+        "name": "Calle Bolívar",
+        "lat": -16.39625,
+        "lng": -71.53735
+      },
+      {
+        "name": "Puente Grau",
+        "lat": -16.39582,
+        "lng": -71.53985
+      },
+      {
+        "name": "Clínica Arequipa",
+        "lat": -16.39485,
+        "lng": -71.54065
+      },
+      {
+        "name": "Calle Misti",
+        "lat": -16.39165,
+        "lng": -71.54115
+      },
+      {
+        "name": "Calle Quezada",
+        "lat": -16.38965,
+        "lng": -71.54135
+      },
+      {
+        "name": "Comisaría de Yanahuara",
+        "lat": -16.3878,
+        "lng": -71.5408
+      },
+      {
+        "name": "Mall Plaza (Retorno Av. Ejército)",
+        "lat": -16.389969,
+        "lng": -71.547013
+      },
+      {
+        "name": "Av. Cayma",
+        "lat": -16.389516,
+        "lng": -71.547646
+      },
+      {
+        "name": "Plaza de Cayma",
+        "lat": -16.381588,
+        "lng": -71.5454
+      },
+      {
+        "name": "Hospital de la Policía (Sanidad PNP)",
+        "lat": -16.375975,
+        "lng": -71.54473
+      },
+      {
+        "name": "Estación de Servicio Repsol (Av. Bolognesi)",
+        "lat": -16.371533,
+        "lng": -71.544533
+      },
+      {
+        "name": "Planta de Tratamiento La Tomilla",
+        "lat": -16.368076,
+        "lng": -71.544381
+      },
+      {
+        "name": "Estadio de La Tomilla",
+        "lat": -16.363914,
+        "lng": -71.544128
+      },
+      {
+        "name": "Mercado de La Tomilla",
+        "lat": -16.361896,
+        "lng": -71.544021
+      },
+      {
+        "name": "Plaza de La Tomilla",
+        "lat": -16.358114,
+        "lng": -71.543814
+      },
+      {
+        "name": "Calle 20 de Abril",
+        "lat": -16.354687,
+        "lng": -71.543499
+      },
+      {
+        "name": "Puesto de Salud Francisco Bolognesi",
+        "lat": -16.354755,
+        "lng": -71.542181
+      },
+      {
+        "name": "Plaza Francisco Bolognesi",
+        "lat": -16.352319,
+        "lng": -71.541673
+      },
+      {
+        "name": "Inkafarma (Bolognesi)",
+        "lat": -16.344911,
+        "lng": -71.540867
+      },
+      {
+        "name": "Estadio Francisco Bolognesi",
+        "lat": -16.344757,
+        "lng": -71.542075
+      },
+      {
+        "name": "Avenida Amazonas",
+        "lat": -16.344172,
+        "lng": -71.544564
+      },
+      {
+        "name": "IECP Thomas MC",
+        "lat": -16.345333,
+        "lng": -71.544892
+      },
+      {
+        "name": "Jirón José Carlos Mariátegui",
+        "lat": -16.347109,
+        "lng": -71.546378
+      },
+      {
+        "name": "Buenos Aires / Las Malvinas",
+        "lat": -16.348486,
+        "lng": -71.547537
+      },
+      {
+        "name": "Avenida Ayacucho",
+        "lat": -16.349704,
+        "lng": -71.548442
+      },
+      {
+        "name": "Alto Cayma (Terminal Final)",
+        "lat": -16.35009,
+        "lng": -71.551082
+      },
+      {
+        "name": "Cruce El Azufral (Av. Arequipa)",
+        "lat": -16.352291,
+        "lng": -71.555043
+      },
+      {
+        "name": "Parque del Niño",
+        "lat": -16.350943,
+        "lng": -71.554722
+      },
+      {
+        "name": "Av. Arequipa (Iglesia de los Mormones)",
+        "lat": -16.350027,
+        "lng": -71.554534
+      },
+      {
+        "name": "Comisaría de Casimiro Cuadros",
+        "lat": -16.349068,
+        "lng": -71.553125
+      },
+      {
+        "name": "Colegio Casimiro Cuadros",
+        "lat": -16.348222,
+        "lng": -71.552528
+      },
+      {
+        "name": "Alto Cayma (Terminal Final)",
+        "lat": -16.346472,
+        "lng": -71.551306
+      }
+    ]
+  },
+  {
+    "id": "R-GRAU-C-IDA",
+    "name": "Miguel Grau - Avelino - Cerro Colorado (ida)",
+    "active": true,
+    "concessionaireId": "union-grau",
+    "stops": [
+      {
+        "name": "Miguel Grau (Terminal)",
+        "lat": -16.42581,
+        "lng": -71.49122
+      },
+      {
+        "name": "15 de Agosto",
+        "lat": -16.42405,
+        "lng": -71.50153
+      },
+      {
+        "name": "Hospital Escomel",
+        "lat": -16.41725,
+        "lng": -71.51052
+      },
+      {
+        "name": "Av. Guardia Civil",
+        "lat": -16.42055,
+        "lng": -71.51752
+      },
+      {
+        "name": "Grifo Monterrey",
+        "lat": -16.42225,
+        "lng": -71.52085
+      },
+      {
+        "name": "Av. Estados Unidos",
+        "lat": -16.42752,
+        "lng": -71.52455
+      },
+      {
+        "name": "Óvalo Avelino Cáceres",
+        "lat": -16.42615,
+        "lng": -71.53485
+      },
+      {
+        "name": "La Pampilla",
+        "lat": -16.41755,
+        "lng": -71.53055
+      },
+      {
+        "name": "Hospital Honorio Delgado",
+        "lat": -16.41682,
+        "lng": -71.52885
+      },
+      {
+        "name": "Ormeño (Terminal Terrestre)",
+        "lat": -16.42785,
+        "lng": -71.53925
+      },
+      {
+        "name": "Óvalo Vallecito",
+        "lat": -16.40685,
+        "lng": -71.54225
+      },
+      {
+        "name": "Universidad Católica Santa María",
+        "lat": -16.40555,
+        "lng": -71.54825
+      },
+      {
+        "name": "Óvalo Quiñones",
+        "lat": -16.39485,
+        "lng": -71.54425
+      },
+      {
+        "name": "Real Plaza",
+        "lat": -16.38885,
+        "lng": -71.54475
+      },
+      {
+        "name": "La Chopería",
+        "lat": -16.38555,
+        "lng": -71.54685
+      },
+      {
+        "name": "Metro (Av. Aviación / Ejército)",
+        "lat": -16.37685,
+        "lng": -71.55835
+      },
+      {
+        "name": "Plaza Las Américas",
+        "lat": -16.37895,
+        "lng": -71.55465
+      }
+    ]
+  },
+  {
+    "id": "R-GRAU-C-VUELTA",
+    "name": "Miguel Grau - Avelino - Cerro Colorado (vuelta)",
+    "active": true,
+    "concessionaireId": "union-grau",
+    "stops": [
+      {
+        "name": "Metro (Av. Aviación / Ejército)",
+        "lat": -16.37685,
+        "lng": -71.55835
+      },
+      {
+        "name": "La Chopería",
+        "lat": -16.38555,
+        "lng": -71.54685
+      },
+      {
+        "name": "Real Plaza",
+        "lat": -16.38885,
+        "lng": -71.54475
+      },
+      {
+        "name": "Óvalo Quiñones",
+        "lat": -16.39485,
+        "lng": -71.54425
+      },
+      {
+        "name": "Universidad Católica Santa María",
+        "lat": -16.40555,
+        "lng": -71.54825
+      },
+      {
+        "name": "Óvalo Vallecito",
+        "lat": -16.40685,
+        "lng": -71.54225
+      },
+      {
+        "name": "Miguel Grau (Terminal Final)",
+        "lat": -16.42785,
+        "lng": -71.53925
+      },
+      {
+        "name": "Hospital Honorio Delgado",
+        "lat": -16.41682,
+        "lng": -71.52885
+      },
+      {
+        "name": "La Pampilla",
+        "lat": -16.41755,
+        "lng": -71.53055
+      },
+      {
+        "name": "Óvalo Avelino Cáceres",
+        "lat": -16.42615,
+        "lng": -71.53485
+      },
+      {
+        "name": "Av. Estados Unidos",
+        "lat": -16.42752,
+        "lng": -71.52455
+      },
+      {
+        "name": "Grifo Monterrey",
+        "lat": -16.42225,
+        "lng": -71.52085
+      },
+      {
+        "name": "Av. Guardia Civil",
+        "lat": -16.42055,
+        "lng": -71.51752
+      },
+      {
+        "name": "Hospital Escomel",
+        "lat": -16.41725,
+        "lng": -71.51052
+      },
+      {
+        "name": "15 de Agosto",
+        "lat": -16.42405,
+        "lng": -71.50153
+      },
+      {
+        "name": "Miguel Grau (Terminal Final)",
+        "lat": -16.42581,
+        "lng": -71.49122
+      }
+    ]
+  }
+]
