@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="benefit_title">Beneficios</string>
+    <string name="benefit_status_none">Sin beneficios activos</string>
+    <string name="benefit_status_approved">Descuento universitario activo</string>
+    <string name="benefit_status_pending_carne">Revisando carné…</string>
+    <string name="benefit_status_pending_code">Esperando código de correo</string>
+    <string name="benefit_status_rejected">Solicitud rechazada</string>
+    <string name="benefit_status_expired">Beneficio vencido</string>
+
+    <string name="benefit_verify_university">Verificar como universitario</string>
+    <string name="benefit_university_desc">Obtén 50 % de descuento en todos tus viajes verificando tu carné universitario vigente de la UCSM.</string>
+    <string name="benefit_valid_until">Válido hasta: %1$s</string>
+
+    <string name="benefit_step_carne_title">Paso 1: Foto del carné</string>
+    <string name="benefit_step_carne_instructions">Ubica tu carné frente a la cámara. Asegúrate de que haya buena luz y que todo el texto sea legible.</string>
+    <string name="benefit_step_carne_button">Tomar foto</string>
+    <string name="benefit_step_carne_scanning">Detectando carné…</string>
+    <string name="benefit_step_carne_detected">Carné detectado: %1$s</string>
+
+    <string name="benefit_step_email_title">Paso 2: Correo institucional</string>
+    <string name="benefit_step_email_instructions">Escribe tu correo institucional de la UCSM (@ucsm.edu.pe) para recibir un código de seguridad.</string>
+    <string name="benefit_field_email">Correo institucional</string>
+    <string name="benefit_email_button">Enviar código</string>
+
+    <string name="benefit_step_code_title">Paso 3: Verificar código</string>
+    <string name="benefit_step_code_instructions">Escribe el código de 6 dígitos que enviamos a tu correo institucional.</string>
+    <string name="benefit_field_code">Código de 6 dígitos</string>
+    <string name="benefit_code_button">Confirmar código</string>
+    <string name="benefit_code_resend">Reenviar código</string>
+    <string name="benefit_code_timer">Podrás reenviar en %1$d s</string>
+
+    <string name="benefit_comparison_title">Tu ahorro con el beneficio</string>
+    <string name="benefit_comparison_regular">Pasaje regular</string>
+    <string name="benefit_comparison_discounted">Pasaje universitario</string>
+    <string name="benefit_comparison_notice">Precios calculados para un viaje de referencia de 5 km.</string>
+
+    <string name="benefit_error_no_camera">No se pudo abrir la cámara.</string>
+    <string name="benefit_error_upload">Error al subir la imagen. Revisa tu conexión.</string>
+</resources>

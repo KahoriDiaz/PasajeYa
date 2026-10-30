@@ -79,3 +79,19 @@ interfaz queda preparada para la fuente real.
 - Verificación automática de licencias, placas, rutas o DNI contra fuentes oficiales.
 - Panel de administración para aprobar operadores y resolver reclamos.
 - QR, GPS, tarifas, voz, historial y reclamos (F2–F7).
+
+
+## Billetera demo (F8) y mapa
+
+- **Saldo de demostración:** la billetera de `feature/wallet` vive solo en el dispositivo
+  (DataStore, por cuenta). No es dinero real, no se sincroniza con Firestore ni pasa por Cloud
+  Functions; por eso la pantalla muestra "Saldo de demostración: no es dinero real". Conectar una
+  pasarela de pago real requiere un proveedor y un backend que hoy no existen. La interfaz
+  `WalletRepository` queda lista para sustituir `DataStoreWalletRepository`.
+- **Costo en vivo del pasajero:** se calcula en el teléfono con el GPS del pasajero y es solo una
+  estimación. El importe que se cobra y se guarda lo calcula el servidor en el Tap Out con el GPS
+  del vehículo.
+- **Mapa:** usa teselas públicas de OpenStreetMap (osmdroid) sin clave de API. Para producción con
+  mucho tráfico conviene un proveedor de teselas propio o con contrato.
+- **Verificación del carné en el teléfono:** ML Kit solo comprueba que el texto parezca un carné de
+  la UCSM para repetir la foto a tiempo; la validación que manda es la del servidor.

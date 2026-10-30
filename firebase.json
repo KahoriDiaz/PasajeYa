@@ -12,6 +12,9 @@
       "npm --prefix functions run lint"
     ]
   },
+  "storage": {
+    "rules": "storage.rules"
+  },
   "emulators": {
     "auth": {
       "port": 9099
@@ -21,6 +24,9 @@
     },
     "functions": {
       "port": 5001
+    },
+    "storage": {
+      "port": 9199
     },
     "ui": {
       "enabled": true,

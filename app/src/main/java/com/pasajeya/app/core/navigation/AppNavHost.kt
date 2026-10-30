@@ -28,9 +28,12 @@ import com.pasajeya.app.feature.auth.ui.register.RegisterScreen
 import com.pasajeya.app.feature.auth.ui.role.RoleSelectionScreen
 import com.pasajeya.app.feature.auth.ui.verification.VerificationScreen
 import com.pasajeya.app.feature.auth.ui.welcome.WelcomeScreen
+import com.pasajeya.app.feature.benefit.ui.BenefitScreen
+import com.pasajeya.app.feature.benefit.ui.CarneCaptureScreen
 import com.pasajeya.app.feature.fare.ui.FareEstimateScreen
 import com.pasajeya.app.feature.history.ui.HistoryScreen
 import com.pasajeya.app.feature.trip.ui.summary.TripSummaryScreen
+import com.pasajeya.app.feature.wallet.ui.WalletScreen
 
 object AppRoutes {
     const val WELCOME = "welcome"
@@ -46,8 +49,11 @@ object AppRoutes {
     const val OPERATOR_HOME = "operator_home"
     const val PRIVACY_POLICY = "privacy_policy"
     const val FARE_ESTIMATE = "fare_estimate"
-    const val HISTORY = "history"
     const val TRIP_SUMMARY = "trip_summary/{tripId}"
+    const val BENEFITS = "benefits"
+    const val CAPTURE_CARNE = "capture_carne"
+    const val HISTORY = "history"
+    const val WALLET = "wallet"
 }
 
 fun routeFor(destination: AuthDestination): String = when (destination) {
@@ -180,6 +186,8 @@ fun AppNavHost(
                 onNavigate = ::navigateTo,
                 onEstimate = { navController.navigate(AppRoutes.FARE_ESTIMATE) },
                 onHistory = { navController.navigate(AppRoutes.HISTORY) },
+                onWallet = { navController.navigate(AppRoutes.WALLET) },
+                onBenefits = { navController.navigate(AppRoutes.BENEFITS) },
                 onTripFinished = { tripId ->
                     navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
                 }
@@ -207,22 +215,37 @@ fun AppNavHost(
             )
         }
 
-        composable(AppRoutes.HISTORY) {
-            HistoryScreen(
-                onBack = { navController.popBackStack() },
-                onTripClick = { tripId ->
-                    navController.navigate(
-                        AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId)
-                    )
-                }
-            )
-        }
-
         composable(
             route = AppRoutes.TRIP_SUMMARY,
             arguments = listOf(navArgument("tripId") { type = NavType.StringType })
         ) {
             TripSummaryScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(AppRoutes.BENEFITS) {
+            BenefitScreen(
+                onBack = { navController.popBackStack() },
+                onVerifyUniversity = { navController.navigate(AppRoutes.CAPTURE_CARNE) }
+            )
+        }
+
+        composable(AppRoutes.HISTORY) {
+            HistoryScreen(
+                onBack = { navController.popBackStack() },
+                onTripClick = { tripId ->
+                    navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
+                }
+            )
+        }
+
+        composable(AppRoutes.WALLET) {
+            WalletScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(AppRoutes.CAPTURE_CARNE) {
+            CarneCaptureScreen(
                 onBack = { navController.popBackStack() }
             )
         }

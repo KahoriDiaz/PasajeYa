@@ -1,0 +1,18 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /benefitUploads/{uid}/{requestId}.jpg {
+      // El dueño puede subir (crear) un JPEG de máximo 5 MB.
+      // Sin lectura ni borrado desde clientes.
+      allow create: if request.auth != null &&
+                    request.auth.uid == uid &&
+                    request.resource.size < 5 * 1024 * 1024 &&
+                    request.resource.contentType == 'image/jpeg';
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

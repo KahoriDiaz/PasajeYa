@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Viaje en vivo -->
+    <string name="live_trip_title">Tu viaje en vivo</string>
+    <string name="live_trip_cost_label">Costo estimado en vivo</string>
+    <string name="live_trip_distance">%1$s recorridos</string>
+    <string name="live_trip_benefit">Descuento universitario %1$d%%</string>
+    <string name="live_trip_capped">Tope de la ruta aplicado</string>
+    <string name="live_trip_disclaimer">Estimación con tu GPS. El cobro final lo calcula el servidor al bajar.</string>
+    <string name="live_trip_permission">Activa la ubicación para ver el costo en vivo.</string>
+    <string name="live_trip_permission_action">Activar ubicación</string>
+    <string name="live_trip_loading">Cargando ruta y tarifa…</string>
+    <string name="live_trip_map_description">Mapa de la ruta con tu posición actual</string>
+    <string name="live_trip_error">No pudimos cargar el costo en vivo: %1$s</string>
+
+    <!-- Estimar pasaje -->
+    <string name="estimate_title">Estimar mi pasaje</string>
+    <string name="estimate_route">Ruta</string>
+    <string name="estimate_select_route">Seleccionar ruta</string>
+    <string name="estimate_origin">Paradero de origen</string>
+    <string name="estimate_destination">Paradero de destino</string>
+    <string name="estimate_calculate">Calcular</string>
+    <string name="estimate_result_title">Resultado de la estimación</string>
+    <string name="estimate_total">Importe estimado</string>
+    <string name="estimate_distance">Distancia por la ruta: %1$s</string>
+    <string name="estimate_regular">Tarifa regular: %1$s</string>
+    <string name="estimate_benefit">Descuento universitario %1$d%% aplicado</string>
+    <string name="estimate_capped">Se aplicó el tope de la ruta.</string>
+    <string name="estimate_min_applied">Se aplicó la tarifa mínima.</string>
+    <string name="estimate_disclaimer">Este monto es una estimación. El cobro real se calcula al finalizar tu viaje.</string>
+    <string name="estimate_same_stop">Elige paraderos distintos para estimar.</string>
+    <string name="estimate_empty_routes">No hay rutas activas por ahora.</string>
+    <string name="estimate_map_description">Mapa de la ruta con sus paraderos</string>
+    <string name="estimate_error_routes">No pudimos cargar las rutas. Revisa tu conexión.</string>
+    <string name="estimate_error_route">No pudimos cargar la ruta y su tarifa. Inténtalo de nuevo.</string>
+    <string name="estimate_stop_label">%1$d. %2$s</string>
+
+    <!-- Inicio pasajero -->
+    <string name="home_open_wallet">Pagar</string>
+    <string name="home_open_benefits">Beneficio universitario</string>
+
+    <!-- Billetera demo -->
+    <string name="wallet_title">Pagar</string>
+    <string name="wallet_demo_notice">Saldo de demostración: no es dinero real</string>
+    <string name="wallet_balance">Saldo disponible</string>
+    <string name="wallet_hold_label">Retenido: %1$s</string>
+    <string name="wallet_recharge_title">Recarga demo</string>
+    <string name="wallet_recharge_option">+ %1$s</string>
+    <string name="wallet_simulate_title">Retención y cobro de un viaje</string>
+    <string name="wallet_hold_action">Retener tarifa máxima (%1$s)</string>
+    <string name="wallet_charge_action">Cobrar último viaje (%1$s)</string>
+    <string name="wallet_charge_no_trip">Aún no tienes un viaje cerrado para cobrar.</string>
+    <string name="wallet_release_action">Liberar retención</string>
+    <string name="wallet_hold_active">Hay una retención activa. Cobra el último viaje o libérala.</string>
+    <string name="wallet_movements_title">Movimientos</string>
+    <string name="wallet_movements_empty">Todavía no hay movimientos.</string>
+    <string name="wallet_kind_recharge">Recarga demo</string>
+    <string name="wallet_kind_hold">Retención</string>
+    <string name="wallet_kind_release">Retención liberada</string>
+    <string name="wallet_kind_charge">Cobro de viaje</string>
+    <string name="wallet_error_invalid_amount">El monto no es válido.</string>
+    <string name="wallet_error_limit">Superaste el saldo demo máximo.</string>
+    <string name="wallet_error_funds">Saldo insuficiente. Recarga primero.</string>
+    <string name="wallet_error_hold_active">Ya hay una retención activa.</string>
+    <string name="wallet_error_no_hold">No hay una retención activa.</string>
+    <string name="wallet_no_account">Inicia sesión para usar la billetera.</string>
+    <string name="wallet_load_failed">No pudimos cargar tus datos. Revisa tu conexión.</string>
+
+    <!-- Carné -->
+    <string name="benefit_carne_unreadable">No pudimos leer el texto del carné. Toma la foto de nuevo con buena luz y el carné completo dentro del marco.</string>
+    <string name="benefit_carne_processing">Verificando y enviando tu carné…</string>
+</resources>

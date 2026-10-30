@@ -1,4 +1,4 @@
-package com.pasajeya.app.feature.auth.data
+﻿package com.pasajeya.app.feature.auth.data
 
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
@@ -225,7 +225,7 @@ class FirebaseAccountRepository @Inject constructor(
     ): Map<*, *> {
         return try {
             val result = functions.getHttpsCallable(name).call(data).await()
-            result.data as? Map<*, *> ?: throw AccountException(AccountFailure.Unknown)
+            result.getData() as? Map<*, *> ?: throw AccountException(AccountFailure.Unknown)
         } catch (error: CancellationException) {
             throw error
         } catch (error: AccountException) {

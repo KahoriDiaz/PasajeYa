@@ -3,7 +3,7 @@ package com.pasajeya.app.core.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pasajeya.app.core.ui.LoadingScreen
 import com.pasajeya.app.core.ui.StartupErrorScreen

@@ -223,7 +223,7 @@ class FirebaseTripRepository @Inject constructor(
         val callable = functions.getHttpsCallable(name)
         return try {
             @Suppress("UNCHECKED_CAST")
-            val result = callable.call(payload).await().data as? Map<String, Any?>
+            val result = callable.call(payload).await().getData() as? Map<String, Any?>
             result ?: throw TripOperationException("Respuesta inválida del servidor.")
         } catch (error: FirebaseFunctionsException) {
             val message = when (error.code) {

@@ -1,99 +1,78 @@
 package com.pasajeya.app.feature.voice.data
 
 import android.content.Context
-import android.media.AudioAttributes
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import com.pasajeya.app.feature.voice.domain.SpeechAnnouncer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.withTimeoutOrNull
+import javax.inject.Singleton
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
+@Singleton
 class AndroidSpeechAnnouncer @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext private val context: Context
 ) : SpeechAnnouncer {
 
-    private val ready = CompletableDeferred<Boolean>()
-    private val textToSpeech: TextToSpeech
-    private var utteranceSequence = 0
-
-    @Volatile
-    override var isAvailable: Boolean = false
+    private var tts: TextToSpeech? = null
+    private var initialized = false
+    override var isAvailable = false
         private set
 
-    @Volatile
-    private var released = false
-
     init {
-        textToSpeech = TextToSpeech(context) { status ->
-            if (released) {
-                textToSpeech.shutdown()
+        tts = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                setupLanguage()
             } else {
-                val available = status == TextToSpeech.SUCCESS &&
-                    selectSpanishLanguage()
-                if (available) {
-                    textToSpeech.setAudioAttributes(
-                        AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_MEDIA)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                            .build()
-                    )
-                }
-                isAvailable = available
-                ready.complete(available)
+                Log.e("SpeechAnnouncer", "TTS initialization failed")
             }
         }
     }
 
-    override suspend fun speak(text: String): Boolean {
-        val initialized = withTimeoutOrNull(INITIALIZATION_TIMEOUT_MILLIS) {
-            ready.await()
-        } ?: false
-        if (!initialized) return false
-        if (released) return false
+    private fun setupLanguage() {
+        val localePe = Locale("es", "PE")
+        val result = tts?.setLanguage(localePe) ?: TextToSpeech.LANG_NOT_SUPPORTED
+        
+        isAvailable = when (result) {
+            TextToSpeech.LANG_AVAILABLE,
+            TextToSpeech.LANG_COUNTRY_AVAILABLE,
+            TextToSpeech.LANG_COUNTRY_VAR_AVAILABLE -> {
+                initialized = true
+                true
+            }
+            else -> {
+                // Intento con español neutro o US si es-PE no está
+                val fallback = tts?.setLanguage(Locale("es"))
+                if (fallback != TextToSpeech.LANG_MISSING_DATA && fallback != TextToSpeech.LANG_NOT_SUPPORTED) {
+                    initialized = true
+                    true
+                } else {
+                    Log.w("SpeechAnnouncer", "Spanish language not supported for TTS")
+                    false
+                }
+            }
+        }
+    }
 
-        utteranceSequence += 1
-        return textToSpeech.speak(
-            text,
-            TextToSpeech.QUEUE_ADD,
-            null,
-            "pasajeya-$utteranceSequence"
-        ) == TextToSpeech.SUCCESS
+    override suspend fun speak(text: String): Boolean = withContext(Dispatchers.Main) {
+        if (!isAvailable || tts == null || text.isBlank()) return@withContext false
+
+        val result = tts?.speak(text, TextToSpeech.QUEUE_ADD, null, "msg_${System.currentTimeMillis()}")
+        result == TextToSpeech.SUCCESS
     }
 
     override fun stop() {
-        textToSpeech.stop()
+        tts?.stop()
     }
 
     override fun release() {
-        released = true
+        tts?.shutdown()
+        tts = null
+        initialized = false
         isAvailable = false
-        if (!ready.isCompleted) {
-            ready.complete(false)
-        }
-        textToSpeech.stop()
-        textToSpeech.shutdown()
-    }
-
-    private fun selectSpanishLanguage(): Boolean {
-        for (locale in SPANISH_LOCALES) {
-            val result = textToSpeech.setLanguage(locale)
-            val available = result == TextToSpeech.LANG_AVAILABLE ||
-                result == TextToSpeech.LANG_COUNTRY_AVAILABLE ||
-                result == TextToSpeech.LANG_COUNTRY_VAR_AVAILABLE
-            if (available) return true
-        }
-        return false
-    }
-
-    private companion object {
-        const val INITIALIZATION_TIMEOUT_MILLIS = 5_000L
-
-        val SPANISH_LOCALES = listOf(
-            Locale.forLanguageTag("es-PE"),
-            Locale.forLanguageTag("es-US"),
-            Locale.forLanguageTag("es-ES")
-        )
     }
 }

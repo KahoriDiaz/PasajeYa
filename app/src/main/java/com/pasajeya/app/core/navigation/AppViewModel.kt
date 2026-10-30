@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 sealed interface AppUiState {
     data object Loading : AppUiState
@@ -62,7 +63,14 @@ class AppViewModel @Inject constructor(
             }
 
             try {
-                val session = accountRepository.ensureSession(user.uid)
+                // Evita el "cargando..." infinito si la nube no responde.
+                val session = withTimeoutOrNull(STARTUP_TIMEOUT_MILLIS) {
+                    accountRepository.ensureSession(user.uid)
+                }
+                if (session == null) {
+                    _uiState.value = AppUiState.StartupError
+                    return@launch
+                }
                 _uiState.value = AppUiState.Ready(
                     resolveAuthDestination(
                         emailVerified = user.emailVerified,
@@ -132,5 +140,9 @@ class AppViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { authRepository.signOut() }
         }
+    }
+
+    private companion object {
+        const val STARTUP_TIMEOUT_MILLIS = 20_000L
     }
 }

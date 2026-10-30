@@ -57,6 +57,8 @@ fun PassengerTripContent(
     onLogout: () -> Unit,
     onEstimate: () -> Unit,
     onHistory: () -> Unit,
+    onWallet: () -> Unit,
+    onBenefits: () -> Unit,
     viewModel: PassengerQrViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -114,12 +116,38 @@ fun PassengerTripContent(
             routeName = state.routeName
         )
 
+        if (state.trip != null) {
+            LiveTripCard()
+        }
+
         Button(
             onClick = onEstimate,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp)
         ) {
-            Text(text = "Estimar mi pasaje")
+            Text(text = stringResource(R.string.estimate_title))
+        }
+
+        Button(
+            onClick = onWallet,
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 52.dp)
+                .testTag("open_wallet"),
+            shape = RoundedCornerShape(14.dp)
+        ) {
+            Text(text = stringResource(R.string.home_open_wallet))
+        }
+
+        OutlinedButton(
+            onClick = onBenefits,
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 52.dp)
+                .testTag("open_benefits"),
+            shape = RoundedCornerShape(14.dp)
+        ) {
+            Text(text = stringResource(R.string.home_open_benefits))
         }
 
         OutlinedButton(

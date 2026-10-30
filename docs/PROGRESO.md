@@ -299,3 +299,38 @@ sus casos están en `docs/pruebas-manuales-F1.md`, `docs/pruebas-manuales-F2.md`
 F 7 :   C o m p l e t a d o 
  
  
+
+
+### 2026-10-29 — Nube real, mapa, tarifa en vivo, beneficio, billetera demo e historial
+
+- **Nube real:** `PasajeYaApplication` ya no llama a `useEmulator(...)`. `FirebaseAuth`,
+  `FirebaseFirestore` y `FirebaseFunctions("southamerica-east1")` apuntan a Firebase real.
+  El arranque tiene un tiempo máximo de 20 s: si la nube no responde se muestra el error con
+  reintento en lugar del "cargando…" infinito.
+- **Verificación de correo:** el sondeo con `reload()` cada 3 s vive ahora en
+  `VerificationViewModel` (silencioso, sin parpadeos de mensajes).
+- **F2/F3 estimar pasaje:** `FareEstimateScreen` muestra el mapa (osmdroid/OpenStreetMap) con la
+  ruta y sus paraderos, y permite elegir paradero de origen y destino. `FareEstimator` suma la
+  distancia Haversine entre paraderos y aplica
+  `distancia_km × baseFarePerKmCents × fuelIndex`, redondeo, tarifa mínima, tope
+  (`min(pasaje oficial de la ruta, 330 céntimos)`) y 50 % universitario. La versión tarifaria
+  (`config/currentFare` → `fareVersions/{id}`) y la ruta se leen de Firestore.
+- **F3 viaje activo:** `LiveTripViewModel` lee el GPS continuo (`FusedLocationProvider`),
+  acumula la distancia con `TripDistanceTracker` (Haversine, descarta lecturas imprecisas,
+  saltos y ruido) y publica distancia y costo por `StateFlow`. `LiveTripCard` los muestra en una
+  tarjeta flotante sobre el mapa. El cobro final sigue siendo el que calcula el servidor.
+- **F4 beneficio:** la captura del carné usa solo CameraX (sin galería), endereza la foto, lee el
+  texto con ML Kit y avisa si no parece un carné de la UCSM. Se corrigió que la subida se
+  cancelaba al cerrar la pantalla y que el flujo de correo/código no aparecía tras `carne_ok`.
+  La pantalla de beneficios ya es accesible desde el inicio del pasajero.
+- **F5 voz:** se restauró `VoiceAnnouncementFormatter` a su contrato original (nombre + edad, nunca
+  DNI; `null` si el nombre queda vacío). El aviso usa la cola de TextToSpeech (`QUEUE_ADD`).
+- **F6 historial:** ya está enlazado desde el inicio del pasajero; tocar un viaje abre el desglose.
+- **F8 billetera demo:** `feature/wallet` con saldo de demostración (aviso obligatorio),
+  recarga demo, retención (hold) y cobro (charge) del último viaje cerrado, y movimientos.
+- Se restauró en `app/build.gradle.kts` `../shared` como assets (contraseñas comunes) y recursos de
+  prueba, el plugin de serialización y `packaging`; se añadieron las dependencias de Compose,
+  guava y concurrent-futures, ML Kit de texto y osmdroid.
+- Verificación ejecutada: `.\gradlew assembleDebug` — correcto; `.\gradlew testDebugUnitTest` — correcto.
+  No se ejecutaron emuladores (por indicación del proyecto).
+- Casos para celular real: `docs/pruebas-manuales-F3-mapa-billetera.md`.

@@ -23,6 +23,12 @@ export { publishFareVersion } from "./fare/publishFareVersion.js";
 export { calibrateFare } from "./fare/calibrateFare.js";
 export { estimateFare } from "./trip/estimateFare.js";
 
+// F4 - Beneficio Universitario
+export { submitCarne } from "./benefit/submitCarne.js";
+export { requestBenefitCode } from "./benefit/requestBenefitCode.js";
+export { confirmBenefitCode } from "./benefit/confirmBenefitCode.js";
+export { previewFare } from "./benefit/previewFare.js";
+
 export interface HealthPayload {
   status: "ok";
   service: "pasajeya-functions";

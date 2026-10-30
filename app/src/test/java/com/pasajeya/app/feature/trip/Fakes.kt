@@ -9,6 +9,10 @@ import com.pasajeya.app.feature.auth.domain.model.RemoteSession
 import com.pasajeya.app.feature.auth.domain.model.RouteOption
 import com.pasajeya.app.feature.auth.domain.model.UserProfile
 import com.pasajeya.app.feature.auth.domain.model.UserRole
+import com.pasajeya.app.feature.benefit.domain.BenefitRepository
+import com.pasajeya.app.feature.benefit.domain.model.BenefitOperationResult
+import com.pasajeya.app.feature.benefit.domain.model.BenefitRequestState
+import com.pasajeya.app.feature.benefit.domain.model.UserBenefit
 import com.pasajeya.app.feature.trip.domain.TripPosition
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.EndShiftResult
@@ -217,6 +221,44 @@ class FakeTripRepository : TripRepository {
             minApplied = false,
             fareVersionId = "v1"
         )
+    }
+}
+
+class FakeBenefitRepository : BenefitRepository {
+    val userBenefit = MutableStateFlow<UserBenefit?>(null)
+    val requestState = MutableStateFlow<BenefitRequestState?>(null)
+
+    var submitCarneCalls = 0
+    var requestCodeCalls = 0
+    var confirmCodeCalls = 0
+    var nextResult: BenefitOperationResult = BenefitOperationResult.Success
+
+    override fun observeUserBenefit(uid: String): Flow<UserBenefit?> = userBenefit
+    override fun observeBenefitRequest(uid: String): Flow<BenefitRequestState?> = requestState
+
+    override suspend fun submitCarne(
+        sessionId: String,
+        requestId: String,
+        imageBytes: ByteArray
+    ): BenefitOperationResult {
+        submitCarneCalls++
+        return nextResult
+    }
+
+    override suspend fun requestBenefitCode(
+        sessionId: String,
+        institutionalEmail: String
+    ): BenefitOperationResult {
+        requestCodeCalls++
+        return nextResult
+    }
+
+    override suspend fun confirmBenefitCode(
+        sessionId: String,
+        code: String
+    ): BenefitOperationResult {
+        confirmCodeCalls++
+        return nextResult
     }
 }
 

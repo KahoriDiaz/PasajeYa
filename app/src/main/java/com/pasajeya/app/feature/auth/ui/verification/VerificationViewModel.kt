@@ -61,6 +61,7 @@ class VerificationViewModel @Inject constructor(
     val events = _events.receiveAsFlow()
 
     private var cooldownJob: Job? = null
+    private var pollJob: Job? = null
 
     init {
         val user = authRepository.currentUser()
@@ -80,6 +81,33 @@ class VerificationViewModel @Inject constructor(
                 completeVerification(user)
             } else {
                 sendVerification()
+                startPolling()
+            }
+        }
+    }
+
+    /**
+     * Sondeo silencioso: llama a reload() cada [POLL_MILLIS] ms hasta que el correo
+     * quede verificado. No toca el estado de la UI salvo al completar.
+     */
+    private fun startPolling() {
+        pollJob?.cancel()
+        pollJob = viewModelScope.launch {
+            while (true) {
+                delay(POLL_MILLIS)
+                val current = _uiState.value
+                if (!current.hasUser || current.isChecking || current.isSending) continue
+                try {
+                    val user = authRepository.reloadUser()
+                    if (user.emailVerified) {
+                        completeVerification(user)
+                        return@launch
+                    }
+                } catch (error: CancellationException) {
+                    throw error
+                } catch (_: Exception) {
+                    // Sin red o sesión caída: se reintenta en el siguiente ciclo.
+                }
             }
         }
     }
@@ -230,5 +258,6 @@ class VerificationViewModel @Inject constructor(
 
     private companion object {
         const val RESEND_SECONDS = 60
+        const val POLL_MILLIS = 3_000L
     }
 }

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pasajeya.app.feature.auth.domain.model.AuthDestination
 import com.pasajeya.app.feature.trip.ui.operator.OperatorTripContent
@@ -17,6 +17,8 @@ fun PassengerHomeScreen(
     onNavigate: (AuthDestination) -> Unit,
     onEstimate: () -> Unit,
     onHistory: () -> Unit,
+    onWallet: () -> Unit,
+    onBenefits: () -> Unit,
     onTripFinished: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
@@ -40,6 +42,8 @@ fun PassengerHomeScreen(
         onLogout = viewModel::logout,
         onEstimate = onEstimate,
         onHistory = onHistory,
+        onWallet = onWallet,
+        onBenefits = onBenefits,
         viewModel = tripViewModel,
         modifier = modifier
     )
