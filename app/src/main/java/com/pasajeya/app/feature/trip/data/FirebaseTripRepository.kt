@@ -363,28 +363,17 @@ class FirebaseTripRepository @Inject constructor(
                 passengerAge = data.longOrNull("age")?.toInt()
             )
         } catch (e: Exception) {
-            val currentUid = auth.currentUser?.uid ?: "passenger"
-            val tripId = "trip_${System.currentTimeMillis()}"
-
-            firestore.collection("trips").document(tripId).set(
-                mapOf(
-                    "passengerUid" to currentUid,
-                    "operatorUid" to (auth.currentUser?.uid ?: ""),
-                    "shiftId" to shiftId,
-                    "routeId" to "R-CAY-01-IDA",
-                    "status" to "open",
-                    "startedAt" to FieldValue.serverTimestamp(),
-                    "originLat" to position.latitude,
-                    "originLng" to position.longitude,
-                    "passengerFirstName" to (auth.currentUser?.displayName ?: "Estudiante")
-                )
-            ).await()
-
-            TapInResult(
-                tripId = tripId,
-                passengerFirstName = auth.currentUser?.displayName ?: "Estudiante",
-                passengerAge = null
-            )
+            if (e is kotlinx.coroutines.CancellationException) throw e
+            // El servidor no respondió: abrimos el viaje con el perfil real del pasajero escaneado
+            // (QR o NFC), nunca con la cuenta del conductor.
+            val passengerUid = qrToken.removePrefix("DEMO_QR_").trim()
+            if (passengerUid.isBlank()) {
+                throw TripOperationException("No se pudo leer al pasajero. Intenta de nuevo.", e)
+            }
+            val shift = loadShift(shiftId)
+                ?: throw TripOperationException("La unidad ya no tiene un turno activo.", e)
+            if (!shift.isActive) throw TripOperationException("La unidad ya terminó su turno.", e)
+            openTripForPassenger(passengerUid, shift, position)
         }
     }
 
@@ -507,6 +496,18 @@ class FirebaseTripRepository @Inject constructor(
             ?: throw TripOperationException("La unidad ya no tiene un turno activo.")
         if (!shift.isActive) throw TripOperationException("La unidad ya terminó su turno.")
 
+        return openTripForPassenger(uid, shift, position)
+    }
+
+    /**
+     * Abre el viaje leyendo el perfil real del pasajero en Firestore (nombre, edad, beneficio).
+     * Lo usan el Tap In del pasajero y el del conductor (QR o NFC) cuando el servidor no responde.
+     */
+    private suspend fun openTripForPassenger(
+        uid: String,
+        shift: Shift,
+        position: TripPosition
+    ): TapInResult {
         val existing = firestore.collection("trips")
             .whereEqualTo("passengerUid", uid)
             .whereEqualTo("shiftId", shift.id)
@@ -537,7 +538,8 @@ class FirebaseTripRepository @Inject constructor(
             ?: auth.currentUser?.displayName
             ?.takeIf { it.isNotBlank() }
             ?: "Pasajero"
-        val age = userDoc?.getString("birthDate")?.ageFromBirthDate()
+        val age = userDoc?.getLong("age")?.toInt()?.takeIf { it in 0..120 }
+            ?: userDoc?.getString("birthDate")?.ageFromBirthDate()
         val boardingIndex = shift.simulatedStopIndex
             .takeIf { it in route.stops.indices }
             ?: nearestStopIndex(route, position)
@@ -782,10 +784,15 @@ private fun DocumentSnapshot.isUniversityEligible(): Boolean {
         validUntil > System.currentTimeMillis()
 }
 
-private fun String.ageFromBirthDate(): Int? = runCatching {
-    val birthDate = LocalDate.parse(this)
-    Period.between(birthDate, LocalDate.now()).years.takeIf { it in 0..120 }
-}.getOrNull()
+private fun String.ageFromBirthDate(): Int? {
+    val text = trim()
+    val birthDate = runCatching { LocalDate.parse(text) }.getOrNull()
+        ?: runCatching {
+            LocalDate.parse(text, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        }.getOrNull()
+        ?: return null
+    return Period.between(birthDate, LocalDate.now()).years.takeIf { it in 0..120 }
+}
 
 private fun nearestStopIndex(route: RoutePath, position: TripPosition): Int {
     if (route.stops.isEmpty()) return 0

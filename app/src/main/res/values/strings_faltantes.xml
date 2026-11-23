@@ -71,9 +71,9 @@
     <string name="history_operator_last">Último turno</string>
     <string name="history_operator_no_shift">Aún no tienes turnos registrados</string>
     <string name="history_operator_empty">Aún no hay viajes en este turno</string>
-    <string name="history_operator_closed">Cerrados: %1$d</string>
-    <string name="history_operator_review">En revisión: %1$d</string>
-    <string name="history_operator_total">Total cobrado: %1$s</string>
+    <string name="history_operator_closed">Cerrados</string>
+    <string name="history_operator_review">En revisión</string>
+    <string name="history_operator_total">Total cobrado</string>
     <string name="history_operator_loading">Cargando viajes del turno…</string>
     <string name="passenger_qr_error">Error al generar el código QR</string>
     <string name="passenger_qr_offline">Sin conexión: el QR podría no ser válido</string>
@@ -124,7 +124,7 @@
     <string name="passenger_scan_out_body">Escanea nuevamente el QR del bus para calcular y cobrar tu viaje.</string>
     <string name="passenger_scan_out_action">Escanear QR para bajar</string>
     <string name="passenger_receipt_title">Comprobante del viaje</string>
-    <string name="passenger_receipt_total">Total cobrado: %1$s</string>
+    <string name="passenger_receipt_total">Total cobrado</string>
     <string name="passenger_receipt_official">Pasaje oficial de la ruta: %1$s</string>
     <string name="passenger_receipt_discount">Descuento universitario: %1$s</string>
     <string name="apdu_service_description">PasajeYa! servicio HCE de pasajero</string>

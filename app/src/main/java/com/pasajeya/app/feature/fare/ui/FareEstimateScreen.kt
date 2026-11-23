@@ -311,9 +311,9 @@ private fun TransparentFareResult(
             }
 
             Text(
-                text = "• Distancia exacta: ${"%.2f".format(km)} km\n" +
-                       "• Costo neto continuo: S/ ${"%.2f".format(fare.rawCalculatedCents / 100.0)}\n" +
-                       "• Factor Osinergmin: ${"%.2f".format(fuelFactor)}x | Rango técnico: S/ 1.00 - S/ 1.60",
+                text = "â€¢ Distancia exacta: ${"%.2f".format(km)} km\n" +
+                       "â€¢ Costo neto continuo: S/ ${"%.2f".format(fare.rawCalculatedCents / 100.0)}\n" +
+                       "â€¢ Factor Osinergmin: ${"%.2f".format(fuelFactor)}x",
                 style = MaterialTheme.typography.bodySmall,
                 color = TextGray
             )
@@ -321,12 +321,12 @@ private fun TransparentFareResult(
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
             Text(
-                text = "2. Comparativa con Esquema Rígido (Por Zonas):",
+                text = "2. Comparativa con Esquema RÃ­gido (Por Zonas):",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold
             )
             Text(
-                text = "Bajo el esquema convencional plano pagarías: ${formatCentsInt(steppedFareCents)}. Con la curva continua de PasajeYa! el pasaje asciende de forma proporcional a los kilómetros reales.",
+                text = "Bajo el esquema convencional plano pagarÃ­as: ${formatCentsInt(steppedFareCents)}. Con la curva continua de PasajeYa! el pasaje asciende de forma proporcional a los kilÃ³metros reales.",
                 style = MaterialTheme.typography.bodySmall,
                 color = TextGray
             )
@@ -334,7 +334,7 @@ private fun TransparentFareResult(
             if (fare.benefit != null || hasBenefit) {
                 fare.benefit?.let {
                     Text(
-                        text = "? Descuento universitario aplicado (${it.percent}%)",
+                        text = "âœ“ Descuento universitario aplicado (${it.percent}%)",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.SemiBold,
                         color = SuccessGreen

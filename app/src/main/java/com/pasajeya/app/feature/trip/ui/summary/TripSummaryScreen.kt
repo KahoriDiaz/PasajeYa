@@ -94,7 +94,7 @@ private fun FareBreakdownCard(breakdown: FareBreakdown) {
                 color = TextGray
             )
             Text(
-                text = "${breakdown.distanceMeters / 1000.0} km",
+                text = String.format(java.util.Locale("es", "PE"), "%.2f km", breakdown.distanceMeters / 1000.0),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
