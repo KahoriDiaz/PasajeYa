@@ -1,0 +1,25 @@
+name: Crear cuentas de demostracion
+
+on:
+  workflow_dispatch:
+
+jobs:
+  seed-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar Firebase Admin
+        run: npm install firebase-admin
+
+      - name: Crear cuentas de demostracion
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+        run: node scripts/seed_demo_accounts.cjs
