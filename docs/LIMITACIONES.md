@@ -119,3 +119,25 @@ interfaz queda preparada para la fuente real.
   el pasajero no la ve; el cobro final sí se descuenta bien en el teléfono del pasajero al
   cerrar el viaje. Cuando el Tap In lo hace el pasajero escaneando el QR de la unidad, la
   retención se ve donde debe. Con una billetera en el servidor esto desaparece.
+
+## Verificación del brevete (noviembre 2026)
+
+El MTC publica la consulta de licencias en el Portal Único del Conductor, que es una página
+para personas, con captcha y sin API pública. No hay forma de consultarla de manera confiable
+desde la app, y raspar la página se rompe el día de la demo. Lo que hay montado:
+
+1. El conductor se registra y su brevete queda en `licenseStatus = POR_REVISAR`.
+2. El workflow "Verificar brevetes" corre cada hora en GitHub Actions, lee los conductores por
+   revisar, consulta el dato del MTC a través de un proveedor que lo revende (json.pe, placapi,
+   consultadatos y similares) y escribe el resultado: `HABILITADO` si está vigente y es de
+   clase A, `RECHAZADO` si está vencida, no habilita pasajeros o el estado no es vigente.
+3. El panel del operador muestra los tres estados.
+
+El token del proveedor vive en los secretos del repositorio (`LICENSE_API_URL` y
+`LICENSE_API_TOKEN`), nunca en el APK: si estuviera en la app, cualquiera lo saca
+descompilándola. Sin esos secretos el workflow no hace nada y el brevete se queda en
+`POR_REVISAR` hasta que una empresa formal avale al conductor, que es el respaldo real que
+tiene hoy el proyecto.
+
+Para el producto de verdad corresponde un convenio directo con el MTC; el proveedor es el
+puente mientras no exista.

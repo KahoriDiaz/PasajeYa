@@ -7,7 +7,9 @@ data class CompanyUnit(
     val plate: String,
     val routeId: String,
     /** El conductor avalado por la empresa cuenta como verificado. */
-    val verified: Boolean = false
+    val verified: Boolean = false,
+    /** La consulta al MTC devolvio que el brevete no habilita. */
+    val licenseRejected: Boolean = false
 )
 
 data class CompanyDashboard(

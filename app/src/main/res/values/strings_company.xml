@@ -23,4 +23,5 @@
     <string name="role_company">Operador (empresa)</string>
     <string name="role_company_desc">Eres la empresa o el consorcio que paga la suscripción y ve a sus conductores.</string>
     <string name="profile_company_title">Datos del representante</string>
+    <string name="company_driver_license_rejected">Brevete no habilitado según el MTC</string>
 </resources>

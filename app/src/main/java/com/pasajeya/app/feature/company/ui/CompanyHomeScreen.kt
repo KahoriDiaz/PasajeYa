@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pasajeya.app.R
+import com.pasajeya.app.core.theme.ErrorRed
 import com.pasajeya.app.core.theme.PrimaryBlue
 import com.pasajeya.app.core.theme.ReviewAmber
 import com.pasajeya.app.core.theme.SuccessGreen
@@ -164,14 +165,20 @@ fun CompanyHomeScreen(
                             color = TextGray
                         )
                         Text(
-                            text = if (unit.verified) {
-                                stringResource(R.string.company_driver_verified)
-                            } else {
-                                stringResource(R.string.company_driver_pending)
+                            text = when {
+                                unit.licenseRejected ->
+                                    stringResource(R.string.company_driver_license_rejected)
+                                unit.verified ->
+                                    stringResource(R.string.company_driver_verified)
+                                else -> stringResource(R.string.company_driver_pending)
                             },
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (unit.verified) SuccessGreen else ReviewAmber
+                            color = when {
+                                unit.licenseRejected -> ErrorRed
+                                unit.verified -> SuccessGreen
+                                else -> ReviewAmber
+                            }
                         )
                     }
                 }
