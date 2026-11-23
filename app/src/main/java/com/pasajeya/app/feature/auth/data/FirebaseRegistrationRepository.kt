@@ -63,7 +63,6 @@ class FirebaseRegistrationRepository @Inject constructor(
         write(
             uid,
             baseData(uid, email, fullName, dni, UserRole.PASSENGER) + mapOf(
-                "walletBalanceCents" to RegistrationConfig.INITIAL_WALLET_CENTS,
                 "birthDate" to birthDate,
                 "age" to age,
                 "activeDeviceId" to deviceId

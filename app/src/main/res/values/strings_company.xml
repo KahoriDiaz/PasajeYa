@@ -14,4 +14,6 @@
     <string name="company_fleet_empty">Aún no hay conductores vinculados. Tus conductores se vinculan al registrarse con el RUC %1$s.</string>
     <string name="company_no_plate">Sin placa</string>
     <string name="company_refresh">Actualizar</string>
+    <string name="company_driver_verified">Verificado por tu empresa</string>
+    <string name="company_driver_pending">Documentos por revisar</string>
 </resources>

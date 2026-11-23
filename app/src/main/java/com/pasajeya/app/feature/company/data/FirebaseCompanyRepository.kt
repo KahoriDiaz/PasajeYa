@@ -30,7 +30,8 @@ class FirebaseCompanyRepository @Inject constructor(
                 driverUid = doc.id,
                 driverName = doc.getString("fullName").orEmpty(),
                 plate = doc.getString("plate") ?: doc.getString("vehiclePlate").orEmpty(),
-                routeId = doc.getString("assignedRouteId").orEmpty()
+                routeId = doc.getString("assignedRouteId").orEmpty(),
+                verified = doc.getString("driverStatus") == DRIVER_VERIFIED
             )
         }
 
@@ -78,5 +79,6 @@ class FirebaseCompanyRepository @Inject constructor(
 
     private companion object {
         const val WHERE_IN_LIMIT = 10
+        const val DRIVER_VERIFIED = "verified_by_company"
     }
 }

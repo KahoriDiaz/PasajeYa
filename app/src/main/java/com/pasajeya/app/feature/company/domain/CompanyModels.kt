@@ -5,7 +5,9 @@ data class CompanyUnit(
     val driverUid: String,
     val driverName: String,
     val plate: String,
-    val routeId: String
+    val routeId: String,
+    /** El conductor avalado por la empresa cuenta como verificado. */
+    val verified: Boolean = false
 )
 
 data class CompanyDashboard(

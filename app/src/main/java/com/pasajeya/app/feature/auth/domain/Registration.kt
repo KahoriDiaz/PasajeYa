@@ -18,7 +18,8 @@ data class OperatorRouteChoice(
 )
 
 object RegistrationConfig {
-    const val INITIAL_WALLET_CENTS = 2_000L
+    /** Saldo inicial de la billetera de demostracion (S/ 20.00). */
+    const val INITIAL_WALLET_CENTS = 2_000
     const val STATUS_ACTIVE = "active"
     /** Avalado por la empresa que lo contrata: es el unico respaldo real hoy. */
     const val LICENSE_STATUS_ENABLED = "HABILITADO"

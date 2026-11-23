@@ -1,10 +1,11 @@
-﻿package com.pasajeya.app.feature.wallet.data
+package com.pasajeya.app.feature.wallet.data
 
 import android.content.Context
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.pasajeya.app.feature.auth.domain.RegistrationConfig
 import com.pasajeya.app.feature.wallet.domain.DemoWallet
 import com.pasajeya.app.feature.wallet.domain.WalletError
 import com.pasajeya.app.feature.wallet.domain.WalletLogic
@@ -62,7 +63,8 @@ class DataStoreWalletRepository @Inject constructor(
     private fun now(): Long = System.currentTimeMillis()
 
     private fun Preferences.readWallet(uid: String): DemoWallet =
-        this[keyFor(uid)]?.let(::decode) ?: DemoWallet(balanceCents = 2000)
+        this[keyFor(uid)]?.let(::decode)
+            ?: DemoWallet(balanceCents = RegistrationConfig.INITIAL_WALLET_CENTS)
 
     private fun keyFor(uid: String) = stringPreferencesKey("wallet_$uid")
 

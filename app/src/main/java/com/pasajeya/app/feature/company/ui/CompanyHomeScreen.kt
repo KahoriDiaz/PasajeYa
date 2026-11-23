@@ -19,6 +19,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pasajeya.app.R
 import com.pasajeya.app.core.theme.PrimaryBlue
+import com.pasajeya.app.core.theme.ReviewAmber
+import com.pasajeya.app.core.theme.SuccessGreen
 import com.pasajeya.app.core.theme.TextGray
 import com.pasajeya.app.core.theme.TextPrimary
 import com.pasajeya.app.core.ui.AuthScreen
@@ -160,6 +162,16 @@ fun CompanyHomeScreen(
                             text = "${unit.driverName} · ${unit.routeId}",
                             style = MaterialTheme.typography.bodySmall,
                             color = TextGray
+                        )
+                        Text(
+                            text = if (unit.verified) {
+                                stringResource(R.string.company_driver_verified)
+                            } else {
+                                stringResource(R.string.company_driver_pending)
+                            },
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = if (unit.verified) SuccessGreen else ReviewAmber
                         )
                     }
                 }
