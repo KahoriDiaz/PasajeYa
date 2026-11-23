@@ -167,16 +167,24 @@ class FirebaseTripRepository @Inject constructor(
     ) {
         val route = loadRoutePath(routeId)
         val stopName = route?.stops?.getOrNull(stopIndex)?.name
-        firestore.collection("shifts").document(shiftId).update(
-            mapOf(
-                "simulationEnabled" to enabled,
-                "simulatedStopIndex" to stopIndex,
-                "simulatedLat" to position.latitude,
-                "simulatedLng" to position.longitude,
-                "simulatedStopName" to stopName,
-                "simulatedUpdatedAt" to FieldValue.serverTimestamp()
-            )
-        ).await()
+        val previousIndex = loadShift(shiftId)?.simulatedStopIndex
+        val advanced = if (route != null && previousIndex != null) {
+            forwardMeters(route, previousIndex, stopIndex)
+        } else {
+            0.0
+        }
+        val changes = mutableMapOf<String, Any?>(
+            "simulationEnabled" to enabled,
+            "simulatedStopIndex" to stopIndex,
+            "simulatedLat" to position.latitude,
+            "simulatedLng" to position.longitude,
+            "simulatedStopName" to stopName,
+            "simulatedUpdatedAt" to FieldValue.serverTimestamp()
+        )
+        if (advanced > 0.0) {
+            changes["odometerMeters"] = FieldValue.increment(advanced)
+        }
+        firestore.collection("shifts").document(shiftId).update(changes).await()
     }
 
     override suspend fun loadOperatorContext(sessionId: String): OperatorContext {
@@ -444,10 +452,12 @@ class FirebaseTripRepository @Inject constructor(
             } else {
                 nearestStopIndex(route, position)
             }
-            val distanceMeters = FareEstimator.routeDistanceMeters(
-                route.stops,
-                boardingIndex,
-                alightingIndex
+            val distanceMeters = travelledMeters(
+                trip = trip,
+                shift = shift,
+                route = route,
+                boardingIndex = boardingIndex,
+                alightingIndex = alightingIndex
             )
 
             val userDoc = runCatching {
@@ -575,6 +585,7 @@ class FirebaseTripRepository @Inject constructor(
                 "originLng" to (boardingPosition?.lng ?: position.longitude),
                 "boardingStopIndex" to boardingIndex,
                 "boardingStopName" to boardingPosition?.name,
+                "boardingOdometerMeters" to shift.odometerMeters,
                 "fareType" to fareType,
                 "passengerFirstName" to firstName,
                 "passengerAge" to age,
@@ -632,10 +643,12 @@ class FirebaseTripRepository @Inject constructor(
             nearestStopIndex(route, position)
         }
         val alightingPosition = route.stops[alightingIndex]
-        val distanceMeters = FareEstimator.routeDistanceMeters(
-            route.stops,
-            boardingIndex,
-            alightingIndex
+        val distanceMeters = travelledMeters(
+            trip = trip,
+            shift = shift,
+            route = route,
+            boardingIndex = boardingIndex,
+            alightingIndex = alightingIndex
         )
         val userDoc = runCatching {
             firestore.collection("users").document(uid).get().await()
@@ -794,6 +807,44 @@ private fun String.ageFromBirthDate(): Int? {
     return Period.between(birthDate, LocalDate.now()).years.takeIf { it in 0..120 }
 }
 
+/**
+ * Metros que la unidad avanzo al pasar del paradero [from] al [to]. Si el indice retrocede,
+ * es que termino el recorrido y volvio a empezar, asi que se suma lo que falta hasta el
+ * ultimo paradero mas lo andado desde el primero.
+ */
+/**
+ * Distancia real del viaje: la diferencia del odometro de la unidad entre subida y bajada.
+ * Si el turno no llevaba odometro, se mide entre los paraderos.
+ */
+internal fun travelledMeters(
+    trip: Trip,
+    shift: Shift?,
+    route: RoutePath,
+    boardingIndex: Int,
+    alightingIndex: Int
+): Double {
+    val boardingOdometer = trip.boardingOdometerMeters
+    val currentOdometer = shift?.odometerMeters
+    if (boardingOdometer != null && currentOdometer != null && currentOdometer > boardingOdometer) {
+        return currentOdometer - boardingOdometer
+    }
+    return FareEstimator.routeDistanceMeters(route.stops, boardingIndex, alightingIndex)
+}
+
+internal fun forwardMeters(route: RoutePath, from: Int, to: Int): Double {
+    val stops = route.stops
+    if (stops.size < 2) return 0.0
+    val start = from.coerceIn(stops.indices)
+    val end = to.coerceIn(stops.indices)
+    if (start == end) return 0.0
+    return if (end > start) {
+        FareEstimator.routeDistanceMeters(stops, start, end)
+    } else {
+        FareEstimator.routeDistanceMeters(stops, start, stops.lastIndex) +
+            FareEstimator.routeDistanceMeters(stops, 0, end)
+    }
+}
+
 private fun nearestStopIndex(route: RoutePath, position: TripPosition): Int {
     if (route.stops.isEmpty()) return 0
     return route.stops.indices.minByOrNull { index ->
@@ -895,6 +946,7 @@ internal fun DocumentSnapshot.toTrip(): Trip? {
         passengerAge = getLong("passengerAge")?.toInt(),
         fareType = getString("fareType") ?: "regular",
         boardingStopIndex = getLong("boardingStopIndex")?.toInt(),
+        boardingOdometerMeters = getDouble("boardingOdometerMeters"),
         alightingStopIndex = getLong("alightingStopIndex")?.toInt(),
         heldAmountCents = getLong("heldAmountCents")?.toInt() ?: 0,
         fareBreakdown = fareBreakdownData?.let {
@@ -945,7 +997,8 @@ internal fun DocumentSnapshot.toShift(): Shift? {
         simulatedLatitude = getDouble("simulatedLat"),
         simulatedLongitude = getDouble("simulatedLng"),
         simulatedStopName = getString("simulatedStopName"),
-        simulatedUpdatedAtMillis = getTimestamp("simulatedUpdatedAt")?.toDate()?.time
+        simulatedUpdatedAtMillis = getTimestamp("simulatedUpdatedAt")?.toDate()?.time,
+        odometerMeters = getDouble("odometerMeters") ?: 0.0
     )
 }
 

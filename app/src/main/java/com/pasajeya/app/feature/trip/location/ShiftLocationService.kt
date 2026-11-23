@@ -22,9 +22,12 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pasajeya.app.MainActivity
 import com.pasajeya.app.R
+import com.pasajeya.app.feature.trip.domain.GpsFix
+import com.pasajeya.app.feature.trip.domain.TripDistanceTracker
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 import javax.inject.Inject
@@ -47,6 +50,8 @@ class ShiftLocationService : Service() {
     private lateinit var client: FusedLocationProviderClient
     private var activeShiftId: String? = null
     private var lastAccepted: Location? = null
+    private val tracker = TripDistanceTracker()
+    private var pendingMeters = 0.0
     private var isFlushing = false
     private var lastFlushAt = 0L
 
@@ -151,6 +156,32 @@ class ShiftLocationService : Service() {
             val isStationary = location.hasSpeed() && location.speed < 0.5f
             if (isStationary && elapsed < STATIONARY_INTERVAL_MS) return
         }
+        previous?.let { anchor ->
+            val step = tracker.onFix(
+                GpsFix(
+                    lat = location.latitude,
+                    lng = location.longitude,
+                    accuracyMeters = if (location.hasAccuracy()) {
+                        location.accuracy.toDouble()
+                    } else {
+                        null
+                    },
+                    timeMillis = now
+                )
+            )
+            pendingMeters += step
+        } ?: tracker.onFix(
+            GpsFix(
+                lat = location.latitude,
+                lng = location.longitude,
+                accuracyMeters = if (location.hasAccuracy()) {
+                    location.accuracy.toDouble()
+                } else {
+                    null
+                },
+                timeMillis = now
+            )
+        )
         lastAccepted = location
         buffer += mapOf(
             "lat" to location.latitude,
@@ -160,6 +191,23 @@ class ShiftLocationService : Service() {
         )
         if (buffer.size >= MAX_POINTS || now - lastFlushAt >= FLUSH_INTERVAL_MS) {
             flush()
+            publishOdometer()
+        }
+    }
+
+    /** Suma al odometro del turno los metros que la unidad recorrio de verdad. */
+    private fun publishOdometer() {
+        val shiftId = activeShiftId ?: return
+        val meters = pendingMeters
+        if (meters <= 0.0) return
+        pendingMeters = 0.0
+        scope.launch {
+            runCatching {
+                firestore.collection("shifts")
+                    .document(shiftId)
+                    .update("odometerMeters", FieldValue.increment(meters))
+                    .await()
+            }.onFailure { pendingMeters += meters }
         }
     }
 

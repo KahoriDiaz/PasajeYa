@@ -191,11 +191,17 @@ class LiveTripViewModel @Inject constructor(
                                 }
                             }
                         }
-                        // Con el modo demostracion encendido, el pasaje sube segun los
-                        // paraderos que avanza el conductor: el telefono esta quieto sobre
-                        // la mesa, asi que su GPS no mide nada.
+                        // La distancia que se cobra la mide la unidad, no el telefono del
+                        // pasajero: su odometro solo crece, asi que vale igual si la combi
+                        // da la vuelta completa y vuelve a pasar por el mismo paradero.
+                        val boardingOdometer = trip.boardingOdometerMeters
+                        val odometer = shift?.odometerMeters
                         val boardingIndex = trip.boardingStopIndex
-                        if (shift?.simulationEnabled == true && boardingIndex != null) {
+                        if (boardingOdometer != null && odometer != null &&
+                            odometer > boardingOdometer
+                        ) {
+                            simulatedMeters = odometer - boardingOdometer
+                        } else if (shift?.simulationEnabled == true && boardingIndex != null) {
                             simulatedMeters = runCatching {
                                 FareEstimator.routeDistanceMeters(
                                     context.route.stops,

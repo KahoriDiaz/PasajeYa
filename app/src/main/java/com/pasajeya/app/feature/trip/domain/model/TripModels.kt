@@ -43,6 +43,8 @@ data class Trip(
     val fareType: String = "regular",
     val boardingStopIndex: Int? = null,
     val alightingStopIndex: Int? = null,
+    /** Lectura del odometro del turno cuando el pasajero subio. */
+    val boardingOdometerMeters: Double? = null,
     val fareBreakdown: FareBreakdown? = null,
     val heldAmountCents: Int = 0
 )
@@ -60,7 +62,12 @@ data class Shift(
     val simulatedLatitude: Double? = null,
     val simulatedLongitude: Double? = null,
     val simulatedStopName: String? = null,
-    val simulatedUpdatedAtMillis: Long? = null
+    val simulatedUpdatedAtMillis: Long? = null,
+    /**
+     * Metros recorridos por la unidad desde que arranco el turno. Solo crece, asi que
+     * sirve igual si la combi da la vuelta completa y vuelve a pasar por el mismo paradero.
+     */
+    val odometerMeters: Double = 0.0
 ) {
     val isActive: Boolean get() = status == "active"
 }
