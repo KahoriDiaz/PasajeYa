@@ -96,13 +96,16 @@ class LiveTripViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private val wallet = FakeWalletRepository()
+
     private fun viewModel() = LiveTripViewModel(
         authRepository = FakeAuthRepository(
             AuthUser(uid = "passenger-1", email = "p@example.com", emailVerified = true)
         ),
         tripRepository = trips,
         fareRepository = fares,
-        locationProvider = location
+        locationProvider = location,
+        walletRepository = wallet
     )
 
     private fun fix(lat: Double, seconds: Long) =

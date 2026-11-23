@@ -37,8 +37,11 @@ Para probar en un celular real, con internet y conectado a la nube de Firebase (
 - **M10 — Carné.** Inicio → "Beneficio universitario" → "Verificar como universitario". Solo hay
   cámara (no hay galería). Foto de un papel cualquiera: avisa que no se pudo leer el texto del
   carné. Foto del carné real: se sube y la pantalla se cierra.
-- **M11 — Correo y código.** Tras el carné aparece el campo de correo institucional; envía el código,
-  escribe los 6 dígitos y confirma. El estado pasa a "Descuento universitario activo".
+- **M11 — Correo institucional.** Tras el carné aparece el campo de correo institucional. Escribe
+  uno que termine en .edu.pe y pulsa "Enviarme el enlace": Firebase Auth envía el enlace de
+  verificación a esa dirección. Ábrelo desde el correo, vuelve a la app y pulsa "Ya abrí el
+  enlace". El estado pasa a "Descuento universitario activo". Con un correo que ya pertenece a
+  otra cuenta, avisa que está registrado en otra cuenta y no activa nada.
 
 ## Voz del operador
 

@@ -10,6 +10,9 @@ import com.pasajeya.app.feature.auth.domain.model.RouteOption
 import com.pasajeya.app.feature.auth.domain.model.UserProfile
 import com.pasajeya.app.feature.auth.domain.model.UserRole
 import com.pasajeya.app.feature.benefit.domain.BenefitRepository
+import com.pasajeya.app.feature.wallet.domain.DemoWallet
+import com.pasajeya.app.feature.wallet.domain.WalletRepository
+import com.pasajeya.app.feature.wallet.domain.WalletResult
 import com.pasajeya.app.feature.benefit.domain.model.BenefitOperationResult
 import com.pasajeya.app.feature.benefit.domain.model.BenefitRequestState
 import com.pasajeya.app.feature.benefit.domain.model.UserBenefit
@@ -308,6 +311,37 @@ class FakeBenefitRepository : BenefitRepository {
     override suspend fun confirmInstitutionalEmail(): BenefitOperationResult {
         confirmCodeCalls++
         return nextResult
+    }
+}
+
+class FakeWalletRepository : WalletRepository {
+    val wallet = MutableStateFlow(DemoWallet(balanceCents = 2_000))
+    var holds = mutableListOf<Int>()
+    var charges = mutableListOf<Int>()
+
+    override fun observe(uid: String): Flow<DemoWallet> = wallet
+
+    override suspend fun recharge(uid: String, amountCents: Int): WalletResult =
+        WalletResult.Success(wallet.value)
+
+    override suspend fun hold(uid: String, amountCents: Int): WalletResult {
+        holds += amountCents
+        wallet.value = wallet.value.copy(holdCents = amountCents)
+        return WalletResult.Success(wallet.value)
+    }
+
+    override suspend fun charge(uid: String, finalCents: Int): WalletResult {
+        charges += finalCents
+        wallet.value = wallet.value.copy(
+            balanceCents = wallet.value.balanceCents - finalCents,
+            holdCents = 0
+        )
+        return WalletResult.Success(wallet.value)
+    }
+
+    override suspend fun release(uid: String): WalletResult {
+        wallet.value = wallet.value.copy(holdCents = 0)
+        return WalletResult.Success(wallet.value)
     }
 }
 

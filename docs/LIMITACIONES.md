@@ -95,3 +95,21 @@ interfaz queda preparada para la fuente real.
   mucho tráfico conviene un proveedor de teselas propio o con contrato.
 - **Verificación del carné en el teléfono:** ML Kit solo comprueba que el texto parezca un carné de
   la UCSM para repetir la foto a tiempo; la validación que manda es la del servidor.
+
+## Lo que falta y lo que no se puede hacer sin servidor (noviembre 2026)
+
+- **Brevete.** El MTC publica la consulta de licencias en una página para personas, con
+  captcha y sin API pública, así que la app no puede verificar la clase A por su cuenta. Hoy el
+  respaldo real es la empresa: el conductor que se registra con el RUC de un operador formal
+  queda `verified_by_company`, y el independiente queda `unverified` hasta que alguien revise
+  sus documentos. Falta leer el brevete con la cámara (OCR) para precargar número, clase y
+  vencimiento, igual que ya se hace con el carné universitario.
+- **Billetera.** El saldo vive en el dispositivo (DataStore) y no es dinero real. La retención
+  del techo de seguridad (S/ 5.00) y el cobro del total se hacen contra esa billetera demo: al
+  abrir el viaje se retiene y en el resumen se cobra el total real del viaje cerrado. Un cobro
+  de verdad necesita pasarela de pago y servidor.
+- **Reglas de Firestore.** Siguen abiertas para cualquier usuario autenticado, porque la app
+  escribe directo en la base. Antes de cualquier uso real hay que cerrarlas por colección y rol.
+- **Cloud Functions.** El proyecto ya no las necesita: el registro, el perfil, el beneficio
+  universitario y el viaje funcionan contra Firestore y Firebase Auth. El código TypeScript de
+  `functions/` queda como referencia de las validaciones que haría un servidor.
