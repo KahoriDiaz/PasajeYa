@@ -90,8 +90,8 @@
     <string name="role_subtitle">Elige el perfil que corresponde a tu cuenta. No podrás cambiarlo después.</string>
     <string name="role_passenger_title">Pasajero</string>
     <string name="role_passenger_description">Viaja con tu QR personal y revisa el detalle de cada cobro.</string>
-    <string name="role_operator_title">Operador</string>
-    <string name="role_operator_description">Registra tu vehículo y las rutas que operas.</string>
+    <string name="role_operator_title">Conductor</string>
+    <string name="role_operator_description">Registra tu vehículo y la ruta que manejas.</string>
     <string name="role_select">Seleccionar</string>
 
     <string name="profile_passenger_title">Datos de pasajero</string>

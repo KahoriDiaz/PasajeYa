@@ -58,6 +58,9 @@ data class RegisterUiState(
     val assignedRouteId: String = "",
     val licenseNumber: String = "",
     val licenseCategory: String = "",
+    val businessName: String = "",
+    val ruc: String = "",
+    val companyRuc: String = "",
     val universityCardCode: String = "",
     val cardExpiryDate: String? = null,
     val cardExpired: Boolean = false,
@@ -77,6 +80,9 @@ data class RegisterUiState(
     val routeError: Boolean = false,
     val licenseNumberError: Boolean = false,
     val licenseCategoryError: Boolean = false,
+    val businessNameError: Boolean = false,
+    val rucError: Boolean = false,
+    val companyRucError: Boolean = false,
     val scanning: ScanDocument? = null,
     val scanFailure: ScanFailure? = null,
     val authFailure: AuthFailure? = null,
@@ -85,7 +91,7 @@ data class RegisterUiState(
 ) {
     /** A-I no autoriza transporte publico urbano: bloquea el registro del conductor. */
     val licenseBlocked: Boolean
-        get() = role == UserRole.OPERATOR &&
+        get() = role == UserRole.DRIVER &&
             licenseCategory == RegistrationConfig.BLOCKED_LICENSE_CATEGORY
 
     /** Cuando el carné está vencido, el beneficio se mantiene como regular. */
@@ -140,6 +146,15 @@ class RegisterViewModel @Inject constructor(
     private fun edit(block: (RegisterUiState) -> RegisterUiState) {
         _uiState.update { block(it).copy(authFailure = null, accountFailure = null) }
     }
+
+    fun onBusinessNameChange(value: String) =
+        edit { it.copy(businessName = value.take(80), businessNameError = false) }
+
+    fun onRucChange(value: String) =
+        edit { it.copy(ruc = value.filter(Char::isDigit).take(11), rucError = false) }
+
+    fun onCompanyRucChange(value: String) =
+        edit { it.copy(companyRuc = value.filter(Char::isDigit).take(11), companyRucError = false) }
 
     fun onRoleChange(role: UserRole) = edit { it.copy(role = role, scanFailure = null) }
 
@@ -309,7 +324,11 @@ class RegisterViewModel @Inject constructor(
         val email = current.email.trim()
         val fullName = current.fullName.trim().replace(Regex("\\s+"), " ")
         val validation = Validators.validatePassword(current.password, email, passwords)
-        val isOperator = current.role == UserRole.OPERATOR
+        val isDriver = current.role == UserRole.DRIVER
+        val isCompany = current.role == UserRole.COMPANY
+        val businessName = current.businessName.trim().replace(Regex("\\s+"), " ")
+        val ruc = current.ruc.trim()
+        val companyRuc = current.companyRuc.trim()
         val plate = Validators.normalizePlate(current.plate)
         val licenseNumber = Validators.normalizeLicenseNumber(current.licenseNumber)
         val route = RegistrationConfig.routeById(current.assignedRouteId)
@@ -337,7 +356,7 @@ class RegisterViewModel @Inject constructor(
             current.benefitType
         }
 
-        val universityRequired = !isOperator && effectiveBenefitType == BenefitType.UNIVERSITY
+        val universityRequired = !isDriver && !isCompany && effectiveBenefitType == BenefitType.UNIVERSITY
         val universityCardError = universityRequired && current.universityCardCode.isBlank()
 
         val next = current.copy(
@@ -355,19 +374,23 @@ class RegisterViewModel @Inject constructor(
                 (effectiveBenefitType == BenefitType.UNIVERSITY && !Validators.isInstitutionalEmail(email)),
             passwordError = !validation.valid,
             confirmPasswordError = current.confirmPassword != current.password,
-            plateError = isOperator && !Validators.isValidPlate(plate),
-            routeError = isOperator && route == null,
-            licenseNumberError = isOperator && !Validators.isValidLicenseNumber(licenseNumber),
-            licenseCategoryError = isOperator &&
+            plateError = isDriver && !Validators.isValidPlate(plate),
+            routeError = isDriver && route == null,
+            licenseNumberError = isDriver && !Validators.isValidLicenseNumber(licenseNumber),
+            licenseCategoryError = isDriver &&
                 !RegistrationConfig.isLicenseCategoryAllowed(current.licenseCategory),
             universityCardError = universityCardError,
+            businessNameError = isCompany && businessName.length < 3,
+            rucError = isCompany && !Regex("^(10|15|17|20)\\d{9}$").matches(ruc),
+            companyRucError = isDriver && companyRuc.isNotEmpty() && companyRuc.length != 11,
             authFailure = null,
             accountFailure = null
         )
         val hasErrors = next.fullNameError || next.dniError || next.birthDateError || next.emailError ||
             next.passwordError || next.confirmPasswordError || next.plateError ||
             next.routeError || next.licenseNumberError || next.licenseCategoryError ||
-            next.universityCardError
+            next.universityCardError || next.businessNameError || next.rucError ||
+            next.companyRucError
         if (hasErrors) {
             _uiState.value = next
             return
@@ -384,7 +407,29 @@ class RegisterViewModel @Inject constructor(
                     authRepository.register(email, current.password)
                 }
 
-                if (isOperator) {
+                if (isCompany) {
+                    registrationRepository.saveCompany(
+                        uid = user.uid,
+                        email = email,
+                        fullName = fullName,
+                        dni = current.dni,
+                        birthDate = birthDate,
+                        age = age,
+                        businessName = businessName,
+                        ruc = ruc,
+                        deviceId = deviceSessionRepository.deviceId
+                    )
+                } else if (isDriver) {
+                    // El conductor puede vincularse a su empresa con el RUC (opcional).
+                    val companyId = if (companyRuc.isNotEmpty()) {
+                        registrationRepository.findCompanyIdByRuc(companyRuc)
+                    } else {
+                        null
+                    }
+                    if (companyRuc.isNotEmpty() && companyId == null) {
+                        _uiState.update { it.copy(isSubmitting = false, companyRucError = true) }
+                        return@launch
+                    }
                     registrationRepository.saveOperator(
                         uid = user.uid,
                         email = email,
@@ -396,7 +441,9 @@ class RegisterViewModel @Inject constructor(
                         route = checkNotNull(route),
                         licenseNumber = licenseNumber,
                         licenseCategory = current.licenseCategory,
-                        deviceId = deviceSessionRepository.deviceId
+                        deviceId = deviceSessionRepository.deviceId,
+                        companyId = companyId,
+                        companyRuc = companyRuc.ifEmpty { null }
                     )
                 } else {
                     val expiryDate = current.cardExpiryDate?.let { java.time.LocalDate.parse(it, DATE_FORMAT) }

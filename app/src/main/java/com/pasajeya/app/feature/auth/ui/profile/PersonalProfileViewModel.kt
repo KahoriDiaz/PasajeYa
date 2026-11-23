@@ -209,6 +209,6 @@ class OperatorPersonalProfileViewModel @Inject constructor(
 ) : PersonalProfileViewModel(
     authRepository = authRepository,
     accountRepository = accountRepository,
-    role = UserRole.OPERATOR,
-    nextDestination = AuthDestination.OPERATOR_PROFILE
+    role = UserRole.DRIVER,
+    nextDestination = AuthDestination.DRIVER_PROFILE
 )

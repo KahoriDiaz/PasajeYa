@@ -276,7 +276,7 @@ class OperatorTripViewModelTest {
             ),
             accountRepository = FakeAccountRepository(
                 uid = "operator-1",
-                role = UserRole.OPERATOR
+                role = UserRole.DRIVER
             ),
             tripRepository = repository,
             locationProvider = locationProvider,

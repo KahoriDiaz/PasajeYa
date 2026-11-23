@@ -61,13 +61,19 @@ class FirebaseAccountRepository @Inject constructor(
         }
 
         val role = UserRole.fromWire(userDoc.get("role"))
+        val companyComplete = if (role == UserRole.COMPANY) {
+            runCatching { firestore.collection("companies").document(uid).get().await().exists() }
+                .getOrDefault(false)
+        } else {
+            true
+        }
         val session = DeviceSession(
             uid = uid,
             sessionId = "local-session-$deviceId",
             profileComplete = userDoc.exists() && role != null,
             emailVerified = auth.currentUser?.isEmailVerified ?: true,
             role = role,
-            operatorComplete = true
+            operatorComplete = companyComplete
         )
         _deviceSession.value = session
         session

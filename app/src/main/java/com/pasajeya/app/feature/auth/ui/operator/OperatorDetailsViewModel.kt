@@ -189,7 +189,7 @@ class OperatorDetailsViewModel @Inject constructor(
                     routeIds = routeIds
                 )
                 _uiState.update { it.copy(isSubmitting = false) }
-                _events.send(AuthDestination.OPERATOR_HOME)
+                _events.send(AuthDestination.DRIVER_HOME)
             } catch (error: CancellationException) {
                 throw error
             } catch (error: AccountException) {

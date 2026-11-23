@@ -3,7 +3,15 @@
     <string name="register_subtitle_local">Crea tu cuenta de pasajero o conductor. Puedes escanear tu documento para completar los datos.</string>
     <string name="register_role_title">Tipo de cuenta</string>
     <string name="register_role_passenger">Pasajero</string>
-    <string name="register_role_operator">Conductor</string>
+    <string name="register_role_driver">Conductor</string>
+    <string name="register_role_company">Operador</string>
+    <string name="field_business_name">Razón social o nombre comercial</string>
+    <string name="field_ruc">RUC de la empresa</string>
+    <string name="field_ruc_hint">20123456789</string>
+    <string name="field_company_ruc_optional">RUC de tu empresa operadora (opcional)</string>
+    <string name="register_business_name_invalid">Ingresa el nombre de la empresa (mínimo 3 letras).</string>
+    <string name="register_ruc_invalid">El RUC debe tener 11 dígitos y empezar con 10, 15, 17 o 20.</string>
+    <string name="register_company_ruc_unknown">No encontramos una empresa con ese RUC. Pídele a tu operador que se registre primero.</string>
     <string name="field_full_name">Nombre completo</string>
     <string name="register_full_name_invalid">Ingresa tu nombre completo, solo con letras.</string>
     <string name="register_benefit_title">Tipo de pasajero</string>

@@ -104,7 +104,8 @@ fun RegisterScreen(
         null -> null
     }
     val busy = state.isSubmitting || state.scanning != null
-    val isOperator = state.role == UserRole.OPERATOR
+    val isDriver = state.role == UserRole.DRIVER
+    val isCompany = state.role == UserRole.COMPANY
 
     AuthScreen(
         title = stringResource(R.string.register_title),
@@ -121,7 +122,8 @@ fun RegisterScreen(
             ChoiceRow(
                 options = listOf(
                     UserRole.PASSENGER to stringResource(R.string.register_role_passenger),
-                    UserRole.OPERATOR to stringResource(R.string.register_role_operator)
+                    UserRole.DRIVER to stringResource(R.string.register_role_driver),
+                    UserRole.COMPANY to stringResource(R.string.register_role_company)
                 ),
                 selected = state.role,
                 enabled = !busy,
@@ -131,7 +133,7 @@ fun RegisterScreen(
             OutlinedButton(
                 onClick = {
                     captureTarget = when {
-                        isOperator -> ScanDocument.LICENSE
+                        isDriver -> ScanDocument.LICENSE
                         else -> ScanDocument.DNI
                     }
                 },
@@ -144,13 +146,13 @@ fun RegisterScreen(
                 Text(
                     stringResource(
                         when {
-                            isOperator -> R.string.register_scan_license
+                            isDriver -> R.string.register_scan_license
                             else -> R.string.register_scan_dni
                         }
                     )
                 )
             }
-            if (!isOperator) {
+            if (!isDriver && !isCompany) {
                 OutlinedButton(
                     onClick = { captureTarget = ScanDocument.UNIVERSITY_CARD },
                     modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
@@ -159,7 +161,7 @@ fun RegisterScreen(
                     Text(stringResource(R.string.register_scan_carne))
                 }
             }
-            if (isOperator) {
+            if (isDriver) {
                 OutlinedButton(
                     onClick = { captureTarget = ScanDocument.DNI },
                     modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
@@ -264,7 +266,9 @@ fun RegisterScreen(
                 )
             }
 
-            if (!isOperator) {
+            if (isCompany) {
+                CompanyFields(state = state, viewModel = viewModel, enabled = !busy)
+            } else if (!isDriver) {
                 SectionLabel(stringResource(R.string.register_benefit_title))
                 ChoiceRow(
                     options = listOf(
@@ -322,7 +326,7 @@ fun RegisterScreen(
             if (errorText != null) {
                 InlineMessage(text = errorText, tone = MessageTone.ERROR)
             }
-                val universityRequired = !isOperator && state.benefitType == BenefitType.UNIVERSITY
+                val universityRequired = !isDriver && !isCompany && state.benefitType == BenefitType.UNIVERSITY
                 PrimaryButton(
                 text = stringResource(R.string.register_submit),
                 onClick = viewModel::submit,
@@ -394,6 +398,16 @@ private fun OperatorFields(
         keyboardType = KeyboardType.Text
     )
 
+    TextField(
+        value = state.companyRuc,
+        onValueChange = viewModel::onCompanyRucChange,
+        label = stringResource(R.string.field_company_ruc_optional),
+        placeholder = stringResource(R.string.field_ruc_hint),
+        enabled = enabled,
+        error = if (state.companyRucError) stringResource(R.string.register_company_ruc_unknown) else null,
+        keyboardType = KeyboardType.Number
+    )
+
     SectionLabel(stringResource(R.string.field_license_class))
     Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedButton(
@@ -431,6 +445,31 @@ private fun OperatorFields(
     } else if (state.licenseCategoryError) {
         ErrorText(stringResource(R.string.register_license_category_required))
     }
+}
+
+@Composable
+private fun CompanyFields(
+    state: RegisterUiState,
+    viewModel: RegisterViewModel,
+    enabled: Boolean
+) {
+    TextField(
+        value = state.businessName,
+        onValueChange = viewModel::onBusinessNameChange,
+        label = stringResource(R.string.field_business_name),
+        enabled = enabled,
+        error = if (state.businessNameError) stringResource(R.string.register_business_name_invalid) else null,
+        keyboardType = KeyboardType.Text
+    )
+    TextField(
+        value = state.ruc,
+        onValueChange = viewModel::onRucChange,
+        label = stringResource(R.string.field_ruc),
+        placeholder = stringResource(R.string.field_ruc_hint),
+        enabled = enabled,
+        error = if (state.rucError) stringResource(R.string.register_ruc_invalid) else null,
+        keyboardType = KeyboardType.Number
+    )
 }
 
 @Composable

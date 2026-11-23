@@ -91,11 +91,18 @@ class FirebaseRegistrationRepository @Inject constructor(
         route: OperatorRouteChoice,
         licenseNumber: String,
         licenseCategory: String,
-        deviceId: String
+        deviceId: String,
+        companyId: String?,
+        companyRuc: String?
     ) {
+        val companyData = if (companyId != null) {
+            mapOf("companyId" to companyId, "companyRuc" to companyRuc.orEmpty())
+        } else {
+            emptyMap()
+        }
         write(
             uid,
-            baseData(uid, email, fullName, dni, UserRole.OPERATOR) + mapOf(
+            baseData(uid, email, fullName, dni, UserRole.DRIVER) + mapOf(
                 "licenseCategory" to licenseCategory,
                 "licenseNumber" to licenseNumber,
                 "licenseStatus" to RegistrationConfig.LICENSE_STATUS_ENABLED,
@@ -106,8 +113,71 @@ class FirebaseRegistrationRepository @Inject constructor(
                 "plate" to plate,
                 "assignedRoutes" to route.routeIds,
                 "activeDeviceId" to deviceId
+            ) + companyData
+        )
+    }
+
+    override suspend fun saveCompany(
+        uid: String,
+        email: String,
+        fullName: String,
+        dni: String,
+        birthDate: String,
+        age: Int,
+        businessName: String,
+        ruc: String,
+        deviceId: String
+    ) {
+        write(
+            uid,
+            baseData(uid, email, fullName, dni, UserRole.COMPANY) + mapOf(
+                "birthDate" to birthDate,
+                "age" to age,
+                "businessName" to businessName,
+                "ruc" to ruc,
+                "activeDeviceId" to deviceId
             )
         )
+        try {
+            firestore.collection("companies").document(uid).set(
+                mapOf(
+                    "ownerUid" to uid,
+                    "businessName" to businessName,
+                    "ruc" to ruc,
+                    "status" to RegistrationConfig.STATUS_ACTIVE,
+                    "subscriptionPerUnitCents" to COMPANY_UNIT_MONTHLY_CENTS,
+                    "createdAt" to FieldValue.serverTimestamp()
+                )
+            ).await()
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: FirebaseNetworkException) {
+            throw AccountException(AccountFailure.Network)
+        } catch (error: FirebaseFirestoreException) {
+            throw AccountException(AccountFailure.Unknown)
+        }
+    }
+
+    override suspend fun findCompanyIdByRuc(ruc: String): String? = try {
+        firestore.collection("companies")
+            .whereEqualTo("ruc", ruc)
+            .limit(1)
+            .get()
+            .await()
+            .documents
+            .firstOrNull()
+            ?.id
+    } catch (error: CancellationException) {
+        throw error
+    } catch (error: FirebaseNetworkException) {
+        throw AccountException(AccountFailure.Network)
+    } catch (error: FirebaseFirestoreException) {
+        throw AccountException(AccountFailure.Unknown)
+    }
+
+    private companion object {
+        /** S/ 1 al día por unidad = S/ 30 al mes (modelo de negocio). */
+        const val COMPANY_UNIT_MONTHLY_CENTS = 3_000L
     }
 
     private fun baseData(

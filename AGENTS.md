@@ -9,7 +9,7 @@ del proyecto. Léelo completo antes de escribir código.
 
 **PasajeYa!** es una app móvil para el transporte público (combis y buses) de **Arequipa, Perú**.
 
-- Existen dos perfiles: **PASAJERO** y **OPERADOR** (conductor-cobrador).
+- Existen three roles (Pasajero, Conductor, Operador): **PASAJERO** y **OPERADOR** (conductor-cobrador).
 - El pasajero tiene un **QR personal**.
 - El operador escanea ese QR al subir (**Tap In**) y al bajar (**Tap Out**).
 - El servidor calcula la distancia usando el **GPS del vehículo**.

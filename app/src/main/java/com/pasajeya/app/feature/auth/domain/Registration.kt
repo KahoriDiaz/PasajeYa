@@ -72,8 +72,26 @@ interface RegistrationRepository {
         route: OperatorRouteChoice,
         licenseNumber: String,
         licenseCategory: String,
+        deviceId: String,
+        companyId: String? = null,
+        companyRuc: String? = null
+    )
+
+    /** Registra al operador (empresa): su cuenta de representante y el documento `companies/{uid}`. */
+    suspend fun saveCompany(
+        uid: String,
+        email: String,
+        fullName: String,
+        dni: String,
+        birthDate: String,
+        age: Int,
+        businessName: String,
+        ruc: String,
         deviceId: String
     )
+
+    /** Devuelve el uid de la empresa que tiene ese RUC, o null si no existe. */
+    suspend fun findCompanyIdByRuc(ruc: String): String?
 }
 
 /** Lee el texto de una foto en el telefono (ML Kit, sin red). */

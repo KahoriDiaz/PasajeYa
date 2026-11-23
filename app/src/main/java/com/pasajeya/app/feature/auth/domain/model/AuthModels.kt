@@ -6,13 +6,26 @@ data class AuthUser(
     val emailVerified: Boolean
 )
 
+/**
+ * Roles de PasajeYa!.
+ * - [PASSENGER]: quien viaja.
+ * - [DRIVER]: el conductor de la unidad. Se guarda como "operator" para seguir siendo
+ *   compatible con las cuentas y las Cloud Functions que ya existen.
+ * - [COMPANY]: el operador (empresa o consorcio concesionario) que paga la suscripción
+ *   por unidad y administra a sus conductores.
+ */
 enum class UserRole(val wireValue: String) {
     PASSENGER("passenger"),
-    OPERATOR("operator");
+    DRIVER("operator"),
+    COMPANY("company");
 
     companion object {
-        fun fromWire(value: Any?): UserRole? =
-            entries.firstOrNull { it.wireValue == value }
+        fun fromWire(value: Any?): UserRole? = when (value) {
+            "passenger" -> PASSENGER
+            "operator", "driver" -> DRIVER
+            "company" -> COMPANY
+            else -> null
+        }
     }
 }
 

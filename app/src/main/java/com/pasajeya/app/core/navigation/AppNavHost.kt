@@ -24,7 +24,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pasajeya.app.R
+import com.pasajeya.app.BuildConfig
 import com.pasajeya.app.feature.auth.domain.model.AuthDestination
+import com.pasajeya.app.feature.company.ui.CompanyHomeScreen
 import com.pasajeya.app.feature.auth.ui.forgot.ForgotPasswordScreen
 import com.pasajeya.app.feature.auth.ui.home.OperatorHomeScreen
 import com.pasajeya.app.feature.auth.ui.home.PassengerHomeScreen
@@ -56,6 +58,7 @@ object AppRoutes {
     const val OPERATOR_PROFILE = "operator_profile"
     const val OPERATOR_DETAILS = "operator_details"
     const val OPERATOR_HOME = "operator_home"
+    const val COMPANY_HOME = "company_home"
     const val PRIVACY_POLICY = "privacy_policy"
     const val FARE_ESTIMATE = "fare_estimate"
     const val TRIP_SUMMARY = "trip_summary/{tripId}"
@@ -71,8 +74,9 @@ fun routeFor(destination: AuthDestination): String = when (destination) {
     AuthDestination.VERIFY_EMAIL -> AppRoutes.VERIFY_EMAIL
     AuthDestination.CHOOSE_ROLE -> AppRoutes.ROLE_SELECTION
     AuthDestination.PASSENGER_HOME -> AppRoutes.PASSENGER_HOME
-    AuthDestination.OPERATOR_PROFILE -> AppRoutes.OPERATOR_DETAILS
-    AuthDestination.OPERATOR_HOME -> AppRoutes.OPERATOR_HOME
+    AuthDestination.DRIVER_PROFILE -> AppRoutes.OPERATOR_DETAILS
+    AuthDestination.DRIVER_HOME -> AppRoutes.OPERATOR_HOME
+    AuthDestination.COMPANY_HOME -> AppRoutes.COMPANY_HOME
 }
 
 @Composable
@@ -202,7 +206,7 @@ fun AppNavHost(
                         navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
                     }
                 )
-                ElevatedButton(
+                if (BuildConfig.DEBUG) ElevatedButton(
                     onClick = { clearAndNavigate(AppRoutes.OPERATOR_HOME) },
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -230,7 +234,7 @@ fun AppNavHost(
                         navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
                     }
                 )
-                ElevatedButton(
+                if (BuildConfig.DEBUG) ElevatedButton(
                     onClick = { clearAndNavigate(AppRoutes.PASSENGER_HOME) },
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -248,6 +252,10 @@ fun AppNavHost(
                     )
                 }
             }
+        }
+
+        composable(AppRoutes.COMPANY_HOME) {
+            CompanyHomeScreen(onNavigate = ::navigateTo)
         }
 
         composable(AppRoutes.PRIVACY_POLICY) {

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="company_title">Panel del operador</string>
+    <string name="company_ruc_label">RUC %1$s</string>
+    <string name="company_loading">Cargando tu flota…</string>
+    <string name="company_load_error">No pudimos cargar el panel. Revisa tu conexión.</string>
+    <string name="company_units">Unidades</string>
+    <string name="company_trips_today">Viajes de hoy</string>
+    <string name="company_charged_today">Cobrado hoy</string>
+    <string name="company_subscription">Suscripción al mes</string>
+    <string name="company_subscription_note">S/ 1 al día por unidad (S/ 30 al mes). El pasajero no paga comisión.</string>
+    <string name="company_fleet_title">Tu flota</string>
+    <string name="company_fleet_empty">Aún no hay conductores vinculados. Tus conductores se vinculan al registrarse con el RUC %1$s.</string>
+    <string name="company_no_plate">Sin placa</string>
+    <string name="company_refresh">Actualizar</string>
+</resources>
