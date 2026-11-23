@@ -6,7 +6,9 @@
 // y nunca en el APK: la app solo deja el pedido en Firestore y este trabajo lo resuelve.
 //
 // Secretos necesarios:
-//   LICENSE_API_URL    p. ej. https://api.ejemplo.pe/v1/licencia?dni={dni}
+//   LICENSE_API_URL    si lleva {dni} se consulta con GET sustituyendo ese hueco;
+//                      si no, se envia POST con {"dni": "..."} en el cuerpo, que es
+//                      como funciona https://api.json.pe/api/licencia
 //   LICENSE_API_TOKEN  token del proveedor (se envia como Bearer)
 // Sin esos secretos el trabajo no hace nada y termina bien.
 const { initializeApp, cert } = require("firebase-admin/app");
@@ -86,12 +88,21 @@ function evaluate(payload) {
 }
 
 async function queryProvider(dni) {
-  const url = API_URL.includes("{dni}")
-    ? API_URL.replace("{dni}", encodeURIComponent(dni))
-    : `${API_URL}${API_URL.includes("?") ? "&" : "?"}dni=${encodeURIComponent(dni)}`;
-  const response = await fetch(url, {
-    headers: { Authorization: `Bearer ${API_TOKEN}`, Accept: "application/json" }
-  });
+  const headers = {
+    Authorization: `Bearer ${API_TOKEN}`,
+    Accept: "application/json"
+  };
+  const usesGet = API_URL.includes("{dni}");
+  const url = usesGet ? API_URL.replace("{dni}", encodeURIComponent(dni)) : API_URL;
+  const options = usesGet
+    ? { headers }
+    : {
+        method: "POST",
+        headers: { ...headers, "Content-Type": "application/json" },
+        body: JSON.stringify({ dni })
+      };
+
+  const response = await fetch(url, options);
   if (!response.ok) {
     throw new Error(`El proveedor respondio ${response.status}`);
   }

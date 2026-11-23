@@ -139,6 +139,12 @@ descompilándola. Sin esos secretos el workflow no hace nada y el brevete se que
 `POR_REVISAR` hasta que una empresa formal avale al conductor, que es el respaldo real que
 tiene hoy el proyecto.
 
+Si `LICENSE_API_URL` lleva `{dni}`, la consulta se hace con GET sustituyendo ese hueco; si no
+lo lleva, se envía POST con `{"dni": "..."}` en el cuerpo, que es como funciona
+`https://api.json.pe/api/licencia`. json.pe tiene plan gratuito de 100 créditos por 30 días
+sin tarjeta, y cada consulta de licencia cuesta 5 créditos, o sea unas 20 consultas: alcanza
+de sobra para la demostración y para el curso.
+
 Para el producto de verdad corresponde un convenio directo con el MTC; el proveedor es el
 puente mientras no exista.
 
