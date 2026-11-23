@@ -1,6 +1,5 @@
 ﻿package com.pasajeya.app.feature.trip.data
 
-import android.location.Location
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -423,73 +422,63 @@ class FirebaseTripRepository @Inject constructor(
                 }
             )
         } catch (e: Exception) {
-            val currentUid = auth.currentUser?.uid ?: "passenger"
+            if (e is kotlinx.coroutines.CancellationException) throw e
+            if (auth.currentUser == null) {
+                throw TripOperationException("No hay una cuenta activa.", e)
+            }
             val tripDoc = firestore.collection("trips").document(tripId).get().await()
+            val trip = tripDoc.toTrip()
+                ?: throw TripOperationException("No pudimos leer el viaje.", e)
+            val route = loadRoutePath(trip.routeId)
+                ?: throw TripOperationException("No pudimos cargar la ruta del viaje.", e)
+            val shift = loadShift(trip.shiftId)
 
-            val originLat = tripDoc.getDouble("originLat") ?: position.latitude
-            val originLng = tripDoc.getDouble("originLng") ?: position.longitude
-
-            val locResults = FloatArray(1)
-            Location.distanceBetween(originLat, originLng, position.latitude, position.longitude, locResults)
-            val distanceMeters = locResults[0].toDouble().coerceAtLeast(3500.0)
-
-            val userDoc = firestore.collection("users").document(currentUid).get().await()
-            val benefitMap = userDoc.get("benefit") as? Map<*, *>
-            val isUniversity = benefitMap?.get("status")?.toString()?.uppercase() == "APPROVED"
-
-            val fareVersion = FareVersionInput(
-                baseFarePerKmCents = 8,
-                minFareCents = 130,
-                maxFareCents = 200,
-                fuelIndex = 1.13,
-                roundingStepCents = 10
-            )
-            val result = FareCalculator.computeFare(
-                distanceMeters = distanceMeters,
-                version = fareVersion,
-                hasUniversityBenefit = isUniversity
+            // Misma medicion que el Tap Out del pasajero: paraderos de la ruta, nunca
+            // una distancia inventada.
+            val boardingIndex = trip.boardingStopIndex
+                ?.takeIf { it in route.stops.indices }
+                ?: nearestStopIndex(route, position)
+            val alightingIndex = if (shift?.simulationEnabled == true) {
+                shift.simulatedStopIndex.takeIf { it in route.stops.indices }
+                    ?: nearestStopIndex(route, position)
+            } else {
+                nearestStopIndex(route, position)
+            }
+            val distanceMeters = FareEstimator.routeDistanceMeters(
+                route.stops,
+                boardingIndex,
+                alightingIndex
             )
 
-            val fareBenefit = if (isUniversity) {
-                FareBenefit(
-                    kind = "university",
-                    percent = 50,
-                    officialUniversityFareCents = result.totalCents,
-                    discountCents = result.regularCents - result.totalCents
-                )
-            } else null
+            val userDoc = runCatching {
+                firestore.collection("users").document(trip.passengerUid).get().await()
+            }.getOrNull()
+            val isUniversity = userDoc?.isUniversityEligible() == true ||
+                trip.fareType == "university"
 
-            val fareBreakdown = FareBreakdown(
-                distanceMeters = distanceMeters,
-                baseFarePerKmCents = fareVersion.baseFarePerKmCents,
-                fuelIndex = fareVersion.fuelIndex,
-                calculatedCents = result.rawCalculatedCents.toInt(),
-                officialFareCents = result.totalCents,
-                regularCents = result.regularCents,
-                benefit = fareBenefit,
-                totalCents = result.totalCents,
-                capped = result.capped,
-                minApplied = result.minApplied,
-                fareVersionId = FARE_VERSION_ID
-            )
+            val version = fareRepository.loadFareVersion()
+            val context = RouteFareContext(route = route.toRouteGeo(), version = version)
+            val result = FareEstimator.fareForDistance(context, distanceMeters, isUniversity)
+            val fareBreakdown = result.toBreakdown(route, isUniversity, version)
+            val alightingPosition = route.stops.getOrNull(alightingIndex)
 
             firestore.collection("trips").document(tripId).update(
                 mapOf(
                     "status" to "closed",
                     "endedAt" to FieldValue.serverTimestamp(),
+                    "endLocation" to mapOf(
+                        "lat" to (alightingPosition?.lat ?: position.latitude),
+                        "lng" to (alightingPosition?.lng ?: position.longitude)
+                    ),
+                    "alightingStopIndex" to alightingIndex,
+                    "alightingStopName" to alightingPosition?.name,
                     "distanceMeters" to distanceMeters,
-                    "fareBreakdown" to mapOf(
-                        "distanceMeters" to distanceMeters,
-                        "calculatedCents" to result.rawCalculatedCents.toInt(),
-                        "officialFareCents" to result.totalCents,
-                        "regularCents" to result.regularCents,
-                        "totalCents" to result.totalCents,
-                        "capped" to result.capped,
-                        "minApplied" to result.minApplied,
-                        "fareVersionId" to "v1-arequipa-continuous"
-                    )
+                    "coverage" to if (shift?.simulationEnabled == true) "simulated" else "gps",
+                    "fareBreakdown" to fareBreakdown.toFirestoreMap()
                 )
             ).await()
+
+            chargeWallet(trip.passengerUid, fareBreakdown.totalCents)
 
             TapOutResult(
                 tripId = tripId,
