@@ -9,7 +9,6 @@ import com.pasajeya.app.feature.benefit.domain.BenefitRepository
 import com.pasajeya.app.feature.benefit.domain.CarneTextCheck
 import com.pasajeya.app.feature.benefit.domain.model.BenefitOperationResult
 import com.pasajeya.app.feature.benefit.domain.model.BenefitRequestState
-import com.pasajeya.app.feature.benefit.domain.model.BenefitStatus
 import com.pasajeya.app.feature.benefit.domain.model.UserBenefit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
