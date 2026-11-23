@@ -105,7 +105,17 @@ class FirebaseRegistrationRepository @Inject constructor(
             baseData(uid, email, fullName, dni, UserRole.DRIVER) + mapOf(
                 "licenseCategory" to licenseCategory,
                 "licenseNumber" to licenseNumber,
-                "licenseStatus" to RegistrationConfig.LICENSE_STATUS_ENABLED,
+                // Nadie verifico el brevete todavia: solo el aval de una empresa lo habilita.
+                "licenseStatus" to if (companyData.isEmpty()) {
+                    RegistrationConfig.LICENSE_STATUS_PENDING
+                } else {
+                    RegistrationConfig.LICENSE_STATUS_ENABLED
+                },
+                "driverStatus" to if (companyData.isEmpty()) {
+                    "unverified"
+                } else {
+                    "verified_by_company"
+                },
                 "vehiclePlate" to plate,
                 "assignedRouteId" to route.id,
                 "birthDate" to birthDate,
@@ -145,7 +155,6 @@ class FirebaseRegistrationRepository @Inject constructor(
                     "businessName" to businessName,
                     "ruc" to ruc,
                     "status" to RegistrationConfig.STATUS_ACTIVE,
-                    "subscriptionPerUnitCents" to COMPANY_UNIT_MONTHLY_CENTS,
                     "createdAt" to FieldValue.serverTimestamp()
                 )
             ).await()
@@ -173,11 +182,6 @@ class FirebaseRegistrationRepository @Inject constructor(
         throw AccountException(AccountFailure.Network)
     } catch (error: FirebaseFirestoreException) {
         throw AccountException(AccountFailure.Unknown)
-    }
-
-    private companion object {
-        /** S/ 1 al día por unidad = S/ 30 al mes (modelo de negocio). */
-        const val COMPANY_UNIT_MONTHLY_CENTS = 3_000L
     }
 
     private fun baseData(

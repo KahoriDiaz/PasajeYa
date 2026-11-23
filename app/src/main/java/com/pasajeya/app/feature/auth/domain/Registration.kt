@@ -20,7 +20,11 @@ data class OperatorRouteChoice(
 object RegistrationConfig {
     const val INITIAL_WALLET_CENTS = 2_000L
     const val STATUS_ACTIVE = "active"
+    /** Avalado por la empresa que lo contrata: es el unico respaldo real hoy. */
     const val LICENSE_STATUS_ENABLED = "HABILITADO"
+
+    /** Conductor independiente: declaro sus datos y falta revisar sus documentos. */
+    const val LICENSE_STATUS_PENDING = "POR_REVISAR"
 
     /** Unica categoria no profesional: no autoriza transporte publico urbano. */
     const val BLOCKED_LICENSE_CATEGORY = "A-I"
