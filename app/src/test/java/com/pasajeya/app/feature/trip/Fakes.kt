@@ -13,6 +13,7 @@ import com.pasajeya.app.feature.benefit.domain.BenefitRepository
 import com.pasajeya.app.feature.benefit.domain.model.BenefitOperationResult
 import com.pasajeya.app.feature.benefit.domain.model.BenefitRequestState
 import com.pasajeya.app.feature.benefit.domain.model.UserBenefit
+import com.pasajeya.app.feature.trip.domain.RoutePath
 import com.pasajeya.app.feature.trip.domain.TripPosition
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.EndShiftResult
@@ -196,6 +197,58 @@ class FakeTripRepository : TripRepository {
         tapOutCalls += 1
         return TapOutResult(
             tripId = tripId,
+            status = "closed",
+            distanceMeters = 1_200.0,
+            requiresReview = false
+        )
+    }
+
+    override suspend fun loadRoutePath(routeId: String): RoutePath? = null
+
+    override suspend fun loadShift(shiftId: String): Shift? = activeShift.value
+
+    override suspend fun findOpenTripForPassenger(
+        passengerUid: String
+    ): Trip? {
+        return openTrips.value.firstOrNull {
+            it.passengerUid == passengerUid && it.status == "open"
+        }
+    }
+
+    override fun observeShiftTrips(shiftId: String): Flow<List<Trip>> = openTrips
+
+    override fun observeShift(shiftId: String): Flow<Shift?> = activeShift
+
+    override suspend fun updateSimulation(
+        shiftId: String,
+        routeId: String,
+        stopIndex: Int,
+        position: TripPosition,
+        enabled: Boolean
+    ) = Unit
+
+    override suspend fun passengerTapIn(
+        sessionId: String,
+        busQr: String,
+        position: TripPosition
+    ): TapInResult {
+        tapInCalls += 1
+        tapInFailure?.let { throw it }
+        return tapInResults.getOrNull(tapInCalls - 1) ?: TapInResult(
+            tripId = "trip-$tapInCalls",
+            passengerFirstName = "Ana",
+            passengerAge = 22
+        )
+    }
+
+    override suspend fun passengerTapOut(
+        sessionId: String,
+        busQr: String,
+        position: TripPosition
+    ): TapOutResult {
+        tapOutCalls += 1
+        return TapOutResult(
+            tripId = "trip-$tapOutCalls",
             status = "closed",
             distanceMeters = 1_200.0,
             requiresReview = false

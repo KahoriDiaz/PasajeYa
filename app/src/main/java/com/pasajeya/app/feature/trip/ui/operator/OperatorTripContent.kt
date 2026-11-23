@@ -4,22 +4,32 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.nfc.NfcAdapter
 import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -32,14 +42,18 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import android.app.Activity
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -50,6 +64,8 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pasajeya.app.R
+import com.pasajeya.app.core.map.MapUserPosition
+import com.pasajeya.app.core.map.RouteMap
 import com.pasajeya.app.core.theme.BorderLight
 import com.pasajeya.app.core.theme.ErrorRed
 import com.pasajeya.app.core.theme.PrimaryBlue
@@ -68,6 +84,9 @@ import com.pasajeya.app.feature.history.ui.OperatorShiftSummaryViewModel
 import com.pasajeya.app.feature.trip.domain.model.Shift
 import com.pasajeya.app.feature.trip.domain.model.TapInResult
 import com.pasajeya.app.feature.trip.domain.model.Trip
+import com.pasajeya.app.feature.trip.ui.generateQrBitmap
+import com.pasajeya.app.feature.profile.ui.ProfileScreen
+import com.pasajeya.app.feature.profile.ui.ProfileUserIcon
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -91,6 +110,21 @@ fun OperatorTripContent(
         summaryViewModel.refresh()
     }
     var pendingStart by rememberSaveable { mutableStateOf(false) }
+    var targetPosition by remember { mutableStateOf<MapUserPosition?>(null) }
+    var showProfile by remember { mutableStateOf(false) }
+
+    val busPosition: MapUserPosition? = state.shift?.let { shift ->
+        shift.simulatedLatitude?.let { lat ->
+            shift.simulatedLongitude?.let { lng ->
+                MapUserPosition(lat, lng)
+            }
+        }
+    }
+
+    fun advanceStop() {
+        viewModel.advanceStop()
+        busPosition?.let { targetPosition = it }
+    }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -138,7 +172,7 @@ fun OperatorTripContent(
                 add(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
-        if (permissions.isEmpty()) {
+        if (state.simulationEnabled || permissions.isEmpty()) {
             viewModel.startShift()
         } else {
             pendingStart = true
@@ -150,6 +184,7 @@ fun OperatorTripContent(
         title = stringResource(R.string.app_name),
         modifier = modifier.testTag("operator_home_screen"),
         actions = {
+            ProfileUserIcon(onProfileClick = { showProfile = true })
             TextButton(onClick = onLogout) {
                 Text(
                     text = stringResource(R.string.action_logout),
@@ -182,6 +217,13 @@ fun OperatorTripContent(
             InlineMessage(
                 text = stringResource(R.string.home_profile_error),
                 tone = MessageTone.ERROR
+            )
+        }
+
+        if (!state.emailVerified && email.isNotEmpty()) {
+            InlineMessage(
+                text = stringResource(R.string.operator_email_unverified_warning),
+                tone = MessageTone.WARNING
             )
         }
 
@@ -263,13 +305,28 @@ fun OperatorTripContent(
                 routeName = state.routeName
                     ?: state.routes.firstOrNull { it.id == shift.routeId }?.name
                     ?: shift.routeId,
-                onScan = viewModel::openScanner,
+                busQrPayload = state.busQrPayload,
+                simulationEnabled = state.simulationEnabled,
+                simulatedStopIndex = state.simulatedStopIndex,
+                simulatedStopName = state.simulatedStopName,
+                stopCount = state.stopCount,
+                onToggleSimulation = viewModel::toggleSimulation,
                 onEndShift = viewModel::requestEndShift,
+                onAdvanceStop = ::advanceStop,
                 isEnding = state.isEndingShift
             )
+            if (state.simulationEnabled && state.routeStops.isNotEmpty() && busPosition != null) {
+                BusMapCard(
+                    stops = state.routeStops,
+                    busPosition = busPosition,
+                    targetPosition = targetPosition,
+                    onAdvanceStop = ::advanceStop
+                )
+            }
             BatteryCard()
             OpenTripsCard(
                 trips = state.openTrips,
+                simulatedStopIndex = state.simulatedStopIndex,
                 tapOutTripId = state.tapOutTripId,
                 onTapOut = viewModel::requestTapOut
             )
@@ -285,6 +342,8 @@ fun OperatorTripContent(
             onEnabledChange = viewModel::setVoiceEnabled,
             onTest = viewModel::testVoice
         )
+
+        NfcReaderEffect(viewModel = viewModel)
     }
 
     if (state.endShiftConfirm) {
@@ -336,6 +395,86 @@ fun OperatorTripContent(
             onDismiss = viewModel::closeScanner,
             onPermissionDenied = viewModel::onCameraPermissionDenied
         )
+    }
+
+    if (showProfile) {
+        ProfileScreen(visible = showProfile, onDismiss = { showProfile = false })
+    }
+}
+
+@Composable
+private fun BusMapCard(
+    stops: List<com.pasajeya.app.feature.fare.domain.RouteStop>,
+    busPosition: MapUserPosition,
+    targetPosition: MapUserPosition?,
+    onAdvanceStop: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, BorderLight)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.operator_bus_map_title),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPrimary
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .clip(RoundedCornerShape(12.dp))
+            ) {
+                RouteMap(
+                    stops = stops,
+                    description = stringResource(R.string.operator_bus_map_description),
+                    modifier = Modifier.fillMaxSize(),
+                    busPosition = busPosition,
+                    targetPosition = targetPosition,
+                    userPosition = null
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun NfcReaderEffect(viewModel: OperatorTripViewModel) {
+    val context = LocalContext.current
+    val activity = context as? Activity
+    val currentCallback = rememberUpdatedState(
+        object : NfcAdapter.ReaderCallback {
+            override fun onTagDiscovered(tag: android.nfc.Tag) {
+                Handler(Looper.getMainLooper()).post {
+                    viewModel.onNfcTagDiscovered(tag)
+                }
+            }
+        }
+    )
+
+    DisposableEffect(activity, currentCallback.value) {
+        val nfcAdapter = activity?.let { NfcAdapter.getDefaultAdapter(it) }
+        if (nfcAdapter != null && nfcAdapter.isEnabled) {
+            nfcAdapter.enableReaderMode(
+                activity,
+                currentCallback.value,
+                NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
+                Bundle()
+            )
+        }
+        onDispose {
+            nfcAdapter?.disableReaderMode(activity ?: context)
+        }
     }
 }
 
@@ -580,11 +719,16 @@ private fun StartShiftCard(
 private fun ActiveShiftCard(
     shift: Shift,
     routeName: String,
-    onScan: () -> Unit,
+    busQrPayload: String?,
+    simulationEnabled: Boolean,
+    simulatedStopIndex: Int,
+    simulatedStopName: String?,
+    stopCount: Int,
+    onToggleSimulation: (Boolean) -> Unit,
     onEndShift: () -> Unit,
+    onAdvanceStop: () -> Unit,
     isEnding: Boolean
-) {
-    Card(
+) {    Card(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(
@@ -628,14 +772,90 @@ private fun ActiveShiftCard(
                     color = TextGray
                 )
             }
-            Button(
-                onClick = onScan,
+
+            Text(
+                text = stringResource(R.string.operator_bus_qr_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPrimary
+            )
+            Text(
+                text = stringResource(R.string.operator_bus_qr_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextGray
+            )
+            val qrBitmap = remember(busQrPayload) {
+                busQrPayload?.let { generateQrBitmap(it) }
+            }
+            if (qrBitmap != null) {
+                Image(
+                    bitmap = qrBitmap,
+                    contentDescription = stringResource(R.string.operator_bus_qr_content),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .size(240.dp)
+                        .background(androidx.compose.ui.graphics.Color.White)
+                        .padding(10.dp)
+                )
+            } else {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
+
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 52.dp)
+                    .heightIn(min = 48.dp)
+                    .toggleable(
+                        value = simulationEnabled,
+                        role = Role.Switch,
+                        onValueChange = onToggleSimulation
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(stringResource(R.string.operator_scan_qr))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.operator_simulation_title),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = TextPrimary
+                    )
+                    Text(
+                        text = stringResource(R.string.operator_simulation_body),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextGray
+                    )
+                }
+                Switch(
+                    checked = simulationEnabled,
+                    onCheckedChange = null
+                )
             }
+            if (simulationEnabled && stopCount > 0) {
+                Text(
+                    text = stringResource(
+                        R.string.operator_simulation_stop,
+                        simulatedStopIndex + 1,
+                        stopCount,
+                        simulatedStopName.orEmpty()
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = PrimaryBlue
+                )
+            }
+
+            if (simulationEnabled && stopCount > 0) {
+                PrimaryButton(
+                    text = stringResource(R.string.operator_advance_stop),
+                    onClick = onAdvanceStop,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                    enabled = !isEnding
+                )
+            }
+
             OutlinedButton(
                 onClick = onEndShift,
                 modifier = Modifier
@@ -701,6 +921,7 @@ private fun BatteryCard() {
 @Composable
 private fun OpenTripsCard(
     trips: List<Trip>,
+    simulatedStopIndex: Int,
     tapOutTripId: String?,
     onTapOut: (Trip) -> Unit
 ) {
@@ -766,6 +987,15 @@ private fun OpenTripsCard(
                                 text = trip.passengerAge?.let {
                                     stringResource(R.string.operator_age, it)
                                 } ?: stringResource(R.string.operator_age_unknown),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = TextGray
+                            )
+                            val kmRecorridos = (simulatedStopIndex - (trip.boardingStopIndex ?: 0)) * 1.2
+                            Text(
+                                text = stringResource(
+                                    R.string.operator_trip_km,
+                                    kmRecorridos.coerceAtLeast(0.0)
+                                ),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = TextGray
                             )

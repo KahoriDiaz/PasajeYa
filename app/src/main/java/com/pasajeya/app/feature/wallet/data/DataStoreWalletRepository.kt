@@ -1,4 +1,4 @@
-package com.pasajeya.app.feature.wallet.data
+﻿package com.pasajeya.app.feature.wallet.data
 
 import android.content.Context
 import androidx.datastore.preferences.core.Preferences
@@ -62,7 +62,7 @@ class DataStoreWalletRepository @Inject constructor(
     private fun now(): Long = System.currentTimeMillis()
 
     private fun Preferences.readWallet(uid: String): DemoWallet =
-        this[keyFor(uid)]?.let(::decode) ?: DemoWallet()
+        this[keyFor(uid)]?.let(::decode) ?: DemoWallet(balanceCents = 2000)
 
     private fun keyFor(uid: String) = stringPreferencesKey("wallet_$uid")
 
@@ -107,3 +107,4 @@ class DataStoreWalletRepository @Inject constructor(
         DemoWallet()
     }
 }
+

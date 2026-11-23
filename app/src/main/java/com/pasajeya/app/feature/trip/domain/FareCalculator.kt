@@ -1,108 +1,88 @@
 package com.pasajeya.app.feature.trip.domain
 
-// Calculadora de tarifas para estimación en tiempo real con GPS
-data class FareVersionInput(
-    val baseFarePerKmCents: Int,
-    val fuelIndex: Double,
-    val minFareCents: Int,
-    val maxFareCents: Int = 330,
-    val roundingStepCents: Int = 5
-)
-
-data class FareBenefitInput(
-    val kind: String,
-    val percent: Int
-)
-
-data class FareBreakdown(
-    val distanceMeters: Double,
-    val baseFarePerKmCents: Int,
-    val fuelIndex: Double,
-    val calculatedCents: Int,
-    val regularCents: Int,
-    val benefit: FareBenefitInput?,
-    val totalCents: Int,
-    val capped: Boolean,
-    val minApplied: Boolean
-)
+import com.pasajeya.app.feature.fare.domain.FareBenefit
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 data class FareResult(
     val distanceMeters: Double,
-    val baseFarePerKmCents: Int,
-    val fuelIndex: Double,
-    val calculatedCents: Int,
-    val regularCents: Int,
-    val benefit: FareBenefitInput?,
     val totalCents: Int,
-    val capped: Boolean,
-    val minApplied: Boolean
+    val regularCents: Int,
+    val benefit: FareBenefit? = null,
+    val capped: Boolean = false,
+    val minApplied: Boolean = false,
+    val rawCalculatedCents: Double = 0.0
 )
 
 object FareCalculator {
 
-    private const val DEFAULT_MAX_FARE_CENTS = 330;
-
+    /**
+     * Tarifa por tramo: distancia (km) × tarifa base por km × índice de combustible.
+     * El resultado se redondea al paso configurado, se aplica la tarifa mínima y el tope
+     * oficial de la ruta (limitado al techo de seguridad). El beneficio universitario es el
+     * 50 % del pasaje regular, redondeado al mismo paso.
+     */
     fun computeFare(
         distanceMeters: Double,
         version: FareVersionInput,
-        hasUniversityBenefit: Boolean
+        hasUniversityBenefit: Boolean = false,
+        officialFareCents: Int? = null
     ): FareResult {
-        require(distanceMeters >= 0.0) { "La distancia debe ser no negativa." }
+        val km = distanceMeters.coerceAtLeast(0.0) / 1000.0
+        val rawCalculatedCents = km * version.baseFarePerKmCents * version.fuelIndex
+        val step = version.roundingStepCents.takeIf { it > 0 } ?: 5
+        val rounded = roundToStep(rawCalculatedCents, step)
 
-        val distanceKm = distanceMeters / 1000.0;
-        val raw = distanceKm * version.baseFarePerKmCents * version.fuelIndex;
-        val calculated = Math.round(raw).toInt();
-        val rounded = roundToStep(Math.round(raw).toInt(), version.roundingStepCents);
-        var regular = Math.max(rounded, version.minFareCents);
-        val minApplied = rounded < version.minFareCents;
-        var capped = false;
-        var maxApplied = false;
-        if (regular > version.maxFareCents) {
-            regular = version.maxFareCents;
-            capped = true;
-            maxApplied = true;
-        }
+        val minCents = version.minFareCents.coerceAtLeast(0)
+        val afterMinimum = rounded.coerceAtLeast(minCents)
+        val minApplied = afterMinimum > rounded
 
-        var benefit: FareBenefitInput? = null;
-        var total = regular;
+        val capCents = officialFareCents
+            ?.takeIf { it > 0 }
+            ?: version.maxFareCents.takeIf { it > 0 }
+        val regularCents = capCents?.let { afterMinimum.coerceAtMost(it) } ?: afterMinimum
+        val capped = capCents != null && afterMinimum > capCents
+
+        var finalCents = regularCents
+        var benefit: FareBenefit? = null
         if (hasUniversityBenefit) {
-            val percent = 50;
-            val discounted = roundToStep(Math.round(regular * 0.5).toInt(), version.roundingStepCents);
-            val conBeneficio = discounted;
-            val discountCents = regular - conBeneficio;
-            if (discountCents < 0) {
-                benefit = FareBenefitInput(kind = "university", percent = percent);
-                total = regular;
-            } else {
-                benefit = FareBenefitInput(kind = "university", percent = percent);
-                total = conBeneficio;
-            }
-        }
-
-        if (total > regular) {
-            total = regular;
-        }
-        if (total > version.maxFareCents) {
-            total = version.maxFareCents;
-        }
-        if (total < 0) {
-            total = 0;
+            finalCents = roundToStep(regularCents / 2.0, step).coerceAtMost(regularCents)
+            // Piso universitario: la mitad de la tarifa mínima (65 céntimos / S/ 0.65)
+            val universityMinCents = (version.minFareCents / 2.0).roundToInt()
+            finalCents = finalCents.coerceAtLeast(universityMinCents)
+            benefit = FareBenefit(
+                type = "UNIVERSITY",
+                percent = 50,
+                discountCents = regularCents - finalCents
+            )
         }
 
         return FareResult(
             distanceMeters = distanceMeters,
-            baseFarePerKmCents = version.baseFarePerKmCents,
-            fuelIndex = version.fuelIndex,
-            calculatedCents = calculated,
-            regularCents = regular,
+            totalCents = finalCents,
+            regularCents = regularCents,
             benefit = benefit,
-            totalCents = total,
             capped = capped,
-            minApplied = minApplied
-        );
+            minApplied = minApplied && !capped,
+            rawCalculatedCents = rawCalculatedCents
+        )
     }
 
-    fun roundToStep(value: Int, step: Int): Int {
-        return Math.round(value / step.toDouble()).toInt() * step;
+    private fun roundToStep(value: Double, step: Int): Int {
+        if (value <= 0.0) return 0
+        val steps = (value / step).roundToInt()
+        return max(step, steps * step)
+    }
+
+    /**
+     * Modelo comparativo secundario: esquema por escalones/rangos tradicionales.
+     */
+    fun computeSteppedFareCents(distanceMeters: Double): Int {
+        val km = distanceMeters / 1000.0
+        return when {
+            km <= 3.0 -> 100
+            km <= 8.0 -> 130
+            else -> 150
+        }
     }
 }

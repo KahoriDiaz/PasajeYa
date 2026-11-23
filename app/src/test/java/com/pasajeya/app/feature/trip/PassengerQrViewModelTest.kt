@@ -2,7 +2,9 @@ package com.pasajeya.app.feature.trip
 
 import com.pasajeya.app.feature.auth.domain.model.AuthUser
 import com.pasajeya.app.feature.auth.domain.model.UserRole
+import com.pasajeya.app.feature.trip.location.LocationProvider
 import com.pasajeya.app.feature.trip.ui.passenger.PassengerQrViewModel
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -100,6 +102,7 @@ class PassengerQrViewModelTest {
                 uid = "passenger-1",
                 role = UserRole.PASSENGER
             ),
-            tripRepository = repository
+            tripRepository = repository,
+            locationProvider = mockk(relaxed = true)
         )
 }

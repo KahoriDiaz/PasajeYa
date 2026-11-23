@@ -7,6 +7,8 @@ import com.pasajeya.app.BuildConfig
 import com.pasajeya.app.feature.auth.domain.AccountRepository
 import com.pasajeya.app.feature.auth.domain.AuthRepository
 import com.pasajeya.app.feature.auth.domain.CommonPasswordsProvider
+import com.pasajeya.app.feature.auth.domain.DocumentTextRecognizer
+import com.pasajeya.app.feature.auth.domain.RegistrationRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -28,6 +30,18 @@ abstract class AuthBindingsModule {
     abstract fun bindAccountRepository(
         repository: FirebaseAccountRepository
     ): AccountRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRegistrationRepository(
+        repository: FirebaseRegistrationRepository
+    ): RegistrationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindDocumentTextRecognizer(
+        recognizer: MlKitDocumentTextRecognizer
+    ): DocumentTextRecognizer
 
     @Binds
     @Singleton

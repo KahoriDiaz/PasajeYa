@@ -1,9 +1,11 @@
 package com.pasajeya.app.feature.auth.ui.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pasajeya.app.feature.auth.domain.AccountRepository
 import com.pasajeya.app.feature.auth.domain.AuthRepository
+import com.pasajeya.app.feature.auth.domain.DeviceSessionRepository
 import com.pasajeya.app.feature.auth.domain.LoginAttemptLimiter
 import com.pasajeya.app.feature.auth.domain.model.AccountException
 import com.pasajeya.app.feature.auth.domain.model.AccountFailure
@@ -40,7 +42,8 @@ data class LoginUiState(
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val deviceSessionRepository: DeviceSessionRepository
 ) : ViewModel() {
     private val limiter = LoginAttemptLimiter()
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -114,18 +117,23 @@ class LoginViewModel @Inject constructor(
             try {
                 val user = authRepository.signIn(email, current.password)
                 val session = accountRepository.ensureSession(user.uid)
+                // Registrar el dispositivo activo para control de sesión única.
+                viewModelScope.launch {
+                    try {
+                        deviceSessionRepository.registerDevice(user.uid, deviceSessionRepository.deviceId)
+                    } catch (_: Exception) {
+                        // No bloquear el login si falla el registro del dispositivo.
+                    }
+                }
                 limiter.reset()
-                _events.send(
-                    resolveAuthDestination(
-                        emailVerified = user.emailVerified,
-                        session = session
-                    )
-                )
+                _events.send(resolveAuthDestination(session))
             } catch (error: CancellationException) {
                 throw error
             } catch (error: AuthException) {
+                Log.e("AUTH_SESSION", "Error de auth al iniciar sesion", error)
                 handleAuthFailure(error.failure)
             } catch (error: AccountException) {
+                Log.e("AUTH_SESSION", "Error de cuenta al iniciar sesion", error)
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
@@ -133,6 +141,7 @@ class LoginViewModel @Inject constructor(
                     )
                 }
             } catch (error: Exception) {
+                Log.e("AUTH_SESSION", "Error desconocido al iniciar sesion", error)
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,

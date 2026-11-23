@@ -12,20 +12,27 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,22 +42,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.pasajeya.app.R
 import com.pasajeya.app.core.theme.PrimaryBlue
-import com.pasajeya.app.core.ui.AuthScreen
+import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 import java.util.concurrent.Executor
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -65,25 +75,22 @@ fun CarneCaptureScreen(
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    
+
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var isCapturing by remember { mutableStateOf(false) }
     var cameraError by remember { mutableStateOf<String?>(null) }
+
     val errorMessage = when {
         state.carneUnreadable -> stringResource(R.string.benefit_carne_unreadable)
         state.error != null -> state.error
         else -> cameraError
     }
 
-    // La pantalla solo se cierra cuando el servidor recibiÃ³ el carnÃ©.
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             if (event is BenefitEvent.CarneSubmitted) onBack()
         }
     }
-
-    val previewView = remember { PreviewView(context) }
-    val imageCapture = remember { ImageCapture.Builder().build() }
 
     LaunchedEffect(cameraPermissionState.status) {
         if (!cameraPermissionState.status.isGranted) {
@@ -91,83 +98,136 @@ fun CarneCaptureScreen(
         }
     }
 
-    LaunchedEffect(cameraPermissionState.status.isGranted) {
-        if (cameraPermissionState.status.isGranted) {
-            val cameraProvider = context.getCameraProvider()
-            val preview = Preview.Builder().build()
-            preview.setSurfaceProvider(previewView.surfaceProvider)
-
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
-                    lifecycleOwner,
-                    CameraSelector.DEFAULT_BACK_CAMERA,
-                    preview,
-                    imageCapture
-                )
-            } catch (e: Exception) {
-                Log.e("CarneCapture", "Use case binding failed", e)
-                cameraError = "No se pudo inicializar la cÃ¡mara."
-            }
-        }
+    val imageCapture = remember {
+        ImageCapture.Builder()
+            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            .build()
     }
 
-    AuthScreen(
-        title = stringResource(R.string.benefit_step_carne_title),
-        onBack = onBack,
-        modifier = modifier
-    ) {
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        containerColor = Color.Black,
+        topBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Volver",
+                        tint = Color.White
+                    )
+                }
+                Text(
+                    text = stringResource(R.string.benefit_step_carne_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        }
+    ) { innerPadding ->
         if (cameraPermissionState.status.isGranted) {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                // Vista previa de la cámara a pantalla completa
+                AndroidView(
+                    factory = { ctx ->
+                        val previewView = PreviewView(ctx).apply {
+                            implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+                            scaleType = PreviewView.ScaleType.FILL_CENTER
+                        }
+
+                        val cameraProviderFuture = ProcessCameraProvider.getInstance(ctx)
+                        cameraProviderFuture.addListener({
+                            val cameraProvider = cameraProviderFuture.get()
+                            val preview = Preview.Builder().build().also {
+                                it.setSurfaceProvider(previewView.surfaceProvider)
+                            }
+
+                            try {
+                                cameraProvider.unbindAll()
+                                cameraProvider.bindToLifecycle(
+                                    lifecycleOwner,
+                                    CameraSelector.DEFAULT_BACK_CAMERA,
+                                    preview,
+                                    imageCapture
+                                )
+                            } catch (e: Exception) {
+                                Log.e("CarneCapture", "Error iniciando cámara", e)
+                                cameraError = "No se pudo inicializar la cámara."
+                            }
+                        }, ContextCompat.getMainExecutor(ctx))
+
+                        previewView
+                    },
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                // Marco guía de encuadre para el carné universitario
                 Column(
                     modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = stringResource(R.string.benefit_step_carne_instructions),
                         style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier
+                            .padding(horizontal = 24.dp, vertical = 16.dp)
+                            .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                            .padding(horizontal = 12.dp, vertical = 6.dp)
                     )
 
-                    // GuÃ­a de encuadre
+                    // Rectángulo con proporción de tarjeta física (85mm x 54mm aprox ~ 320x200 dp)
                     Box(
                         modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .border(2.dp, Color.White.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
+                            .size(width = 320.dp, height = 205.dp)
+                            .border(3.dp, PrimaryBlue, RoundedCornerShape(14.dp))
+                            .background(Color.Transparent)
                     ) {
-                        AndroidView(
-                            factory = { previewView },
-                            modifier = Modifier.fillMaxSize()
-                        )
-                        
-                        // Overlay para ayudar al encuadre
-                        Box(
+                        // Indicador de esquinas visuales
+                        Text(
+                            text = "Enfoca el anverso del carné aquí",
+                            color = Color.White.copy(alpha = 0.85f),
+                            style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier
-                                .size(width = 300.dp, height = 190.dp)
-                                .align(Alignment.Center)
-                                .border(2.dp, PrimaryBlue, RoundedCornerShape(8.dp))
-                                .background(Color.Black.copy(alpha = 0.1f))
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = 8.dp)
+                                .background(Color.Black.copy(alpha = 0.4f), RoundedCornerShape(4.dp))
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
                         )
                     }
-                    
+
+                    // Botón inferior de captura
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(100.dp),
+                            .padding(bottom = 36.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         if (isCapturing || state.isLoading) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                CircularProgressIndicator()
-                                if (state.isLoading) {
-                                    Text(
-                                        text = stringResource(R.string.benefit_carne_processing),
-                                        style = MaterialTheme.typography.bodySmall
-                                    )
-                                }
+                                CircularProgressIndicator(color = Color.White)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = if (state.isLoading) {
+                                        stringResource(R.string.benefit_carne_processing)
+                                    } else {
+                                        "Capturando imagen..."
+                                    },
+                                    color = Color.White,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
                             }
                         } else {
                             FloatingActionButton(
@@ -187,33 +247,48 @@ fun CarneCaptureScreen(
                                         }
                                     )
                                 },
+                                shape = CircleShape,
                                 containerColor = PrimaryBlue,
-                                contentColor = Color.White
+                                contentColor = Color.White,
+                                modifier = Modifier.size(72.dp)
                             ) {
-                                Icon(Icons.Default.CameraAlt, contentDescription = "Capturar")
+                                Icon(
+                                    imageVector = Icons.Default.CameraAlt,
+                                    contentDescription = "Capturar carné",
+                                    modifier = Modifier.size(34.dp)
+                                )
                             }
                         }
                     }
                 }
 
+                // Banner de error si ocurre un fallo
                 errorMessage?.let {
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .padding(bottom = 120.dp)
-                            .background(Color.Red.copy(alpha = 0.8f), RoundedCornerShape(8.dp))
-                            .padding(8.dp)
+                            .padding(bottom = 120.dp, start = 20.dp, end = 20.dp)
+                            .background(Color(0xFFD32F2F), RoundedCornerShape(8.dp))
+                            .padding(horizontal = 16.dp, vertical = 10.dp)
                     ) {
-                        Text(text = it, color = Color.White)
+                        Text(text = it, color = Color.White, textAlign = TextAlign.Center)
                     }
                 }
             }
         } else {
-            Text(
-                text = stringResource(R.string.benefit_error_no_camera),
-                modifier = Modifier.padding(16.dp),
-                textAlign = TextAlign.Center
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.benefit_error_no_camera),
+                    color = Color.White,
+                    modifier = Modifier.padding(24.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
@@ -228,10 +303,10 @@ private fun takePhoto(
         executor,
         object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
-                val buffer = image.planes[0].buffer
+                val rotation = image.imageInfo.rotationDegrees
+                val buffer: ByteBuffer = image.planes[0].buffer
                 val bytes = ByteArray(buffer.remaining())
                 buffer.get(bytes)
-                val rotation = image.imageInfo.rotationDegrees
                 image.close()
                 onImageCaptured(bytes, rotation)
             }
@@ -241,12 +316,4 @@ private fun takePhoto(
             }
         }
     )
-}
-
-private suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutine { continuation ->
-    ProcessCameraProvider.getInstance(this).also { cameraProviderFuture ->
-        cameraProviderFuture.addListener({
-            continuation.resume(cameraProviderFuture.get())
-        }, ContextCompat.getMainExecutor(this))
-    }
 }

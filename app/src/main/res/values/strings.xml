@@ -102,7 +102,7 @@
     <string name="field_dni">DNI</string>
     <string name="field_dni_hint">8 dígitos, sin espacios</string>
     <string name="field_birth_date">Fecha de nacimiento</string>
-    <string name="field_birth_date_hint">AAAA-MM-DD</string>
+    <string name="field_birth_date_hint">DD/MM/AAAA</string>
     <string name="profile_name_invalid">Usa entre 2 y 40 letras.</string>
     <string name="profile_dni_invalid">El DNI debe tener 8 dígitos y no puede ser una repetición.</string>
     <string name="profile_birth_invalid">Debes tener entre 12 y 110 años. Usa el formato AAAA-MM-DD.</string>

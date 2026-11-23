@@ -47,11 +47,15 @@ class FirebaseAuthRepository @Inject constructor(
 
     override suspend fun register(email: String, password: String): AuthUser {
         return try {
-            auth.createUserWithEmailAndPassword(email.trim(), password)
-                .await()
-                .user
+            val result = auth.createUserWithEmailAndPassword(email.trim(), password).await()
+            val user = result.user
                 ?.toDomain()
                 ?: throw AuthException(AuthFailure.Unknown)
+            // Enviar correo de verificación inmediatamente tras crear la cuenta.
+            result.user?.let { firebaseUser ->
+                firebaseUser.sendEmailVerification().await()
+            }
+            user
         } catch (error: FirebaseAuthException) {
             throw AuthException(error.toFailure())
         } catch (error: CancellationException) {

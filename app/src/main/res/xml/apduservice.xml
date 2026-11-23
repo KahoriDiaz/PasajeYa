@@ -1,4 +1,7 @@
-<resources>
-    <!-- AID for PasajeYa HCE service -->
-    <string name="com_pasajeya_apdu_service_aid">A0000000010102</string>
-</resources>
+<host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/apdu_service_description"
+    android:requireDeviceUnlock="false">
+    <aid-group android:category="other">
+        <aid android:name="A0000000010102"/>
+    </aid-group>
+</host-apdu-service>

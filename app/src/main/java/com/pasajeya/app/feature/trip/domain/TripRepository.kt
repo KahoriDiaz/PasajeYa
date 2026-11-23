@@ -8,6 +8,7 @@ import com.pasajeya.app.feature.trip.domain.model.Shift
 import com.pasajeya.app.feature.trip.domain.model.TapInResult
 import com.pasajeya.app.feature.trip.domain.model.TapOutResult
 import com.pasajeya.app.feature.trip.domain.model.Trip
+import com.pasajeya.app.feature.trip.domain.RoutePath
 import kotlinx.coroutines.flow.Flow
 
 data class TripPosition(
@@ -54,4 +55,35 @@ interface TripRepository {
         boardingStopIndex: Int,
         alightingStopIndex: Int
     ): FareBreakdown
+
+    suspend fun loadRoutePath(routeId: String): RoutePath?
+
+    suspend fun loadShift(shiftId: String): Shift?
+
+    fun observeShiftTrips(shiftId: String): Flow<List<Trip>>
+
+    fun observeShift(shiftId: String): Flow<Shift?>
+
+    /** Busca un viaje abierto de un pasajero (cualquier turno). */
+    suspend fun findOpenTripForPassenger(passengerUid: String): Trip?
+
+    suspend fun updateSimulation(
+        shiftId: String,
+        routeId: String,
+        stopIndex: Int,
+        position: TripPosition,
+        enabled: Boolean
+    )
+
+    suspend fun passengerTapIn(
+        sessionId: String,
+        busQr: String,
+        position: TripPosition
+    ): TapInResult
+
+    suspend fun passengerTapOut(
+        sessionId: String,
+        busQr: String,
+        position: TripPosition
+    ): TapOutResult
 }

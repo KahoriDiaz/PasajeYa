@@ -71,12 +71,21 @@ class FirebaseFareRepository @Inject constructor(
                     close(error)
                     return@addSnapshotListener
                 }
+                val benefitType = snapshot?.getString("benefitType") ?: ""
+                val status = snapshot?.getString("universityStatus") ?: ""
+                val cardCode = snapshot?.getString("universityCardCode") ?: ""
+                val expiry = snapshot?.get("universityCardExpiryDate") as? Timestamp
+                val expired = expiry != null && expiry.toDate().time <= System.currentTimeMillis()
+
                 val benefit = snapshot?.get("benefit") as? Map<*, *>
                 val validUntil = (benefit?.get("validUntil") as? Timestamp)?.toDate()?.time
-                val active = benefit?.get("status") == "approved" &&
+                val legacyActive = benefit?.get("status") == "approved" &&
                     benefit["kind"] == "university" &&
                     validUntil != null &&
                     validUntil > System.currentTimeMillis()
+
+                val active = (benefitType == "university" && status == "VERIFIED" && cardCode.isNotBlank() && !expired) ||
+                    legacyActive
                 trySend(active)
             }
         awaitClose { registration.remove() }

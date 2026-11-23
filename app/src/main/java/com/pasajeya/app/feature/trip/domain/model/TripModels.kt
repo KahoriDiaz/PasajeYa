@@ -40,7 +40,11 @@ data class Trip(
     val distanceMeters: Double,
     val passengerFirstName: String,
     val passengerAge: Int?,
-    val fareBreakdown: FareBreakdown? = null
+    val fareType: String = "regular",
+    val boardingStopIndex: Int? = null,
+    val alightingStopIndex: Int? = null,
+    val fareBreakdown: FareBreakdown? = null,
+    val heldAmountCents: Int = 0
 )
 
 data class Shift(
@@ -50,7 +54,13 @@ data class Shift(
     val routeId: String,
     val startedAtMillis: Long?,
     val endedAtMillis: Long?,
-    val status: String
+    val status: String,
+    val simulationEnabled: Boolean = false,
+    val simulatedStopIndex: Int = 0,
+    val simulatedLatitude: Double? = null,
+    val simulatedLongitude: Double? = null,
+    val simulatedStopName: String? = null,
+    val simulatedUpdatedAtMillis: Long? = null
 ) {
     val isActive: Boolean get() = status == "active"
 }
@@ -64,7 +74,8 @@ data class OperatorContext(
 data class TapInResult(
     val tripId: String,
     val passengerFirstName: String,
-    val passengerAge: Int?
+    val passengerAge: Int?,
+    val fareType: String = "regular"
 )
 
 data class TapOutResult(

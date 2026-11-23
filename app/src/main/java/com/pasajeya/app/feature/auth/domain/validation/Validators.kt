@@ -81,4 +81,7 @@ object Validators {
 
     fun isValidLicenseClass(value: String): Boolean =
         value in OperatorConfig.licenseClasses
+
+    fun isInstitutionalEmail(value: String): Boolean =
+        Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.edu(\\.pe)?$").matches(value)
 }

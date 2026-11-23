@@ -36,9 +36,7 @@ class FirebaseHistoryRepository @Inject constructor(
         var query = firestore.collection("trips")
             .whereEqualTo("passengerUid", passengerUid)
             .whereIn("status", PASSENGER_STATUSES)
-            .orderBy("startedAt", Query.Direction.DESCENDING)
-            .orderBy(FieldPath.documentId(), Query.Direction.DESCENDING)
-            .limit(PAGE_SIZE.toLong())
+            .limit(PAGE_SIZE.toLong() * 2)
 
         HistoryDateRanges.range(filter)?.let { range ->
             query = query
@@ -52,33 +50,33 @@ class FirebaseHistoryRepository @Inject constructor(
                 )
         }
 
-        if (cursor != null) {
-            query = query.startAfter(
-                Timestamp(Date(cursor.startedAtMillis)),
-                cursor.tripId
-            )
-        }
-
         val snapshot = snapshotOf(query)
-        val trips = snapshot.documents.mapNotNull { document ->
+        var trips = snapshot.documents.mapNotNull { document ->
             document.toTrip()?.let { trip ->
                 HistoryTrip(trip = trip, routeName = trip.routeId)
             }
         }
-        val routeNames = loadRouteNames(trips.map { it.trip.routeId }.toSet())
-        val lastDocument = snapshot.documents.lastOrNull()
-        val lastTrip = lastDocument?.toTrip()
+        // Firestore no exige índice compuesto: se ordena en memoria por createdAt descendente.
+        trips = trips.sortedByDescending { it.trip.startedAtMillis ?: 0L }
+        // Aplicar paginación por cursor en memoria (sin orderBy en Firestore).
+        var offset = 0
+        if (cursor != null) {
+            offset = trips.indexOfFirst { it.trip.id == cursor.tripId }
+            if (offset >= 0) offset += 1
+        }
+        val pageTrips = trips.drop(offset).take(PAGE_SIZE)
+        val lastTrip = pageTrips.lastOrNull()
+        val routeNames = loadRouteNames(pageTrips.map { it.trip.routeId }.toSet())
         return HistoryPage(
-            trips = trips.map { item ->
+            trips = pageTrips.map { item ->
                 item.copy(routeName = routeNames[item.trip.routeId] ?: item.routeName)
             },
             nextCursor = if (
-                snapshot.documents.size == PAGE_SIZE &&
-                lastTrip?.startedAtMillis != null
+                pageTrips.size == PAGE_SIZE && lastTrip?.trip?.startedAtMillis != null
             ) {
                 HistoryCursor(
-                    startedAtMillis = lastTrip.startedAtMillis,
-                    tripId = lastDocument.id
+                    startedAtMillis = lastTrip.trip.startedAtMillis,
+                    tripId = lastTrip.trip.id
                 )
             } else {
                 null
@@ -120,7 +118,6 @@ class FirebaseHistoryRepository @Inject constructor(
     ): OperatorShiftSummary? {
         val shiftQuery = firestore.collection("shifts")
             .whereEqualTo("operatorUid", operatorUid)
-            .orderBy("startedAt", Query.Direction.DESCENDING)
             .limit(1)
         val shift = snapshotOf(shiftQuery).documents
             .firstOrNull()
@@ -130,8 +127,8 @@ class FirebaseHistoryRepository @Inject constructor(
         val tripsQuery = firestore.collection("trips")
             .whereEqualTo("operatorUid", operatorUid)
             .whereEqualTo("shiftId", shift.id)
-            .orderBy("startedAt", Query.Direction.DESCENDING)
         val trips = snapshotOf(tripsQuery).documents.mapNotNull { it.toTrip() }
+            .sortedByDescending { it.startedAtMillis ?: 0L }
         val closed = trips.filter { it.status == "closed" }
 
         return OperatorShiftSummary(

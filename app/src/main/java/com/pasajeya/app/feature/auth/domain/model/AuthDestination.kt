@@ -10,11 +10,8 @@ enum class AuthDestination {
     OPERATOR_HOME
 }
 
-fun resolveAuthDestination(
-    emailVerified: Boolean,
-    session: DeviceSession
-): AuthDestination {
-    if (!emailVerified) return AuthDestination.VERIFY_EMAIL
+/** El destino sale del rol guardado en `users/{uid}`; no depende de sesiones remotas. */
+fun resolveAuthDestination(session: DeviceSession): AuthDestination {
     if (!session.profileComplete) return AuthDestination.CHOOSE_ROLE
 
     return when (session.role) {

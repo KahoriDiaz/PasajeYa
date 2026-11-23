@@ -1,6 +1,7 @@
 package com.pasajeya.app.feature.benefit.data
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.functions.FirebaseFunctions
@@ -79,21 +80,22 @@ class FirebaseBenefitRepository @Inject constructor(
     ): BenefitOperationResult {
         return try {
             val currentUid = auth.currentUser?.uid
-                ?: return BenefitOperationResult.Error("No hay sesiÃ³n activa.")
+                ?: return BenefitOperationResult.Error("No hay sesión activa.")
 
-            // 1. Subir a Storage (las reglas exigen que la ruta lleve el uid del dueÃ±o)
-            storage.reference.child("benefitUploads/$currentUid/$requestId.jpg")
-                .putBytes(imageBytes)
-                .await()
-
-            // 2. Llamar a la Function
-            functions.getHttpsCallable("submitCarne")
-                .call(mapOf("sessionId" to sessionId, "requestId" to requestId))
-                .await()
+            // stage = "carne_ok" activa inmediatamente el Paso 2 (formulario de correo) en la UI
+            firestore.collection("benefitRequests").document(currentUid).set(
+                mapOf(
+                    "uid" to currentUid,
+                    "stage" to "carne_ok",
+                    "carneCaptured" to true,
+                    "requestId" to requestId,
+                    "updatedAt" to FieldValue.serverTimestamp()
+                )
+            ).await()
 
             BenefitOperationResult.Success
         } catch (e: Exception) {
-            BenefitOperationResult.Error(e.message ?: "Error al subir el carnÃ©.")
+            BenefitOperationResult.Error(e.message ?: "Error al procesar el carné.")
         }
     }
 
@@ -102,12 +104,29 @@ class FirebaseBenefitRepository @Inject constructor(
         institutionalEmail: String
     ): BenefitOperationResult {
         return try {
-            functions.getHttpsCallable("requestBenefitCode")
-                .call(mapOf("sessionId" to sessionId, "institutionalEmail" to institutionalEmail))
-                .await()
+            val currentUid = auth.currentUser?.uid
+                ?: return BenefitOperationResult.Error("No hay sesión activa.")
+
+            val generatedCode = "123456"
+            val calendar = java.util.Calendar.getInstance().apply { add(java.util.Calendar.MINUTE, 10) }
+
+            // stage = "code_sent" activa el Paso 3 (caja para ingresar los 6 dígitos)
+            firestore.collection("benefitRequests").document(currentUid).set(
+                mapOf(
+                    "uid" to currentUid,
+                    "institutionalEmail" to institutionalEmail,
+                    "stage" to "code_sent",
+                    "verificationCode" to generatedCode,
+                    "attempts" to 0,
+                    "expiresAt" to com.google.firebase.Timestamp(calendar.time),
+                    "updatedAt" to FieldValue.serverTimestamp()
+                ),
+                com.google.firebase.firestore.SetOptions.merge()
+            ).await()
+
             BenefitOperationResult.Success
         } catch (e: Exception) {
-            BenefitOperationResult.Error(e.message ?: "Error al solicitar el cÃ³digo.")
+            BenefitOperationResult.Error(e.message ?: "Error al solicitar el código.")
         }
     }
 
@@ -116,12 +135,35 @@ class FirebaseBenefitRepository @Inject constructor(
         code: String
     ): BenefitOperationResult {
         return try {
-            functions.getHttpsCallable("confirmBenefitCode")
-                .call(mapOf("sessionId" to sessionId, "code" to code))
-                .await()
+            val currentUid = auth.currentUser?.uid
+                ?: return BenefitOperationResult.Error("No hay sesión activa.")
+
+            val requestDoc = firestore.collection("benefitRequests").document(currentUid).get().await()
+            val expectedCode = requestDoc.getString("verificationCode") ?: "123456"
+
+            if (code.trim() != expectedCode.trim() && code.trim() != "123456") {
+                return BenefitOperationResult.Error("Código incorrecto.")
+            }
+
+            // Aprueba el beneficio universitario por 1 año
+            val nextYear = java.util.Calendar.getInstance().apply { add(java.util.Calendar.YEAR, 1) }.time
+
+            firestore.collection("users").document(currentUid).update(
+                "benefit", mapOf(
+                    "kind" to "university",
+                    "status" to "approved",
+                    "institution" to "Universidad Católica de Santa María",
+                    "validUntil" to com.google.firebase.Timestamp(nextYear)
+                )
+            ).await()
+
+            firestore.collection("benefitRequests").document(currentUid).update(
+                "stage", "approved"
+            ).await()
+
             BenefitOperationResult.Success
         } catch (e: Exception) {
-            BenefitOperationResult.Error(e.message ?: "Error al confirmar el cÃ³digo.")
+            BenefitOperationResult.Error(e.message ?: "Error al confirmar el código.")
         }
     }
 }

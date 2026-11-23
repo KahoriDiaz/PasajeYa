@@ -43,7 +43,6 @@ import com.pasajeya.app.core.theme.SuccessGreen
 import com.pasajeya.app.core.theme.TextGray
 import com.pasajeya.app.core.theme.TextPrimary
 import com.pasajeya.app.core.util.formatCentsInt
-import com.pasajeya.app.feature.fare.ui.formatKm
 
 /**
  * Mapa del viaje activo con una tarjeta flotante que muestra distancia recorrida y costo.
@@ -95,7 +94,8 @@ fun LiveTripCard(
                         stops = route.stops,
                         description = stringResource(R.string.live_trip_map_description),
                         modifier = Modifier.fillMaxSize(),
-                        userPosition = state.position?.let { MapUserPosition(it.lat, it.lng) }
+                        userPosition = state.position?.let { MapUserPosition(it.lat, it.lng) },
+                        busPosition = state.busPosition
                     )
                 } else if (state.isLoading) {
                     Column(
@@ -219,6 +219,11 @@ private fun FloatingFareCard(
                     color = TextGray
                 )
             }
+
         }
     }
+    
 }
+
+private fun formatKm(meters: Double): String =
+    String.format(java.util.Locale("es", "PE"), "%.2f km", meters / 1000.0)

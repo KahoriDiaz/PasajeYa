@@ -51,18 +51,22 @@ class FirebaseAccountRepository @Inject constructor(
             ?.let { return@withLock it }
 
         val deviceId = deviceIdStore.getOrCreate()
+        // Sesion local: el rol sale de users/{uid}. Si no se puede leer, no se adivina el rol.
         val userDoc = try {
             firestore.collection("users").document(uid).get().await()
-        } catch (_: Exception) {
-            null
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: Exception) {
+            throw AccountException(AccountFailure.Network)
         }
 
+        val role = UserRole.fromWire(userDoc.get("role"))
         val session = DeviceSession(
             uid = uid,
             sessionId = "local-session-$deviceId",
-            profileComplete = userDoc?.exists() == true,
+            profileComplete = userDoc.exists() && role != null,
             emailVerified = auth.currentUser?.isEmailVerified ?: true,
-            role = UserRole.fromWire(userDoc?.get("role")) ?: UserRole.PASSENGER,
+            role = role,
             operatorComplete = true
         )
         _deviceSession.value = session

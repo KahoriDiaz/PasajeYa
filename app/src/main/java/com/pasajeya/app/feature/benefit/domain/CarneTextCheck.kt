@@ -3,12 +3,17 @@ package com.pasajeya.app.feature.benefit.domain
 import java.text.Normalizer
 
 /**
- * Verificación asistida (en el teléfono) del texto leído con ML Kit antes de enviar el carné.
- * Es solo una ayuda para repetir la foto a tiempo: la validación que manda es la del servidor,
- * que usa las mismas palabras clave.
+ * Verificaci�n asistida del carn� universitario.
+ * Valida presencia de palabras institucionales o t�rminos est�ndar de carn� (SUNEDU / UCSM / UNIVERSIDAD).
+ * La validaci�n de fondo se consolida con el correo institucional @ucsm.edu.pe (OTP).
  */
 object CarneTextCheck {
-    val UNIVERSITY_KEYWORDS = listOf("CATOLICA", "SANTA", "MARIA")
+    private val KEYWORDS = listOf(
+        "UCSM",
+        "CATOLICA",
+        "SANTA MARIA",
+        "SUNEDU"
+    )
 
     fun normalize(text: String): String =
         Normalizer.normalize(text, Normalizer.Form.NFD)
@@ -20,6 +25,7 @@ object CarneTextCheck {
 
     fun looksLikeUniversityCard(recognizedText: String): Boolean {
         val normalized = normalize(recognizedText)
-        return UNIVERSITY_KEYWORDS.all { normalized.contains(it) }
+        if (normalized.isBlank()) return false
+        return KEYWORDS.any { normalized.contains(it) }
     }
 }

@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.MotionEvent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +40,9 @@ data class MapUserPosition(val lat: Double, val lng: Double)
 /**
  * Mapa (OpenStreetMap vía osmdroid) con la ruta, sus paraderos y, opcionalmente, el paradero de
  * origen/destino resaltados y la posición del usuario.
+ *
+ * @param targetPosition cuando cambia, el mapa se centra con [MapController.animateTo].
+ * @param busPosition posición opcional del autobús (marcador azul) distinta de la del usuario.
  */
 @Composable
 fun RouteMap(
@@ -47,7 +51,9 @@ fun RouteMap(
     modifier: Modifier = Modifier,
     boardingIndex: Int? = null,
     alightingIndex: Int? = null,
-    userPosition: MapUserPosition? = null
+    userPosition: MapUserPosition? = null,
+    targetPosition: MapUserPosition? = null,
+    busPosition: MapUserPosition? = null
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -89,6 +95,14 @@ fun RouteMap(
         }
     }
 
+    // Centrar el mapa en una posición objetivo cuando esta cambie.
+    LaunchedEffect(targetPosition) {
+        targetPosition?.let { pos ->
+            mapView.controller.animateTo(GeoPoint(pos.lat, pos.lng))
+            mapView.controller.setZoom(16.0)
+        }
+    }
+
     AndroidView(
         factory = { mapView },
         modifier = modifier.semantics { contentDescription = description },
@@ -120,6 +134,11 @@ fun RouteMap(
             userPosition?.let {
                 view.overlays.add(
                     stopMarker(view, "", it.lat, it.lng, COLOR_USER, true, sizeDp = 18)
+                )
+            }
+            busPosition?.let {
+                view.overlays.add(
+                    stopMarker(view, "Bus", it.lat, it.lng, COLOR_ROUTE, true, sizeDp = 20)
                 )
             }
             view.invalidate()

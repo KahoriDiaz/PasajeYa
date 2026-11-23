@@ -22,7 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,8 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import com.pasajeya.app.R
 import com.pasajeya.app.core.theme.BorderLight
+import com.pasajeya.app.core.theme.ErrorRed
 import com.pasajeya.app.core.theme.PrimaryBlue
 import com.pasajeya.app.core.theme.SuccessGreen
 import com.pasajeya.app.core.theme.TextGray
@@ -44,6 +48,9 @@ import com.pasajeya.app.core.ui.MessageTone
 import com.pasajeya.app.core.ui.ScreenHeading
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.ui.generateQrBitmap
+import com.pasajeya.app.feature.profile.ui.ProfileScreen
+import com.pasajeya.app.feature.profile.ui.ProfileUserIcon
+import com.pasajeya.app.feature.trip.ui.operator.QrScannerDialog
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -63,11 +70,14 @@ fun PassengerTripContent(
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val showProfile = remember { mutableStateOf<Boolean>(false) }
+    val scope = rememberCoroutineScope()
 
     AuthScreen(
         title = stringResource(R.string.app_name),
         modifier = modifier.testTag("passenger_home_screen"),
         actions = {
+            ProfileUserIcon(onProfileClick = { showProfile.value = true })
             TextButton(onClick = onLogout) {
                 Text(
                     text = stringResource(R.string.action_logout),
@@ -103,18 +113,70 @@ fun PassengerTripContent(
             )
         }
 
-        QrCard(
-            token = state.token,
-            secondsRemaining = state.secondsRemaining,
-            isRefreshing = state.isRefreshing,
-            isOffline = state.isOffline,
-            onRetry = viewModel::retry
+        state.lastError?.let { error ->
+            InlineMessage(text = error, tone = MessageTone.ERROR)
+        }
+        state.lastMessage?.let { message ->
+            InlineMessage(text = message, tone = MessageTone.SUCCESS)
+        }
+
+        if (!state.emailVerified && state.trip == null) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = ErrorRed.copy(alpha = 0.10f)
+                ),
+                border = BorderStroke(1.dp, ErrorRed.copy(alpha = 0.35f))
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(R.string.profile_email_unverified_title),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = ErrorRed
+                    )
+                    Text(
+                        text = stringResource(R.string.profile_email_unverified_body),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextGray,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                    TextButton(
+                        onClick = { scope.launch { viewModel.resendVerification() } }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.profile_email_resend),
+                            color = PrimaryBlue,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            }
+        }
+
+        PassengerScanCard(
+            hasActiveTrip = state.trip != null,
+            isProcessing = state.isProcessing,
+            onScan = viewModel::openScanner
         )
 
         ActiveTripCard(
             trip = state.trip,
             routeName = state.routeName
         )
+
+        state.lastFare?.let { fare ->
+            FareReceiptCard(
+                totalCents = fare.totalCents,
+                officialFareCents = fare.officialFareCents,
+                discountCents = fare.benefit?.discountCents ?: 0
+            )
+        }
 
         if (state.trip != null) {
             LiveTripCard()
@@ -161,21 +223,31 @@ fun PassengerTripContent(
             Text(text = stringResource(R.string.history_open))
         }
     }
+
+    if (state.scannerOpen) {
+        QrScannerDialog(
+            onQrDetected = viewModel::onBusQrScanned,
+            onDismiss = viewModel::closeScanner,
+            onPermissionDenied = viewModel::closeScanner
+        )
+    }
+
+    if (showProfile.value) {
+        ProfileScreen(visible = showProfile.value, onDismiss = { showProfile.value = false })
+    }
 }
 
 @Composable
-private fun QrCard(
-    token: String?,
-    secondsRemaining: Int,
-    isRefreshing: Boolean,
-    isOffline: Boolean,
-    onRetry: () -> Unit
+private fun PassengerScanCard(
+    hasActiveTrip: Boolean,
+    isProcessing: Boolean,
+    onScan: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = PrimaryBlue.copy(alpha = 0.08f)
         ),
         border = BorderStroke(1.dp, BorderLight)
     ) {
@@ -184,77 +256,123 @@ private fun QrCard(
                 .fillMaxWidth()
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = stringResource(R.string.passenger_qr_title),
+                text = stringResource(
+                    if (hasActiveTrip) {
+                        R.string.passenger_scan_out_title
+                    } else {
+                        R.string.passenger_scan_in_title
+                    }
+                ),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
                 color = TextPrimary
             )
             Text(
-                text = stringResource(R.string.passenger_qr_subtitle),
+                text = stringResource(
+                    if (hasActiveTrip) {
+                        R.string.passenger_scan_out_body
+                    } else {
+                        R.string.passenger_scan_in_body
+                    }
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextGray,
                 textAlign = TextAlign.Center
             )
-
-            Box(
+            Button(
+                onClick = onScan,
                 modifier = Modifier
-                    .size(248.dp)
-                    .background(Color.White, RoundedCornerShape(16.dp))
-                    .padding(12.dp),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .heightIn(min = 52.dp)
+                    .testTag("passenger_scan_bus"),
+                shape = RoundedCornerShape(14.dp),
+                enabled = !isProcessing
             ) {
-                when {
-                    token != null -> {
-                        val bitmap = remember(token) {
-                            generateQrBitmap(token, size = 720)
-                        }
-                        Image(
-                            bitmap = bitmap,
-                            contentDescription = stringResource(
-                                R.string.passenger_qr_title
-                            ),
-                            modifier = Modifier
-                                .size(224.dp)
-                                .testTag("passenger_qr")
-                        )
-                    }
-                    isRefreshing -> CircularProgressIndicator(color = PrimaryBlue)
-                    else -> Text(
-                        text = stringResource(R.string.passenger_qr_error),
-                        color = TextGray,
-                        textAlign = TextAlign.Center
+                if (isProcessing) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(22.dp),
+                        strokeWidth = 2.dp,
+                        color = Color.White
                     )
-                }
-            }
-
-            if (token != null && !isOffline) {
-                Text(
-                    text = stringResource(
-                        R.string.passenger_qr_renew,
-                        secondsRemaining
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = PrimaryBlue
-                )
-            }
-            if (isOffline) {
-                InlineMessage(
-                    text = stringResource(R.string.passenger_qr_offline),
-                    tone = MessageTone.WARNING
-                )
-                if (token == null) {
-                    TextButton(onClick = onRetry) {
-                        Text(stringResource(R.string.operator_action_retry))
-                    }
+                } else {
+                    Text(
+                        stringResource(
+                            if (hasActiveTrip) {
+                                R.string.passenger_scan_out_action
+                            } else {
+                                R.string.passenger_scan_in_action
+                            }
+                        )
+                    )
                 }
             }
         }
     }
 }
+
+@Composable
+private fun FareReceiptCard(
+    totalCents: Int,
+    officialFareCents: Int,
+    discountCents: Int
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = SuccessGreen.copy(alpha = 0.10f)
+        ),
+        border = BorderStroke(1.dp, SuccessGreen.copy(alpha = 0.35f))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.passenger_receipt_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPrimary
+            )
+            Text(
+                text = stringResource(
+                    R.string.passenger_receipt_total,
+                    formatSoles(totalCents)
+                ),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = SuccessGreen
+            )
+            Text(
+                text = stringResource(
+                    R.string.passenger_receipt_official,
+                    formatSoles(officialFareCents)
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextGray
+            )
+            if (discountCents > 0) {
+                Text(
+                    text = stringResource(
+                        R.string.passenger_receipt_discount,
+                        formatSoles(discountCents)
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = SuccessGreen
+                )
+            }
+        }
+    }
+}
+
+private fun formatSoles(cents: Int): String =
+    String.format(Locale.ROOT, "S/ %.2f", cents / 100.0)
 
 @Composable
 private fun ActiveTripCard(trip: Trip?, routeName: String?) {

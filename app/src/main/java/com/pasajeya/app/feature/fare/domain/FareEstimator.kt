@@ -14,18 +14,26 @@ data class FareEstimate(
 
 object FareEstimator {
 
-    /** Techo de seguridad global del pasaje, en céntimos. */
-    const val SAFETY_CEILING_CENTS = 330
+    /** Techo de seguridad utilizado por la billetera para retenciones previas al viaje (S/ 5.00) */
+    const val SAFETY_CEILING_CENTS = 500
 
-    /**
-     * Distancia a lo largo de la ruta entre dos paraderos: suma de tramos consecutivos
-     * calculados con Haversine. El orden de los índices no importa.
-     */
+    /** Tope máximo aceptado para el cálculo tarifario de una ruta (S/ 3.30) */
+    const val MAX_FARE_CEILING_CENTS = 330
+
+    fun ceilingCents(route: RouteGeo): Int {
+        val official = route.officialFareCents
+            .takeIf { it > 0 }
+            ?: MAX_FARE_CEILING_CENTS
+        return min(official, MAX_FARE_CEILING_CENTS)
+    }
+
     fun routeDistanceMeters(stops: List<RouteStop>, from: Int, to: Int): Double {
-        require(stops.isNotEmpty()) { "La ruta no tiene paraderos con coordenadas." }
+        if (stops.isEmpty()) return 0.0
+        if (from !in stops.indices) throw IllegalArgumentException("Índice de subida fuera de rango.")
+        if (to !in stops.indices) throw IllegalArgumentException("Índice de bajada fuera de rango.")
+        if (from == to) return 0.0
         val start = min(from, to)
         val end = max(from, to)
-        require(start >= 0 && end < stops.size) { "Los índices de paradero no son válidos." }
 
         var total = 0.0
         for (i in start until end) {
@@ -36,26 +44,17 @@ object FareEstimator {
         return total
     }
 
-    /** Tope del cálculo: pasaje oficial de la ruta, sin pasar del techo de seguridad. */
-    fun ceilingCents(route: RouteGeo): Int =
-        if (route.officialFareCents > 0) {
-            min(route.officialFareCents, SAFETY_CEILING_CENTS)
-        } else {
-            SAFETY_CEILING_CENTS
-        }
-
-    /** Tarifa para una distancia dada: distancia_km × base × índice de combustible. */
     fun fareForDistance(
         context: RouteFareContext,
         distanceMeters: Double,
         hasUniversityBenefit: Boolean
     ): FareResult = FareCalculator.computeFare(
         distanceMeters = distanceMeters,
-        version = context.version.copy(maxFareCents = ceilingCents(context.route)),
-        hasUniversityBenefit = hasUniversityBenefit
+        version = context.version,
+        hasUniversityBenefit = hasUniversityBenefit,
+        officialFareCents = ceilingCents(context.route)
     )
 
-    /** Estimación según paradero de origen y destino usando la distancia real entre coordenadas. */
     fun estimateFare(
         context: RouteFareContext,
         boardingStopIndex: Int,

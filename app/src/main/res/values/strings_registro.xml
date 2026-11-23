@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="register_subtitle_local">Crea tu cuenta de pasajero o conductor. Puedes escanear tu documento para completar los datos.</string>
+    <string name="register_role_title">Tipo de cuenta</string>
+    <string name="register_role_passenger">Pasajero</string>
+    <string name="register_role_operator">Conductor</string>
+    <string name="field_full_name">Nombre completo</string>
+    <string name="register_full_name_invalid">Ingresa tu nombre completo, solo con letras.</string>
+    <string name="register_benefit_title">Tipo de pasajero</string>
+    <string name="register_benefit_regular">Regular</string>
+    <string name="register_benefit_university">Universitario</string>
+    <string name="register_scan_dni">Escanear DNI</string>
+    <string name="register_scan_license">Escanear Brevete</string>
+    <string name="register_scanning">Leyendo el documento en tu teléfono…</string>
+    <string name="register_scan_unreadable">No pudimos leer el documento. Acércalo, mejora la luz e intenta de nuevo.</string>
+    <string name="register_scan_dni_missing">No encontramos un DNI de 8 dígitos en la imagen.</string>
+    <string name="register_scan_license_missing">No encontramos el número ni la categoría del brevete.</string>
+    <string name="register_scan_category_unsupported">No reconocimos la categoría del brevete. Selecciónala manualmente.</string>
+    <string name="register_route_title">Ruta asignada</string>
+    <string name="register_route_required">Selecciona la ruta que operarás.</string>
+    <string name="register_license_category_required">Selecciona una categoría profesional de brevete.</string>
+    <string name="register_license_blocked">Licencia A-I no autorizada para transporte público urbano</string>
+    <string name="register_capture_dni_title">Escanear DNI</string>
+    <string name="register_capture_license_title">Escanear brevete</string>
+    <string name="register_capture_hint">Encuadra el documento dentro del marco y captura la foto.</string>
+    <string name="register_capture_action">Capturar documento</string>
+    <string name="register_capture_close">Cerrar</string>
+    <string name="register_capture_permission">Necesitamos permiso de cámara para escanear el documento.</string>
+    <string name="register_capture_permission_action">Dar permiso</string>
+    <string name="register_capture_error">No se pudo usar la cámara.</string>
+
+    <string name="register_email_institutional_required">Debe ingresar su correo institucional (.edu.pe)</string>
+    <string name="register_card_code_required">Ingrese el código de estudiante o matrícula del carné universitario</string>
+    <string name="register_card_expired">Carné fuera de vigencia. Se registrará el beneficio como regular.</string>
+    <string name="register_card_no_code">No se detectó el código de estudiante o matrícula en el carné.</string>
+    <string name="register_card_no_expiry">No se detectó la fecha de caducidad del carné universitario.</string>
+    <string name="register_scan_carne">Escanear Carné</string>
+    <string name="register_scan_university_missing">No se reconocieron datos válidos del carné universitario.</string>
+    <string name="register_capture_carne_title">Escanear carné universitario</string>
+    <string name="register_card_code">Código de estudiante / matrícula</string>
+    <string name="register_card_expiry">Fecha de caducidad del carné</string>
+</resources>

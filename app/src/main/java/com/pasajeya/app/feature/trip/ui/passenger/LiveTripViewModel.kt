@@ -3,6 +3,7 @@ package com.pasajeya.app.feature.trip.ui.passenger
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pasajeya.app.feature.auth.domain.AuthRepository
+import com.pasajeya.app.core.map.MapUserPosition
 import com.pasajeya.app.feature.fare.domain.FareEstimator
 import com.pasajeya.app.feature.fare.domain.FareRepository
 import com.pasajeya.app.feature.fare.domain.RouteFareContext
@@ -15,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +41,7 @@ data class LiveTripUiState(
     val hasUniversityBenefit: Boolean = false,
     val capped: Boolean = false,
     val position: GpsFix? = null,
+    val busPosition: MapUserPosition? = null,
     val error: String? = null
 ) {
     val hasTrip: Boolean get() = tripId != null
@@ -57,6 +60,8 @@ class LiveTripViewModel @Inject constructor(
     val uiState: StateFlow<LiveTripUiState> = _uiState.asStateFlow()
 
     private val permission = MutableStateFlow(locationProvider.hasPermission())
+
+    private var shiftJob: Job? = null
 
     init {
         _uiState.update { it.copy(permissionGranted = permission.value) }
@@ -79,19 +84,25 @@ class LiveTripViewModel @Inject constructor(
                 .distinctUntilChangedBy { it?.id }
                 .collectLatest { trip ->
                     if (trip == null) {
-                        _uiState.value = LiveTripUiState(permissionGranted = permission.value)
+                        shiftJob?.cancel()
+                        shiftJob = null
+                        _uiState.value = LiveTripUiState(
+                            permissionGranted = permission.value,
+                            busPosition = null
+                        )
                     } else {
-                        track(uid, trip.id, trip.routeId)
+                        track(uid, trip.id, trip.routeId, trip.shiftId)
                     }
                 }
         }
     }
 
-    private suspend fun track(uid: String, tripId: String, routeId: String) = coroutineScope {
+    private suspend fun track(uid: String, tripId: String, routeId: String, shiftId: String) = coroutineScope {
         _uiState.value = LiveTripUiState(
             tripId = tripId,
             isLoading = true,
-            permissionGranted = permission.value
+            permissionGranted = permission.value,
+            busPosition = null
         )
 
         val context: RouteFareContext = try {
@@ -156,6 +167,23 @@ class LiveTripViewModel @Inject constructor(
             .collect { fix ->
                 tracker.onFix(fix)
                 publish(position = fix)
+            }
+
+            // Observar el turno del operador para actualizar la posición del bus en tiempo real.
+            shiftJob?.cancel()
+            shiftJob = viewModelScope.launch {
+                tripRepository.observeShift(shiftId)
+                    .catch { error -> if (error is CancellationException) throw error }
+                    .collect { shift ->
+                        val pos = shift?.let { s ->
+                            s.simulatedLatitude?.let { lat ->
+                                s.simulatedLongitude?.let { lng ->
+                                    MapUserPosition(lat, lng)
+                                }
+                            }
+                        }
+                        _uiState.update { it.copy(busPosition = pos) }
+                    }
             }
     }
 }

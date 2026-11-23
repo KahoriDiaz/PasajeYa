@@ -211,12 +211,7 @@ class VerificationViewModel @Inject constructor(
             _uiState.update { it.copy(isChecking = true) }
             try {
                 val session = accountRepository.ensureSession(user.uid)
-                _events.send(
-                    resolveAuthDestination(
-                        emailVerified = true,
-                        session = session
-                    )
-                )
+                _events.send(resolveAuthDestination(session))
             } catch (error: CancellationException) {
                 throw error
             } catch (error: AccountException) {

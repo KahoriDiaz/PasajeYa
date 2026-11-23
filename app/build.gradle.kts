@@ -8,6 +8,8 @@
     alias(libs.plugins.google.services)
 }
 
+val routesAssetsDir = layout.buildDirectory.dir("generated/routesAssets")
+
 android {
     namespace = "com.pasajeya.app"
     compileSdk = 35
@@ -48,6 +50,7 @@ android {
     // Vectores compartidos con las Cloud Functions: assets en la app y recursos en pruebas.
     sourceSets {
         getByName("main").assets.srcDir("../shared")
+        getByName("main").assets.srcDir(routesAssetsDir)
         getByName("test").resources.srcDir("../shared")
     }
 
@@ -56,6 +59,17 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+val syncRoutesAsset by tasks.registering(Copy::class) {
+    from(rootProject.file("data/routes.json"))
+    into(layout.buildDirectory.dir("generated/routesAssets"))
+}
+
+tasks.matching { task ->
+    task.name.startsWith("merge") && task.name.endsWith("Assets")
+}.configureEach {
+    dependsOn(syncRoutesAsset)
 }
 
 dependencies {

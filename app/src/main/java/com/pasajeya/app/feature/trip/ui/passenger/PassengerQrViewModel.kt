@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pasajeya.app.feature.auth.domain.AccountRepository
 import com.pasajeya.app.feature.auth.domain.AuthRepository
+import com.pasajeya.app.feature.trip.domain.TripPosition
 import com.pasajeya.app.feature.trip.domain.TripRepository
+import com.pasajeya.app.feature.trip.domain.model.FareBreakdown
 import com.pasajeya.app.feature.trip.domain.model.Trip
+import com.pasajeya.app.feature.trip.location.LocationProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
@@ -32,14 +35,21 @@ data class PassengerQrUiState(
     val isRefreshing: Boolean = true,
     val isOffline: Boolean = false,
     val trip: Trip? = null,
-    val routeName: String? = null
+    val routeName: String? = null,
+    val scannerOpen: Boolean = false,
+    val isProcessing: Boolean = false,
+    val lastMessage: String? = null,
+    val lastError: String? = null,
+    val lastFare: FareBreakdown? = null,
+    val emailVerified: Boolean = false
 )
 
 @HiltViewModel
 class PassengerQrViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val accountRepository: AccountRepository,
-    private val tripRepository: TripRepository
+    private val tripRepository: TripRepository,
+    private val locationProvider: LocationProvider
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PassengerQrUiState())
@@ -52,7 +62,9 @@ class PassengerQrViewModel @Inject constructor(
     private var tripJob: Job? = null
 
     init {
-        val uid = authRepository.currentUser()?.uid
+        val user = authRepository.currentUser()
+        val uid = user?.uid
+        _uiState.update { it.copy(emailVerified = user?.emailVerified == true) }
         if (uid != null) {
             observeTrip(uid)
             tokenJob = viewModelScope.launch { refreshTokens() }
@@ -71,6 +83,88 @@ class PassengerQrViewModel @Inject constructor(
         if (tokenJob?.isActive == true) return
         _uiState.update { it.copy(isRefreshing = true, isOffline = false) }
         tokenJob = viewModelScope.launch { refreshTokens() }
+    }
+
+    fun openScanner() {
+        _uiState.update {
+            it.copy(scannerOpen = true, lastError = null, lastMessage = null)
+        }
+    }
+
+    fun closeScanner() {
+        _uiState.update { it.copy(scannerOpen = false) }
+    }
+
+    suspend fun resendVerification() {
+        authRepository.sendEmailVerification()
+    }
+
+    fun consumeMessage() {
+        _uiState.update { it.copy(lastMessage = null, lastError = null) }
+    }
+
+    fun onBusQrScanned(rawValue: String) {
+        if (_uiState.value.isProcessing) return
+        _uiState.update {
+            it.copy(isProcessing = true, scannerOpen = false, lastError = null)
+        }
+        viewModelScope.launch {
+            try {
+                val position = runCatching {
+                    locationProvider.currentPosition()
+                }.getOrElse {
+                    TripPosition(0.0, 0.0, accuracy = 0.0)
+                }
+                val hasActiveTrip = _uiState.value.trip?.status == "open"
+                if (hasActiveTrip) {
+                    val result = tripRepository.passengerTapOut(
+                        sessionId = sessionId(),
+                        busQr = rawValue,
+                        position = position
+                    )
+                    val total = result.fareBreakdown?.totalCents ?: 0
+                    val discount = result.fareBreakdown?.benefit != null
+                    val message = buildString {
+                        append("Viaje completado. Total cobrado: S/ ")
+                        append(String.format(java.util.Locale.ROOT, "%.2f", total / 100.0))
+                        if (discount) append(" (tarifa universitaria 50%)")
+                    }
+                    _uiState.update {
+                        it.copy(
+                            isProcessing = false,
+                            lastFare = result.fareBreakdown,
+                            lastMessage = message
+                        )
+                    }
+                } else {
+                    val result = tripRepository.passengerTapIn(
+                        sessionId = sessionId(),
+                        busQr = rawValue,
+                        position = position
+                    )
+                    val typeLabel = if (result.fareType == "university") {
+                        "Tarifa universitaria (50%)"
+                    } else {
+                        "Tarifa regular"
+                    }
+                    _uiState.update {
+                        it.copy(
+                            isProcessing = false,
+                            lastMessage = "Bienvenido, ${result.passengerFirstName}. $typeLabel."
+                        )
+                    }
+                }
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isProcessing = false,
+                        lastError = error.message ?: "No pudimos procesar el QR."
+                    )
+                }
+            }
+        }
     }
 
     private fun observeTrip(uid: String) {

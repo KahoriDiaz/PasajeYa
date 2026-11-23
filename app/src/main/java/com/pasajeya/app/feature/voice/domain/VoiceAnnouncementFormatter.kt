@@ -12,6 +12,29 @@ class VoiceAnnouncementFormatter @Inject constructor() {
         return "$cleanName, $age $ageLabel"
     }
 
+    fun formatWelcome(firstName: String, fareType: String): String? {
+        val cleanName = cleanFirstName(firstName)
+        val typeLabel = if (fareType == "university") {
+            "pasajero universitario"
+        } else {
+            "pasajero regular"
+        }
+        val name = if (cleanName.isEmpty()) typeLabel else "$cleanName, $typeLabel"
+        return "Bienvenido, $name"
+    }
+
+    fun formatFarewell(firstName: String, fareType: String, totalCents: Int): String? {
+        val cleanName = cleanFirstName(firstName)
+        if (cleanName.isEmpty()) return null
+        val typeLabel = if (fareType == "university") {
+            "tarifa universitaria"
+        } else {
+            "tarifa regular"
+        }
+        val amount = String.format(Locale.ROOT, "%.2f", totalCents / 100.0)
+        return "Hasta luego, $cleanName, viaje completado, $typeLabel, total cobrado $amount soles"
+    }
+
     private fun cleanFirstName(raw: String): String {
         val firstWord = raw
             .filter { it.isLetter() || it.isWhitespace() }
