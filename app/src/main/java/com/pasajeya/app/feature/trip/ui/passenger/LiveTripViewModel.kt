@@ -11,6 +11,7 @@ import com.pasajeya.app.feature.fare.domain.RouteGeo
 import com.pasajeya.app.feature.trip.domain.GpsFix
 import com.pasajeya.app.feature.trip.domain.TripDistanceTracker
 import com.pasajeya.app.feature.trip.domain.TripRepository
+import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.location.LocationProvider
 import com.pasajeya.app.feature.wallet.domain.WalletRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,6 +44,8 @@ data class LiveTripUiState(
     val capped: Boolean = false,
     val position: GpsFix? = null,
     val busPosition: MapUserPosition? = null,
+    /** La distancia viene de la ruta porque el conductor tiene el modo demostracion activo. */
+    val isSimulated: Boolean = false,
     val error: String? = null
 ) {
     val hasTrip: Boolean get() = tripId != null
@@ -94,7 +97,7 @@ class LiveTripViewModel @Inject constructor(
                         )
                     } else {
                         holdSafetyCeiling(uid)
-                        track(uid, trip.id, trip.routeId, trip.shiftId)
+                        track(uid, trip)
                     }
                 }
         }
@@ -111,7 +114,9 @@ class LiveTripViewModel @Inject constructor(
         }
     }
 
-    private suspend fun track(uid: String, tripId: String, routeId: String, shiftId: String) = coroutineScope {
+    private suspend fun track(uid: String, trip: Trip) = coroutineScope {
+        val tripId = trip.id
+        val shiftId = trip.shiftId
         _uiState.value = LiveTripUiState(
             tripId = tripId,
             isLoading = true,
@@ -120,7 +125,7 @@ class LiveTripViewModel @Inject constructor(
         )
 
         val context: RouteFareContext = try {
-            fareRepository.loadRouteFareContext(routeId)
+            fareRepository.loadRouteFareContext(trip.routeId)
         } catch (error: CancellationException) {
             throw error
         } catch (error: Exception) {
@@ -135,18 +140,22 @@ class LiveTripViewModel @Inject constructor(
 
         val tracker = TripDistanceTracker()
         var hasBenefit = false
+        // En modo demostracion la distancia sale de los paraderos de la ruta y no del GPS.
+        var simulatedMeters: Double? = null
 
         fun publish(position: GpsFix?) {
+            val meters = simulatedMeters ?: tracker.distanceMeters
             val fare = FareEstimator.fareForDistance(
                 context = context,
-                distanceMeters = tracker.distanceMeters,
+                distanceMeters = meters,
                 hasUniversityBenefit = hasBenefit
             )
             _uiState.update {
                 it.copy(
                     isLoading = false,
                     route = context.route,
-                    distanceMeters = tracker.distanceMeters,
+                    distanceMeters = meters,
+                    isSimulated = simulatedMeters != null,
                     fareCents = fare.totalCents,
                     regularCents = fare.regularCents,
                     hasUniversityBenefit = hasBenefit,
@@ -179,7 +188,7 @@ class LiveTripViewModel @Inject constructor(
                 }
             }
             .collect { fix ->
-                tracker.onFix(fix)
+                if (simulatedMeters == null) tracker.onFix(fix)
                 publish(position = fix)
             }
 
@@ -196,7 +205,21 @@ class LiveTripViewModel @Inject constructor(
                                 }
                             }
                         }
+                        // Con el modo demostracion encendido, el pasaje sube segun los
+                        // paraderos que avanza el conductor: el telefono esta quieto sobre
+                        // la mesa, asi que su GPS no mide nada.
+                        val boardingIndex = trip.boardingStopIndex
+                        if (shift?.simulationEnabled == true && boardingIndex != null) {
+                            simulatedMeters = runCatching {
+                                FareEstimator.routeDistanceMeters(
+                                    context.route.stops,
+                                    boardingIndex,
+                                    shift.simulatedStopIndex
+                                )
+                            }.getOrNull() ?: simulatedMeters
+                        }
                         _uiState.update { it.copy(busPosition = pos) }
+                        publish(position = null)
                     }
             }
     }

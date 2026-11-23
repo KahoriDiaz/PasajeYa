@@ -16,4 +16,5 @@
     <string name="fare_today_min">Mínimo por viaje</string>
     <string name="fare_today_max">Tope por viaje</string>
     <string name="fare_today_note">Los cuatro valores se recalculan todos los días a las 6:00 con el precio del diésel en Arequipa. Índice de hoy: %1$sx sobre el precio base.</string>
+    <string name="live_trip_simulated">Distancia medida sobre los paraderos de la ruta (modo demostración del conductor)</string>
 </resources>

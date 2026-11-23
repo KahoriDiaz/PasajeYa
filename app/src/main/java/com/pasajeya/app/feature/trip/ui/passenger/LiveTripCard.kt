@@ -117,6 +117,7 @@ fun LiveTripCard(
                         distanceMeters = state.distanceMeters,
                         benefitPercent = if (state.hasUniversityBenefit) 50 else null,
                         capped = state.capped,
+                        isSimulated = state.isSimulated,
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(10.dp)
@@ -174,6 +175,7 @@ private fun FloatingFareCard(
     distanceMeters: Double,
     benefitPercent: Int?,
     capped: Boolean,
+    isSimulated: Boolean,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -204,6 +206,13 @@ private fun FloatingFareCard(
                 color = TextPrimary,
                 modifier = Modifier.testTag("live_trip_distance")
             )
+            if (isSimulated) {
+                Text(
+                    text = stringResource(R.string.live_trip_simulated),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextGray
+                )
+            }
             if (benefitPercent != null) {
                 Text(
                     text = stringResource(R.string.live_trip_benefit, benefitPercent),

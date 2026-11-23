@@ -1,21 +1,12 @@
 ﻿package com.pasajeya.app.core.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -24,7 +15,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pasajeya.app.R
-import com.pasajeya.app.BuildConfig
 import com.pasajeya.app.feature.auth.domain.model.AuthDestination
 import com.pasajeya.app.feature.company.ui.CompanyHomeScreen
 import com.pasajeya.app.feature.auth.ui.forgot.ForgotPasswordScreen
@@ -195,63 +185,25 @@ fun AppNavHost(
         }
 
         composable(AppRoutes.PASSENGER_HOME) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                PassengerHomeScreen(
-                    onNavigate = ::navigateTo,
-                    onEstimate = { navController.navigate(AppRoutes.FARE_ESTIMATE) },
-                    onHistory = { navController.navigate(AppRoutes.HISTORY) },
-                    onWallet = { navController.navigate(AppRoutes.WALLET) },
-                    onBenefits = { navController.navigate(AppRoutes.BENEFITS) },
-                    onTripFinished = { tripId ->
-                        navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
-                    }
-                )
-                if (BuildConfig.DEBUG) ElevatedButton(
-                    onClick = { clearAndNavigate(AppRoutes.OPERATOR_HOME) },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = 44.dp, end = 16.dp),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = ButtonDefaults.elevatedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    ),
-                    elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 6.dp)
-                ) {
-                    Text(
-                        text = "Modo Conductor 🚌",
-                        style = MaterialTheme.typography.labelMedium
-                    )
+            PassengerHomeScreen(
+                onNavigate = ::navigateTo,
+                onEstimate = { navController.navigate(AppRoutes.FARE_ESTIMATE) },
+                onHistory = { navController.navigate(AppRoutes.HISTORY) },
+                onWallet = { navController.navigate(AppRoutes.WALLET) },
+                onBenefits = { navController.navigate(AppRoutes.BENEFITS) },
+                onTripFinished = { tripId ->
+                    navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
                 }
-            }
+            )
         }
 
         composable(AppRoutes.OPERATOR_HOME) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                OperatorHomeScreen(
-                    onNavigate = ::navigateTo,
-                    onTripFinished = { tripId ->
-                        navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
-                    }
-                )
-                if (BuildConfig.DEBUG) ElevatedButton(
-                    onClick = { clearAndNavigate(AppRoutes.PASSENGER_HOME) },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = 44.dp, end = 16.dp),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = ButtonDefaults.elevatedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                    ),
-                    elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 6.dp)
-                ) {
-                    Text(
-                        text = "Modo Pasajero 👤",
-                        style = MaterialTheme.typography.labelMedium
-                    )
+            OperatorHomeScreen(
+                onNavigate = ::navigateTo,
+                onTripFinished = { tripId ->
+                    navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
                 }
-            }
+            )
         }
 
         composable(AppRoutes.COMPANY_HOME) {
