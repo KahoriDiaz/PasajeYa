@@ -281,6 +281,11 @@ fun RegisterScreen(
                 )
 
                 if (state.benefitType == BenefitType.UNIVERSITY) {
+                    Text(
+                        text = stringResource(R.string.register_benefit_university_note),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextGray
+                    )
                     TextField(
                         value = state.universityCardCode,
                         onValueChange = viewModel::onUniversityCardCodeChange,

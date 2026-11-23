@@ -46,5 +46,6 @@
     <string name="register_scan_university_missing">No se reconocieron datos válidos del carné universitario.</string>
     <string name="register_capture_carne_title">Escanear carné universitario</string>
     <string name="register_card_code">Código de estudiante / matrícula</string>
+    <string name="register_benefit_university_note">El medio pasaje se activa cuando verifiques tu correo institucional desde la app. Lo haces en "Beneficio universitario".</string>
     <string name="register_card_expiry">Fecha de caducidad del carné</string>
 </resources>
