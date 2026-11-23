@@ -809,8 +809,7 @@ private fun String.ageFromBirthDate(): Int? {
 
 /**
  * Metros que la unidad avanzo al pasar del paradero [from] al [to]. Si el indice retrocede,
- * es que termino el recorrido y volvio a empezar, asi que se suma lo que falta hasta el
- * ultimo paradero mas lo andado desde el primero.
+ * es que termino el recorrido y arranco de nuevo, asi que se suma el regreso completo.
  */
 /**
  * Distancia real del viaje: la diferencia del odometro de la unidad entre subida y bajada.
@@ -837,12 +836,14 @@ internal fun forwardMeters(route: RoutePath, from: Int, to: Int): Double {
     val start = from.coerceIn(stops.indices)
     val end = to.coerceIn(stops.indices)
     if (start == end) return 0.0
-    return if (end > start) {
-        FareEstimator.routeDistanceMeters(stops, start, end)
-    } else {
-        FareEstimator.routeDistanceMeters(stops, start, stops.lastIndex) +
-            FareEstimator.routeDistanceMeters(stops, 0, end)
+    if (end > start) {
+        return FareEstimator.routeDistanceMeters(stops, start, end)
     }
+    // La unidad llego al final y volvio a empezar: avanzo lo que faltaba hasta el ultimo
+    // paradero, el recorrido de regreso completo y lo andado desde el primero.
+    return FareEstimator.routeDistanceMeters(stops, start, stops.lastIndex) +
+        FareEstimator.routeDistanceMeters(stops, 0, stops.lastIndex) +
+        FareEstimator.routeDistanceMeters(stops, 0, end)
 }
 
 private fun nearestStopIndex(route: RoutePath, position: TripPosition): Int {
