@@ -8,6 +8,7 @@ enum class AuthDestination {
     PASSENGER_HOME,
     DRIVER_PROFILE,
     DRIVER_HOME,
+    COMPANY_DETAILS,
     COMPANY_HOME
 }
 
@@ -22,7 +23,7 @@ fun resolveAuthDestination(session: DeviceSession): AuthDestination {
             else AuthDestination.DRIVER_PROFILE
         UserRole.COMPANY ->
             if (session.operatorComplete) AuthDestination.COMPANY_HOME
-            else AuthDestination.CHOOSE_ROLE
+            else AuthDestination.COMPANY_DETAILS
         null -> AuthDestination.CHOOSE_ROLE
     }
 }

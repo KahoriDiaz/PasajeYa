@@ -203,6 +203,17 @@ class PassengerProfileViewModel @Inject constructor(
 )
 
 @HiltViewModel
+class CompanyPersonalProfileViewModel @Inject constructor(
+    authRepository: AuthRepository,
+    accountRepository: AccountRepository
+) : PersonalProfileViewModel(
+    authRepository = authRepository,
+    accountRepository = accountRepository,
+    role = UserRole.COMPANY,
+    nextDestination = AuthDestination.COMPANY_DETAILS
+)
+
+@HiltViewModel
 class OperatorPersonalProfileViewModel @Inject constructor(
     authRepository: AuthRepository,
     accountRepository: AccountRepository

@@ -10,6 +10,7 @@ object Validators {
     )
     private val nameRegex = Regex("^[\\p{L}]+(?:[ '\\-][\\p{L}]+)*$")
     private val dniRegex = Regex("^[0-9]{8}$")
+    private val rucRegex = Regex("^(10|15|17|20)[0-9]{9}$")
 
     fun isValidEmail(value: String): Boolean {
         if (value.length !in 6..100 || !emailRegex.matches(value)) return false
@@ -54,6 +55,9 @@ object Validators {
             strength = strength
         )
     }
+
+    /** RUC peruano: 11 digitos que empiezan en 10, 15, 17 o 20. */
+    fun isValidRuc(value: String): Boolean = rucRegex.matches(value.trim())
 
     fun isValidDni(value: String): Boolean =
         dniRegex.matches(value) && value.toSet().size > 1

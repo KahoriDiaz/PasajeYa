@@ -23,6 +23,7 @@ import com.pasajeya.app.feature.auth.ui.common.SessionActionsViewModel
 fun RoleSelectionScreen(
     onPassenger: () -> Unit,
     onOperator: () -> Unit,
+    onCompany: () -> Unit,
     onNavigate: (AuthDestination) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SessionActionsViewModel = hiltViewModel()
@@ -57,6 +58,11 @@ fun RoleSelectionScreen(
             title = stringResource(R.string.role_operator_title),
             description = stringResource(R.string.role_operator_description),
             onClick = onOperator
+        )
+        RoleCard(
+            title = stringResource(R.string.role_company),
+            description = stringResource(R.string.role_company_desc),
+            onClick = onCompany
         )
     }
 }

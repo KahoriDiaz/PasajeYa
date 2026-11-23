@@ -71,6 +71,24 @@ fun OperatorPersonalProfileScreen(
 }
 
 @Composable
+fun CompanyPersonalProfileScreen(
+    onBack: () -> Unit,
+    onPrivacy: () -> Unit,
+    onNavigate: (AuthDestination) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: CompanyPersonalProfileViewModel = hiltViewModel()
+) {
+    PersonalProfileScreen(
+        title = stringResource(R.string.profile_company_title),
+        viewModel = viewModel,
+        onBack = onBack,
+        onPrivacy = onPrivacy,
+        onNavigate = onNavigate,
+        modifier = modifier.testTag("company_profile_screen")
+    )
+}
+
+@Composable
 private fun PersonalProfileScreen(
     title: String,
     viewModel: PersonalProfileViewModel,

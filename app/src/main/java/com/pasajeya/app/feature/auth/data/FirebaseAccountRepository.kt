@@ -234,6 +234,54 @@ class FirebaseAccountRepository @Inject constructor(
         }
     }
 
+    override suspend fun registerCompany(businessName: String, ruc: String) {
+        val session = requireActiveSession()
+        val uid = session.uid
+
+        try {
+            // El RUC identifica a la empresa: no puede repetirse en dos cuentas.
+            val existing = firestore.collection("companies")
+                .whereEqualTo("ruc", ruc)
+                .limit(1)
+                .get()
+                .await()
+                .documents
+                .firstOrNull()
+            if (existing != null && existing.id != uid) {
+                throw AccountException(AccountFailure.DniAlreadyRegistered)
+            }
+
+            firestore.collection("users").document(uid).set(
+                mapOf(
+                    "businessName" to businessName,
+                    "companyRuc" to ruc,
+                    "fullName" to businessName
+                ),
+                SetOptions.merge()
+            ).await()
+            firestore.collection("companies").document(uid).set(
+                mapOf(
+                    "ownerUid" to uid,
+                    "businessName" to businessName,
+                    "ruc" to ruc,
+                    "status" to "active",
+                    "createdAt" to FieldValue.serverTimestamp()
+                ),
+                SetOptions.merge()
+            ).await()
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: AccountException) {
+            throw error
+        } catch (error: Exception) {
+            throw AccountException(error.toAccountFailure())
+        }
+
+        _deviceSession.update { current ->
+            if (current?.uid == uid) current.copy(operatorComplete = true) else current
+        }
+    }
+
     override suspend fun registerOperator(
         licenseNumber: String,
         licenseClass: String,

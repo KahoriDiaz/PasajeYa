@@ -16,4 +16,11 @@
     <string name="company_refresh">Actualizar</string>
     <string name="company_driver_verified">Verificado por tu empresa</string>
     <string name="company_driver_pending">Documentos por revisar</string>
+    <string name="company_details_title">Datos de tu empresa</string>
+    <string name="company_details_subtitle">Con el RUC tus conductores se vinculan solos al registrarse.</string>
+    <string name="company_details_note">La suscripción se cobra por unidad: S/ 1.00 al día por cada conductor vinculado, y menos si tienes 50 o más unidades.</string>
+    <string name="company_details_action">Guardar y continuar</string>
+    <string name="role_company">Operador (empresa)</string>
+    <string name="role_company_desc">Eres la empresa o el consorcio que paga la suscripción y ve a sus conductores.</string>
+    <string name="profile_company_title">Datos del representante</string>
 </resources>

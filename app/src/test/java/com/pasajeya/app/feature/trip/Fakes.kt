@@ -98,6 +98,9 @@ class FakeAccountRepository(
         consentVersion: String
     ) = Unit
 
+    override suspend fun registerCompany(businessName: String, ruc: String) =
+        error("Not used")
+
     override suspend fun registerOperator(
         licenseNumber: String,
         licenseClass: String,

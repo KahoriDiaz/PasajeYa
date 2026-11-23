@@ -31,6 +31,9 @@ interface AccountRepository {
         consentVersion: String
     )
 
+    /** Guarda la razon social y el RUC, y crea la ficha en `companies/{uid}`. */
+    suspend fun registerCompany(businessName: String, ruc: String)
+
     suspend fun registerOperator(
         licenseNumber: String,
         licenseClass: String,

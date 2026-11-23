@@ -16,6 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pasajeya.app.R
 import com.pasajeya.app.feature.auth.domain.model.AuthDestination
+import com.pasajeya.app.feature.auth.ui.company.CompanyDetailsScreen
+import com.pasajeya.app.feature.auth.ui.profile.CompanyPersonalProfileScreen
 import com.pasajeya.app.feature.company.ui.CompanyHomeScreen
 import com.pasajeya.app.feature.auth.ui.forgot.ForgotPasswordScreen
 import com.pasajeya.app.feature.auth.ui.home.OperatorHomeScreen
@@ -48,6 +50,8 @@ object AppRoutes {
     const val OPERATOR_PROFILE = "operator_profile"
     const val OPERATOR_DETAILS = "operator_details"
     const val OPERATOR_HOME = "operator_home"
+    const val COMPANY_PROFILE = "company_profile"
+    const val COMPANY_DETAILS = "company_details"
     const val COMPANY_HOME = "company_home"
     const val PRIVACY_POLICY = "privacy_policy"
     const val FARE_ESTIMATE = "fare_estimate"
@@ -66,6 +70,7 @@ fun routeFor(destination: AuthDestination): String = when (destination) {
     AuthDestination.PASSENGER_HOME -> AppRoutes.PASSENGER_HOME
     AuthDestination.DRIVER_PROFILE -> AppRoutes.OPERATOR_DETAILS
     AuthDestination.DRIVER_HOME -> AppRoutes.OPERATOR_HOME
+    AuthDestination.COMPANY_DETAILS -> AppRoutes.COMPANY_DETAILS
     AuthDestination.COMPANY_HOME -> AppRoutes.COMPANY_HOME
 }
 
@@ -156,6 +161,9 @@ fun AppNavHost(
                 onOperator = {
                     navController.navigate(AppRoutes.OPERATOR_PROFILE)
                 },
+                onCompany = {
+                    navController.navigate(AppRoutes.COMPANY_PROFILE)
+                },
                 onNavigate = ::navigateTo
             )
         }
@@ -178,6 +186,20 @@ fun AppNavHost(
                 },
                 onNavigate = ::navigateTo
             )
+        }
+
+        composable(AppRoutes.COMPANY_PROFILE) {
+            CompanyPersonalProfileScreen(
+                onBack = { navController.popBackStack() },
+                onPrivacy = {
+                    navController.navigate(AppRoutes.PRIVACY_POLICY)
+                },
+                onNavigate = ::navigateTo
+            )
+        }
+
+        composable(AppRoutes.COMPANY_DETAILS) {
+            CompanyDetailsScreen(onNavigate = ::navigateTo)
         }
 
         composable(AppRoutes.OPERATOR_DETAILS) {

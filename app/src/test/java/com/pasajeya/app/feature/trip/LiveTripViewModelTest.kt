@@ -158,7 +158,8 @@ class LiveTripViewModelTest {
 
         assertTrue(vm.uiState.value.hasUniversityBenefit)
         assertEquals(135, vm.uiState.value.regularCents)
-        assertEquals(70, vm.uiState.value.fareCents)
+        // La mitad se redondea a favor del estudiante: 67.5 -> 65, nunca 70.
+        assertEquals(65, vm.uiState.value.fareCents)
     }
 
     @Test(timeout = 10_000)
