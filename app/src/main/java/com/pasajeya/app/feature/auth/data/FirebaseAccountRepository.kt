@@ -194,6 +194,9 @@ class FirebaseAccountRepository @Inject constructor(
             }
 
             val now = FieldValue.serverTimestamp()
+            // Si la fecha no se puede leer, mejor no guardar edad que guardar 0:
+            // el anuncio de voz diria "0 anos".
+            val age = ageFromBirthDate(birthDate)
             userRef.set(
                 mapOf(
                     "role" to role.wireValue,
@@ -201,14 +204,13 @@ class FirebaseAccountRepository @Inject constructor(
                     "lastName" to lastName,
                     "fullName" to listOf(firstName, lastName).joinToString(" ").trim(),
                     "birthDate" to birthDate,
-                    "age" to (ageFromBirthDate(birthDate) ?: 0),
                     "createdAt" to now,
                     "privacyConsent" to mapOf(
                         "version" to consentVersion,
                         "acceptedAt" to now
                     ),
                     "benefit" to mapOf("status" to "none")
-                ),
+                ) + (if (age != null) mapOf("age" to age) else emptyMap<String, Any>()),
                 SetOptions.merge()
             ).await()
             firestore.collection("users_private").document(uid)

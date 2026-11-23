@@ -120,6 +120,8 @@ async function main() {
       vehiclePlate: DRIVER.plate,
       assignedRouteId: routeId,
       licenseClass: DRIVER.licenseClass,
+      licenseNumber: DRIVER.licenseNumber,
+      licenseStatus: "HABILITADO",
       driverStatus: "verified_by_company",
       companyId: companyUid,
       isDemoAccount: true,
