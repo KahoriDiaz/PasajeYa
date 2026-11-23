@@ -14,6 +14,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
@@ -46,6 +48,17 @@ jobs:
           name: pasajeya-debug-apk
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+
+      - name: Publicar el APK como descarga directa
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk PasajeYa-demo.apk
+          gh release view apk-demo >/dev/null 2>&1 || gh release create apk-demo \
+            --title "APK de demostración" \
+            --notes "Instalable de la última compilación. Desinstala primero cualquier versión anterior de PasajeYa, porque está firmada con otra llave."
+          gh release upload apk-demo PasajeYa-demo.apk --clobber
 
       - name: Guardar los reportes de prueba
         if: failure()
