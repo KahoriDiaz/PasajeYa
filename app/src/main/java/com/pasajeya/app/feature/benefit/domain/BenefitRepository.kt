@@ -28,18 +28,16 @@ interface BenefitRepository {
     ): BenefitOperationResult
 
     /**
-     * Solicita el envío de un código de verificación al correo institucional.
+     * Pide a Firebase Auth que envie el enlace de verificacion al correo institucional.
+     * El correo pasa a ser el de acceso de la cuenta solo cuando la persona abre el enlace,
+     * y Firebase rechaza un correo que ya pertenezca a otra cuenta.
      */
-    suspend fun requestBenefitCode(
-        sessionId: String,
+    suspend fun sendInstitutionalEmailLink(
         institutionalEmail: String
     ): BenefitOperationResult
 
     /**
-     * Confirma el código de verificación recibido por correo.
+     * Revisa si el enlace ya fue abierto y, en ese caso, aprueba el beneficio.
      */
-    suspend fun confirmBenefitCode(
-        sessionId: String,
-        code: String
-    ): BenefitOperationResult
+    suspend fun confirmInstitutionalEmail(): BenefitOperationResult
 }

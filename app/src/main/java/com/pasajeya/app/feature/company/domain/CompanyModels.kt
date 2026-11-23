@@ -14,8 +14,14 @@ data class CompanyDashboard(
     val units: List<CompanyUnit>,
     val tripsToday: Int,
     val chargedTodayCents: Long,
-    /** Suscripción mensual = unidades × S/ 30 (S/ 1 al día por unidad). */
-    val monthlySubscriptionCents: Long
+    /** Suscripción mensual = unidades × precio del día × 30. */
+    val monthlySubscriptionCents: Long,
+    /** Precio por unidad al día que le toca a esta empresa. */
+    val dailyPerUnitCents: Int,
+    /** Descuento frente a lo que pagaría un conductor independiente. */
+    val discountPercent: Int,
+    /** Ahorro mensual frente al precio de informal. */
+    val monthlySavingCents: Long
 )
 
 interface CompanyRepository {

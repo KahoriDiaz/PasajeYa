@@ -19,16 +19,16 @@
     <string name="benefit_step_carne_detected">Carné detectado: %1$s</string>
 
     <string name="benefit_step_email_title">Paso 2: Correo institucional</string>
-    <string name="benefit_step_email_instructions">Escribe tu correo institucional de la UCSM (@ucsm.edu.pe) para recibir un código de seguridad.</string>
+    <string name="benefit_step_email_instructions">Escribe tu correo de la universidad, el que termina en .edu.pe. Te enviaremos un enlace de verificación a esa dirección.</string>
     <string name="benefit_field_email">Correo institucional</string>
-    <string name="benefit_email_button">Enviar código</string>
+    <string name="benefit_email_button">Enviarme el enlace</string>
+    <string name="benefit_email_warning">Ese correo pasará a ser el de acceso a tu cuenta, y así nadie más puede usar tu beneficio.</string>
+    <string name="benefit_step_link_instructions">Enviamos un enlace a %1$s. Ábrelo desde tu correo y vuelve aquí.</string>
+    <string name="benefit_link_confirm_button">Ya abrí el enlace</string>
+    <string name="benefit_link_resend">Reenviar el enlace</string>
+    <string name="benefit_link_timer">Puedes reenviarlo en %1$d s</string>
 
     <string name="benefit_step_code_title">Paso 3: Verificar código</string>
-    <string name="benefit_step_code_instructions">Escribe el código de 6 dígitos que enviamos a tu correo institucional.</string>
-    <string name="benefit_field_code">Código de 6 dígitos</string>
-    <string name="benefit_code_button">Confirmar código</string>
-    <string name="benefit_code_resend">Reenviar código</string>
-    <string name="benefit_code_timer">Podrás reenviar en %1$d s</string>
 
     <string name="benefit_comparison_title">Tu ahorro con el beneficio</string>
     <string name="benefit_comparison_regular">Pasaje regular</string>

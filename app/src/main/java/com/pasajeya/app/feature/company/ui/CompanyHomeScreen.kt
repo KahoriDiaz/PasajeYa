@@ -112,10 +112,25 @@ fun CompanyHomeScreen(
                     )
                 }
                 Text(
-                    text = stringResource(R.string.company_subscription_note),
+                    text = stringResource(
+                        R.string.company_subscription_note,
+                        formatCents(dashboard.dailyPerUnitCents.toLong())
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = TextGray
                 )
+                if (dashboard.discountPercent > 0) {
+                    Text(
+                        text = stringResource(
+                            R.string.company_formal_discount,
+                            dashboard.discountPercent,
+                            formatCents(dashboard.monthlySavingCents)
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = PrimaryBlue
+                    )
+                }
             }
 
             FormCard {

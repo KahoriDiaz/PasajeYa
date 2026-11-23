@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.pasajeya.app.feature.company.domain.CompanyDashboard
 import com.pasajeya.app.feature.company.domain.CompanyRepository
 import com.pasajeya.app.feature.company.domain.CompanyUnit
+import com.pasajeya.app.feature.company.domain.SubscriptionPricing
 import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject
@@ -18,8 +19,6 @@ class FirebaseCompanyRepository @Inject constructor(
 
     override suspend fun loadDashboard(companyUid: String): CompanyDashboard {
         val company = firestore.collection("companies").document(companyUid).get().await()
-        val unitPriceCents = (company.get("subscriptionPerUnitCents") as? Number)?.toLong()
-            ?: DEFAULT_UNIT_MONTHLY_CENTS
 
         val drivers = firestore.collection("users")
             .whereEqualTo("companyId", companyUid)
@@ -58,18 +57,26 @@ class FirebaseCompanyRepository @Inject constructor(
             }
         }
 
+        // Empresa con RUC = formal, asi que paga el precio con descuento.
+        val isFormal = company.getString("ruc").orEmpty().isNotBlank()
         return CompanyDashboard(
             businessName = company.getString("businessName").orEmpty(),
             ruc = company.getString("ruc").orEmpty(),
             units = units,
             tripsToday = tripsToday,
             chargedTodayCents = chargedTodayCents,
-            monthlySubscriptionCents = units.size * unitPriceCents
+            monthlySubscriptionCents = SubscriptionPricing.monthlyCents(units.size, isFormal),
+            dailyPerUnitCents = SubscriptionPricing.dailyCentsFor(units.size, isFormal),
+            discountPercent = if (isFormal) SubscriptionPricing.discountPercent(units.size) else 0,
+            monthlySavingCents = if (isFormal) {
+                SubscriptionPricing.monthlySavingCents(units.size)
+            } else {
+                0L
+            }
         )
     }
 
     private companion object {
-        const val DEFAULT_UNIT_MONTHLY_CENTS = 3_000L
         const val WHERE_IN_LIMIT = 10
     }
 }

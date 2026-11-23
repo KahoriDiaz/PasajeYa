@@ -19,7 +19,9 @@ data class UserBenefit(
 data class BenefitRequestState(
     val stage: String,
     val expiresAtMillis: Long?,
-    val attempts: Int
+    val attempts: Int,
+    /** Correo institucional al que se envio el enlace de verificacion. */
+    val institutionalEmail: String = ""
 )
 
 sealed class BenefitOperationResult {

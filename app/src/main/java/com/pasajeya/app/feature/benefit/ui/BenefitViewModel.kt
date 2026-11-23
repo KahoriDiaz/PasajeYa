@@ -32,10 +32,10 @@ data class BenefitUiState(
     val request: BenefitRequestState? = null,
     val error: String? = null,
     val institutionalEmail: String = "",
-    val verificationCode: String = "",
     val carneUnreadable: Boolean = false,
-    val codeTimerSeconds: Int = 0,
-    val canResendCode: Boolean = true
+    /** Segundos de espera antes de poder reenviar el enlace. */
+    val resendTimerSeconds: Int = 0,
+    val canResendLink: Boolean = true
 )
 
 @HiltViewModel
@@ -70,7 +70,7 @@ class BenefitViewModel @Inject constructor(
         viewModelScope.launch {
             benefitRepository.observeBenefitRequest(uid).collect { request ->
                 _uiState.update { it.copy(request = request) }
-                if (request?.stage == "code_sent") {
+                if (request?.stage == "link_sent") {
                     startTimer()
                 } else {
                     stopTimer()
@@ -81,12 +81,6 @@ class BenefitViewModel @Inject constructor(
 
     fun onEmailChange(email: String) {
         _uiState.update { it.copy(institutionalEmail = email) }
-    }
-
-    fun onCodeChange(code: String) {
-        if (code.length <= 6 && code.all { it.isDigit() }) {
-            _uiState.update { it.copy(verificationCode = code) }
-        }
     }
 
     /**
@@ -127,30 +121,27 @@ class BenefitViewModel @Inject constructor(
         }
     }
 
-    fun requestEmailCode() {
+    /** Firebase Auth manda el enlace al correo institucional. No hace falta servidor. */
+    fun sendEmailLink() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
-            val sessionId = getSessionId()
             val email = _uiState.value.institutionalEmail
-            
-            val result = benefitRepository.requestBenefitCode(sessionId, email)
+            val result = benefitRepository.sendInstitutionalEmailLink(email)
             _uiState.update { it.copy(isLoading = false) }
-            
+
             if (result is BenefitOperationResult.Error) {
                 _uiState.update { it.copy(error = result.message) }
             }
         }
     }
 
-    fun confirmCode() {
+    /** Revisa si la persona ya abrio el enlace que le llego al correo. */
+    fun confirmEmailLink() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
-            val sessionId = getSessionId()
-            val code = _uiState.value.verificationCode
-            
-            val result = benefitRepository.confirmBenefitCode(sessionId, code)
+            val result = benefitRepository.confirmInstitutionalEmail()
             _uiState.update { it.copy(isLoading = false) }
-            
+
             if (result is BenefitOperationResult.Error) {
                 _uiState.update { it.copy(error = result.message) }
             } else {
@@ -161,15 +152,15 @@ class BenefitViewModel @Inject constructor(
 
     private fun startTimer() {
         timerJob?.cancel()
-        _uiState.update { it.copy(codeTimerSeconds = 600, canResendCode = false) }
+        _uiState.update { it.copy(resendTimerSeconds = RESEND_WAIT_SECONDS, canResendLink = false) }
         timerJob = viewModelScope.launch {
-            while (_uiState.value.codeTimerSeconds > 0) {
+            while (_uiState.value.resendTimerSeconds > 0) {
                 delay(1000)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
-                        codeTimerSeconds = it.codeTimerSeconds - 1,
-                        canResendCode = it.codeTimerSeconds <= 540 // Permite reenvío tras 1 min
-                    ) 
+                        resendTimerSeconds = it.resendTimerSeconds - 1,
+                        canResendLink = it.resendTimerSeconds <= 1
+                    )
                 }
             }
         }
@@ -177,7 +168,11 @@ class BenefitViewModel @Inject constructor(
 
     private fun stopTimer() {
         timerJob?.cancel()
-        _uiState.update { it.copy(codeTimerSeconds = 0, canResendCode = true) }
+        _uiState.update { it.copy(resendTimerSeconds = 0, canResendLink = true) }
+    }
+
+    private companion object {
+        const val RESEND_WAIT_SECONDS = 60
     }
 
     private suspend fun getSessionId(): String {

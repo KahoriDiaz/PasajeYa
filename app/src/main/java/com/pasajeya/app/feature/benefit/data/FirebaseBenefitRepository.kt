@@ -1,12 +1,15 @@
 package com.pasajeya.app.feature.benefit.data
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
-import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.pasajeya.app.feature.benefit.domain.BenefitRepository
+import com.pasajeya.app.feature.benefit.domain.InstitutionalEmail
 import com.pasajeya.app.feature.benefit.domain.model.BenefitOperationResult
 import com.pasajeya.app.feature.benefit.domain.model.BenefitRequestState
 import com.pasajeya.app.feature.benefit.domain.model.BenefitStatus
@@ -21,7 +24,6 @@ import kotlinx.coroutines.tasks.await
 @Singleton
 class FirebaseBenefitRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
-    private val functions: FirebaseFunctions,
     private val storage: FirebaseStorage,
     private val auth: FirebaseAuth
 ) : BenefitRepository {
@@ -66,7 +68,8 @@ class FirebaseBenefitRepository @Inject constructor(
                     BenefitRequestState(
                         stage = snapshot.getString("stage") ?: "",
                         expiresAtMillis = snapshot.getTimestamp("expiresAt")?.toDate()?.time,
-                        attempts = snapshot.getLong("attempts")?.toInt() ?: 0
+                        attempts = snapshot.getLong("attempts")?.toInt() ?: 0,
+                        institutionalEmail = snapshot.getString("institutionalEmail").orEmpty()
                     )
                 )
             }
@@ -80,13 +83,13 @@ class FirebaseBenefitRepository @Inject constructor(
     ): BenefitOperationResult {
         return try {
             val currentUid = auth.currentUser?.uid
-                ?: return BenefitOperationResult.Error("No hay sesiÛn activa.")
+                ?: return BenefitOperationResult.Error("No hay sesi√≥n activa.")
 
             // stage = "carne_ok" activa inmediatamente el Paso 2 (formulario de correo) en la UI
             firestore.collection("benefitRequests").document(currentUid).set(
                 mapOf(
                     "uid" to currentUid,
-                    "stage" to "carne_ok",
+                    "stage" to STAGE_CARNE_OK,
                     "carneCaptured" to true,
                     "requestId" to requestId,
                     "updatedAt" to FieldValue.serverTimestamp()
@@ -95,75 +98,116 @@ class FirebaseBenefitRepository @Inject constructor(
 
             BenefitOperationResult.Success
         } catch (e: Exception) {
-            BenefitOperationResult.Error(e.message ?: "Error al procesar el carnÈ.")
+            BenefitOperationResult.Error(e.message ?: "Error al procesar el carn√©.")
         }
     }
 
-    override suspend fun requestBenefitCode(
-        sessionId: String,
+    override suspend fun sendInstitutionalEmailLink(
         institutionalEmail: String
     ): BenefitOperationResult {
+        val user = auth.currentUser
+            ?: return BenefitOperationResult.Error("No hay sesi√≥n activa.")
+        val email = InstitutionalEmail.normalize(institutionalEmail)
+        if (!InstitutionalEmail.isInstitutional(email)) {
+            return BenefitOperationResult.Error(
+                "Usa tu correo de la universidad, el que termina en .edu.pe."
+            )
+        }
+
         return try {
-            val currentUid = auth.currentUser?.uid
-                ?: return BenefitOperationResult.Error("No hay sesiÛn activa.")
+            if (user.email?.lowercase() == email && user.isEmailVerified) {
+                // Ya entra con su correo institucional verificado: no hay nada que enviar.
+                approveUniversityBenefit(user.uid, email)
+                return BenefitOperationResult.Success
+            }
 
-            val generatedCode = "123456"
-            val calendar = java.util.Calendar.getInstance().apply { add(java.util.Calendar.MINUTE, 10) }
-
-            // stage = "code_sent" activa el Paso 3 (caja para ingresar los 6 dÌgitos)
-            firestore.collection("benefitRequests").document(currentUid).set(
+            // Firebase env√≠a el enlace a ese correo y reci√©n entonces lo toma como propio.
+            user.verifyBeforeUpdateEmail(email).await()
+            firestore.collection("benefitRequests").document(user.uid).set(
                 mapOf(
-                    "uid" to currentUid,
-                    "institutionalEmail" to institutionalEmail,
-                    "stage" to "code_sent",
-                    "verificationCode" to generatedCode,
-                    "attempts" to 0,
-                    "expiresAt" to com.google.firebase.Timestamp(calendar.time),
+                    "uid" to user.uid,
+                    "institutionalEmail" to email,
+                    "stage" to STAGE_LINK_SENT,
                     "updatedAt" to FieldValue.serverTimestamp()
                 ),
-                com.google.firebase.firestore.SetOptions.merge()
+                SetOptions.merge()
             ).await()
-
             BenefitOperationResult.Success
-        } catch (e: Exception) {
-            BenefitOperationResult.Error(e.message ?: "Error al solicitar el cÛdigo.")
+        } catch (error: FirebaseAuthUserCollisionException) {
+            BenefitOperationResult.Error(
+                "Ese correo institucional ya est√° registrado en otra cuenta."
+            )
+        } catch (error: FirebaseAuthRecentLoginRequiredException) {
+            BenefitOperationResult.Error(
+                "Por seguridad, vuelve a iniciar sesi√≥n y reint√©ntalo."
+            )
+        } catch (error: Exception) {
+            BenefitOperationResult.Error(
+                error.message ?: "No pudimos enviar el enlace de verificaci√≥n."
+            )
         }
     }
 
-    override suspend fun confirmBenefitCode(
-        sessionId: String,
-        code: String
-    ): BenefitOperationResult {
+    override suspend fun confirmInstitutionalEmail(): BenefitOperationResult {
+        val user = auth.currentUser
+            ?: return BenefitOperationResult.Error("No hay sesi√≥n activa.")
+
         return try {
-            val currentUid = auth.currentUser?.uid
-                ?: return BenefitOperationResult.Error("No hay sesiÛn activa.")
+            user.reload().await()
+            val refreshed = auth.currentUser
+                ?: return BenefitOperationResult.Error("No hay sesi√≥n activa.")
+            val email = refreshed.email?.lowercase().orEmpty()
 
-            val requestDoc = firestore.collection("benefitRequests").document(currentUid).get().await()
-            val expectedCode = requestDoc.getString("verificationCode") ?: "123456"
-
-            if (code.trim() != expectedCode.trim() && code.trim() != "123456") {
-                return BenefitOperationResult.Error("CÛdigo incorrecto.")
+            if (!InstitutionalEmail.isInstitutional(email) || !refreshed.isEmailVerified) {
+                return BenefitOperationResult.Error(
+                    "Todav√≠a no vemos el correo verificado. Abre el enlace que te lleg√≥ " +
+                        "y vuelve a intentarlo."
+                )
             }
 
-            // Aprueba el beneficio universitario por 1 aÒo
-            val nextYear = java.util.Calendar.getInstance().apply { add(java.util.Calendar.YEAR, 1) }.time
+            approveUniversityBenefit(refreshed.uid, email)
+            BenefitOperationResult.Success
+        } catch (error: Exception) {
+            BenefitOperationResult.Error(
+                error.message ?: "No pudimos confirmar tu correo institucional."
+            )
+        }
+    }
 
-            firestore.collection("users").document(currentUid).update(
-                "benefit", mapOf(
+    /** Aprueba el beneficio por un a√±o desde que se verific√≥ el correo. */
+    private suspend fun approveUniversityBenefit(uid: String, email: String) {
+        val nextYear = java.util.Calendar.getInstance()
+            .apply { add(java.util.Calendar.YEAR, 1) }
+            .time
+
+        firestore.collection("users").document(uid).set(
+            mapOf(
+                "benefitType" to "university",
+                "institutionalEmail" to email,
+                "benefit" to mapOf(
                     "kind" to "university",
                     "status" to "approved",
-                    "institution" to "Universidad CatÛlica de Santa MarÌa",
+                    "institution" to InstitutionalEmail.institutionFromEmail(email),
                     "validUntil" to com.google.firebase.Timestamp(nextYear)
                 )
-            ).await()
+            ),
+            SetOptions.merge()
+        ).await()
 
-            firestore.collection("benefitRequests").document(currentUid).update(
-                "stage", "approved"
-            ).await()
+        firestore.collection("benefitRequests").document(uid).set(
+            mapOf(
+                "uid" to uid,
+                "institutionalEmail" to email,
+                "stage" to STAGE_APPROVED,
+                "updatedAt" to FieldValue.serverTimestamp()
+            ),
+            SetOptions.merge()
+        ).await()
+    }
 
-            BenefitOperationResult.Success
-        } catch (e: Exception) {
-            BenefitOperationResult.Error(e.message ?: "Error al confirmar el cÛdigo.")
-        }
+    private companion object {
+        const val STAGE_CARNE_OK = "carne_ok"
+        const val STAGE_LINK_SENT = "link_sent"
+        const val STAGE_APPROVED = "approved"
     }
 }

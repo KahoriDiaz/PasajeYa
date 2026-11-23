@@ -298,18 +298,14 @@ class FakeBenefitRepository : BenefitRepository {
         return nextResult
     }
 
-    override suspend fun requestBenefitCode(
-        sessionId: String,
+    override suspend fun sendInstitutionalEmailLink(
         institutionalEmail: String
     ): BenefitOperationResult {
         requestCodeCalls++
         return nextResult
     }
 
-    override suspend fun confirmBenefitCode(
-        sessionId: String,
-        code: String
-    ): BenefitOperationResult {
+    override suspend fun confirmInstitutionalEmail(): BenefitOperationResult {
         confirmCodeCalls++
         return nextResult
     }

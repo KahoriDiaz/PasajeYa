@@ -8,7 +8,8 @@
     <string name="company_trips_today">Viajes de hoy</string>
     <string name="company_charged_today">Cobrado hoy</string>
     <string name="company_subscription">Suscripción al mes</string>
-    <string name="company_subscription_note">S/ 1 al día por unidad (S/ 30 al mes). El pasajero no paga comisión.</string>
+    <string name="company_subscription_note">%1$s al día por cada unidad. El pasajero no paga comisión.</string>
+    <string name="company_formal_discount">Por ser empresa formal pagas %1$d %% menos que un conductor independiente: ahorras %2$s al mes.</string>
     <string name="company_fleet_title">Tu flota</string>
     <string name="company_fleet_empty">Aún no hay conductores vinculados. Tus conductores se vinculan al registrarse con el RUC %1$s.</string>
     <string name="company_no_plate">Sin placa</string>

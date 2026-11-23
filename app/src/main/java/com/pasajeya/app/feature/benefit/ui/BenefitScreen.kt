@@ -72,7 +72,7 @@ fun BenefitScreen(
         // El servidor guarda el avance en benefitRequests.stage; users.benefit sigue en
         // "none" hasta aprobar. Por eso el flujo pendiente se decide por la solicitud.
         val stage = state.request?.stage
-        val requestInProgress = stage == "carne_ok" || stage == "code_sent"
+        val requestInProgress = stage == "carne_ok" || stage == "link_sent"
         when {
             state.benefit?.status == BenefitStatus.APPROVED -> {
                 ApprovedBenefitCard(benefit = state.benefit!!)
@@ -81,20 +81,20 @@ fun BenefitScreen(
                 state.benefit?.status == BenefitStatus.PENDING_CARNE ||
                 state.benefit?.status == BenefitStatus.PENDING_CODE -> {
                 PendingBenefitCard(
-                    status = if (stage == "code_sent") {
+                    status = if (stage == "link_sent") {
                         BenefitStatus.PENDING_CODE
                     } else {
                         state.benefit?.status ?: BenefitStatus.PENDING_CODE
                     },
                     stage = stage,
                     email = state.institutionalEmail,
-                    code = state.verificationCode,
-                    timer = state.codeTimerSeconds,
-                    canResend = state.canResendCode,
+                    sentEmail = state.request?.institutionalEmail.orEmpty(),
+                    isLoading = state.isLoading,
+                    timer = state.resendTimerSeconds,
+                    canResend = state.canResendLink,
                     onEmailChange = viewModel::onEmailChange,
-                    onCodeChange = viewModel::onCodeChange,
-                    onSendCode = viewModel::requestEmailCode,
-                    onConfirmCode = viewModel::confirmCode
+                    onSendLink = viewModel::sendEmailLink,
+                    onConfirmLink = viewModel::confirmEmailLink
                 )
             }
             else -> {
@@ -176,64 +176,77 @@ private fun PendingBenefitCard(
     status: BenefitStatus,
     stage: String?,
     email: String,
-    code: String,
+    sentEmail: String,
+    isLoading: Boolean,
     timer: Int,
     canResend: Boolean,
     onEmailChange: (String) -> Unit,
-    onCodeChange: (String) -> Unit,
-    onSendCode: () -> Unit,
-    onConfirmCode: () -> Unit
+    onSendLink: () -> Unit,
+    onConfirmLink: () -> Unit
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             Text(
-                text = if (status == BenefitStatus.PENDING_CARNE) 
-                    stringResource(R.string.benefit_status_pending_carne) 
-                else stringResource(R.string.benefit_status_pending_code),
+                text = if (status == BenefitStatus.PENDING_CARNE) {
+                    stringResource(R.string.benefit_status_pending_carne)
+                } else {
+                    stringResource(R.string.benefit_status_pending_code)
+                },
                 style = MaterialTheme.typography.titleMedium
             )
 
-            if (stage == "carne_ok" || stage == "code_sent") {
+            if (stage == "carne_ok") {
                 Text(text = stringResource(R.string.benefit_step_email_instructions))
                 OutlinedTextField(
                     value = email,
                     onValueChange = onEmailChange,
                     label = { Text(stringResource(R.string.benefit_field_email)) },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = stage == "carne_ok",
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
-                if (stage == "carne_ok") {
-                    Button(onClick = onSendCode, modifier = Modifier.fillMaxWidth()) {
-                        Text(stringResource(R.string.benefit_email_button))
-                    }
+                Text(
+                    text = stringResource(R.string.benefit_email_warning),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextGray
+                )
+                Button(
+                    onClick = onSendLink,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !isLoading && email.isNotBlank()
+                ) {
+                    Text(stringResource(R.string.benefit_email_button))
                 }
             }
 
-            if (stage == "code_sent") {
-                Text(text = stringResource(R.string.benefit_step_code_instructions))
-                OutlinedTextField(
-                    value = code,
-                    onValueChange = onCodeChange,
-                    label = { Text(stringResource(R.string.benefit_field_code)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            if (stage == "link_sent") {
+                Text(
+                    text = stringResource(
+                        R.string.benefit_step_link_instructions,
+                        sentEmail.ifBlank { email }
+                    )
                 )
                 Button(
-                    onClick = onConfirmCode,
+                    onClick = onConfirmLink,
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = code.length == 6
+                    enabled = !isLoading
                 ) {
-                    Text(stringResource(R.string.benefit_code_button))
+                    Text(stringResource(R.string.benefit_link_confirm_button))
                 }
-                
+
                 if (canResend) {
-                    TextButton(onClick = onSendCode, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                        Text(stringResource(R.string.benefit_code_resend))
+                    TextButton(
+                        onClick = onSendLink,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        enabled = !isLoading
+                    ) {
+                        Text(stringResource(R.string.benefit_link_resend))
                     }
                 } else {
                     Text(
-                        text = stringResource(R.string.benefit_code_timer, timer),
+                        text = stringResource(R.string.benefit_link_timer, timer),
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         style = MaterialTheme.typography.bodySmall,
                         color = TextGray
