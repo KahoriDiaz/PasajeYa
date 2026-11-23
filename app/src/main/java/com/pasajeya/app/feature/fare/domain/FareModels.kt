@@ -37,15 +37,21 @@ data class FareVersion(
     val roundingStepCents: Int = 10
 )
 
-/** Ruta con su geometr�a y la versi�n tarifaria vigente, lista para calcular. */
+/** Ruta con su geometria y la version tarifaria vigente, lista para calcular. */
 data class RouteFareContext(
     val route: RouteGeo,
     val version: FareVersionInput
 )
 
 interface FareRepository {
-    /** Lee la ruta y la versi�n tarifaria vigente desde Firestore. */
+    /** Lee la ruta y la version tarifaria vigente desde Firestore. */
     suspend fun loadRouteFareContext(routeId: String): RouteFareContext
+
+    /**
+     * Version tarifaria vigente del dia, la que publica el script de combustible.
+     * Es la misma que usa el cobro del viaje, para que estimacion y cobro coincidan.
+     */
+    suspend fun loadFareVersion(): FareVersionInput
 
     /** Emite en vivo (snapshot listener) si el usuario tiene el beneficio universitario vigente. */
     fun observeUniversityBenefit(uid: String): Flow<Boolean>

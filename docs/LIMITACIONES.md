@@ -113,3 +113,9 @@ interfaz queda preparada para la fuente real.
 - **Cloud Functions.** El proyecto ya no las necesita: el registro, el perfil, el beneficio
   universitario y el viaje funcionan contra Firestore y Firebase Auth. El código TypeScript de
   `functions/` queda como referencia de las validaciones que haría un servidor.
+- **La retención y el dispositivo.** La billetera demo vive en el teléfono, así que la
+  retención se anota en el aparato donde ocurre el Tap In. Si el pasajero paga mostrando su QR
+  y es el conductor quien escanea, la retención queda registrada en el teléfono del conductor y
+  el pasajero no la ve; el cobro final sí se descuenta bien en el teléfono del pasajero al
+  cerrar el viaje. Cuando el Tap In lo hace el pasajero escaneando el QR de la unidad, la
+  retención se ve donde debe. Con una billetera en el servidor esto desaparece.

@@ -348,14 +348,16 @@ private fun FareReceiptCard(
                 fontWeight = FontWeight.Bold,
                 color = SuccessGreen
             )
-            Text(
-                text = stringResource(
-                    R.string.passenger_receipt_official,
-                    formatSoles(officialFareCents)
-                ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = TextGray
-            )
+            if (officialFareCents > 0) {
+                Text(
+                    text = stringResource(
+                        R.string.passenger_receipt_official,
+                        formatSoles(officialFareCents)
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextGray
+                )
+            }
             if (discountCents > 0) {
                 Text(
                     text = stringResource(

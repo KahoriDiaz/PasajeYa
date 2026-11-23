@@ -13,7 +13,6 @@ import com.pasajeya.app.feature.trip.domain.TripDistanceTracker
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.location.LocationProvider
-import com.pasajeya.app.feature.wallet.domain.WalletRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
@@ -57,8 +56,7 @@ class LiveTripViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val tripRepository: TripRepository,
     private val fareRepository: FareRepository,
-    private val locationProvider: LocationProvider,
-    private val walletRepository: WalletRepository
+    private val locationProvider: LocationProvider
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LiveTripUiState())
@@ -96,21 +94,9 @@ class LiveTripViewModel @Inject constructor(
                             busPosition = null
                         )
                     } else {
-                        holdSafetyCeiling(uid)
                         track(uid, trip)
                     }
                 }
-        }
-    }
-
-    /**
-     * Al subir se retiene el techo de seguridad (S/ 5.00) de la billetera demo. Al cerrar
-     * el viaje se cobra el total real contra esa retencion. Si ya hay una retencion activa
-     * o no alcanza el saldo, la billetera devuelve un fallo y el viaje sigue igual.
-     */
-    private fun holdSafetyCeiling(uid: String) {
-        viewModelScope.launch {
-            walletRepository.hold(uid, FareEstimator.SAFETY_CEILING_CENTS)
         }
     }
 

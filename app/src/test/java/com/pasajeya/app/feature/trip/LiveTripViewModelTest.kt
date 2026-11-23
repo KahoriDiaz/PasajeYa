@@ -56,6 +56,8 @@ private class FakeFareRepository : FareRepository {
 
     override suspend fun loadRouteFareContext(routeId: String) = context
 
+    override suspend fun loadFareVersion() = context.version
+
     override fun observeUniversityBenefit(uid: String): Flow<Boolean> = benefit
 }
 
@@ -96,16 +98,13 @@ class LiveTripViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private val wallet = FakeWalletRepository()
-
     private fun viewModel() = LiveTripViewModel(
         authRepository = FakeAuthRepository(
             AuthUser(uid = "passenger-1", email = "p@example.com", emailVerified = true)
         ),
         tripRepository = trips,
         fareRepository = fares,
-        locationProvider = location,
-        walletRepository = wallet
+        locationProvider = location
     )
 
     private fun fix(lat: Double, seconds: Long) =

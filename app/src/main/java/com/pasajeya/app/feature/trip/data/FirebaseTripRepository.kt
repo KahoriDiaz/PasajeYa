@@ -7,10 +7,10 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
-import com.google.firebase.firestore.Query
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.pasajeya.app.feature.fare.domain.FareEstimator
+import com.pasajeya.app.feature.fare.domain.FareRepository
 import com.pasajeya.app.feature.fare.domain.RouteFareContext
 import com.pasajeya.app.feature.trip.domain.BusQrCodec
 import com.pasajeya.app.feature.trip.domain.FareCalculator
@@ -45,7 +45,8 @@ class FirebaseTripRepository @Inject constructor(
     private val functions: FirebaseFunctions,
     private val auth: FirebaseAuth,
     private val routeCatalog: RouteCatalog,
-    internal val walletRepository: WalletRepository
+    internal val walletRepository: WalletRepository,
+    private val fareRepository: FareRepository
 ) : TripRepository {
 
     override suspend fun issueQrToken(sessionId: String): QrToken {
@@ -117,9 +118,9 @@ class FirebaseTripRepository @Inject constructor(
                 id = doc.id,
                 name = doc.getString("name").orEmpty(),
                 stops = stops,
-                officialFareCents = doc.getLong("officialFareCents")?.toInt() ?: 130,
+                officialFareCents = doc.getLong("officialFareCents")?.toInt() ?: 0,
                 officialUniversityFareCents =
-                    doc.getLong("officialUniversityFareCents")?.toInt() ?: 65
+                    doc.getLong("officialUniversityFareCents")?.toInt() ?: 0
             )
         }.getOrNull()
     }
@@ -195,7 +196,15 @@ class FirebaseTripRepository @Inject constructor(
                 runCatching { firestore.collection("users").document(currentUid).get().await() }.getOrNull()
             } else null
 
-            val userPlate = userDoc?.getString("plate") ?: "V1A-824"
+            val operatorDoc = if (currentUid != null) {
+                runCatching {
+                    firestore.collection("operators").document(currentUid).get().await()
+                }.getOrNull()
+            } else null
+            val userPlate = operatorDoc?.getString("plate")
+                ?: userDoc?.getString("plate")
+                ?: userDoc?.getString("vehiclePlate")
+                ?: ""
             val routesList = (userDoc?.get("assignedRoutes") as? List<*>)
                 ?.filterIsInstance<String>()
                 ?.takeIf { it.isNotEmpty() }
@@ -266,7 +275,13 @@ class FirebaseTripRepository @Inject constructor(
                 ?: Shift(
                     id = shiftId,
                     operatorUid = auth.currentUser?.uid ?: "",
-                    plate = "V1A-824",
+                    plate = runCatching {
+                        firestore.collection("operators")
+                            .document(auth.currentUser?.uid.orEmpty())
+                            .get()
+                            .await()
+                            .getString("plate")
+                    }.getOrNull().orEmpty(),
                     routeId = routeId,
                     startedAtMillis = data.longOrNull("startedAt"),
                     endedAtMillis = null,
@@ -278,7 +293,10 @@ class FirebaseTripRepository @Inject constructor(
             val plate = runCatching {
                 firestore.collection("operators").document(currentUid).get().await()
                     .getString("plate")
-            }.getOrNull() ?: "V1A-824"
+            }.getOrNull() ?: runCatching {
+                firestore.collection("users").document(currentUid).get().await()
+                    .getString("plate")
+            }.getOrNull() ?: ""
             val firstStop = loadRoutePath(routeId)?.stops?.firstOrNull()
             firestore.collection("shifts").document(shiftId).set(
                 mapOf(
@@ -452,7 +470,7 @@ class FirebaseTripRepository @Inject constructor(
                 totalCents = result.totalCents,
                 capped = result.capped,
                 minApplied = result.minApplied,
-                fareVersionId = "v1-arequipa-continuous"
+                fareVersionId = FARE_VERSION_ID
             )
 
             firestore.collection("trips").document(tripId).update(
@@ -540,9 +558,14 @@ class FirebaseTripRepository @Inject constructor(
             ?: "Pasajero"
         val age = userDoc?.getLong("age")?.toInt()?.takeIf { it in 0..120 }
             ?: userDoc?.getString("birthDate")?.ageFromBirthDate()
-        val boardingIndex = shift.simulatedStopIndex
-            .takeIf { it in route.stops.indices }
-            ?: nearestStopIndex(route, position)
+        // Con el modo demostracion encendido el bus esta en un paradero conocido; sin el,
+        // el paradero de subida es el mas cercano a la posicion real del telefono.
+        val boardingIndex = if (shift.simulationEnabled) {
+            shift.simulatedStopIndex.takeIf { it in route.stops.indices }
+                ?: nearestStopIndex(route, position)
+        } else {
+            nearestStopIndex(route, position)
+        }
         val boardingPosition = route.stops.getOrNull(boardingIndex)
         val tripId = "trip_${System.currentTimeMillis()}"
         val fareType = if (isUniversity) "university" else "regular"
@@ -613,9 +636,12 @@ class FirebaseTripRepository @Inject constructor(
         val boardingIndex = tripDoc.getLong("boardingStopIndex")?.toInt()
             ?.takeIf { it in route.stops.indices }
             ?: nearestStopIndex(route, position)
-        val alightingIndex = shift.simulatedStopIndex
-            .takeIf { it in route.stops.indices }
-            ?: nearestStopIndex(route, position)
+        val alightingIndex = if (shift.simulationEnabled) {
+            shift.simulatedStopIndex.takeIf { it in route.stops.indices }
+                ?: nearestStopIndex(route, position)
+        } else {
+            nearestStopIndex(route, position)
+        }
         val alightingPosition = route.stops[alightingIndex]
         val distanceMeters = FareEstimator.routeDistanceMeters(
             route.stops,
@@ -627,31 +653,11 @@ class FirebaseTripRepository @Inject constructor(
         }.getOrNull()
         val isUniversity = userDoc?.isUniversityEligible() == true ||
             trip.fareType == "university"
-        val context = RouteFareContext(
-            route = route.toRouteGeo(),
-            version = demoFareVersion()
-        )
+        // Misma tarifa del dia que muestra la pantalla de estimacion.
+        val version = fareRepository.loadFareVersion()
+        val context = RouteFareContext(route = route.toRouteGeo(), version = version)
         val result = FareEstimator.fareForDistance(context, distanceMeters, isUniversity)
-        val breakdown = result.toBreakdown(route, isUniversity)
-
-        // Liquidación atómica en Firestore: liberar hold + descontar tarifa definitiva.
-        val heldAmountCents = tripDoc.getLong("heldAmountCents")?.toInt() ?: 0
-        val finalFareCents = breakdown.totalCents
-        firestore.runTransaction { transaction ->
-            val userSnapshot = transaction.get(firestore.collection("users").document(uid))
-            val currentBalance = userSnapshot.getLong("walletBalanceCents") ?: 0L
-            val currentHold = userSnapshot.getLong("walletHeldCents") ?: 0L
-            val newBalance = currentBalance - finalFareCents
-            val newHold = (currentHold - heldAmountCents).coerceAtLeast(0)
-            if (newBalance < 0) {
-                throw Exception("Saldo insuficiente para liquidar el viaje.")
-            }
-            transaction.update(userSnapshot.reference, mapOf(
-                "walletBalanceCents" to newBalance,
-                "walletHeldCents" to newHold
-            ))
-            null
-        }.await()
+        val breakdown = result.toBreakdown(route, isUniversity, version)
 
         firestore.collection("trips").document(trip.id).update(
             mapOf(
@@ -665,7 +671,7 @@ class FirebaseTripRepository @Inject constructor(
                 "alightingStopName" to alightingPosition.name,
                 "distanceMeters" to distanceMeters,
                 "usedPoints" to (alightingIndex - boardingIndex).coerceAtLeast(0),
-                "coverage" to "simulated",
+                "coverage" to if (shift.simulationEnabled) "simulated" else "gps",
                 "fareBreakdown" to breakdown.toFirestoreMap()
             )
         ).await()
@@ -700,14 +706,19 @@ class FirebaseTripRepository @Inject constructor(
             (data as Map<String, Any?>).toFareBreakdown()
                 ?: throw TripOperationException("No se pudo obtener la estimación.")
         } catch (e: Exception) {
-            val stopsCount = kotlin.math.abs(alightingStopIndex - boardingStopIndex).coerceAtLeast(1)
-            val distanceMeters = stopsCount * 1200.0
+            val route = loadRoutePath(routeId)
+                ?: throw TripOperationException("No pudimos cargar la ruta.", e)
+            val distanceMeters = FareEstimator.routeDistanceMeters(
+                route.stops,
+                boardingStopIndex,
+                alightingStopIndex
+            )
 
             val currentUid = auth.currentUser?.uid ?: ""
             val userDoc = runCatching { firestore.collection("users").document(currentUid).get().await() }.getOrNull()
             val isUniversity = userDoc?.isUniversityEligible() == true
 
-            val fareVersion = FareVersionInput(minFareCents = 100, maxFareCents = 160, fuelIndex = 1.13)
+            val fareVersion = fareRepository.loadFareVersion()
             val result = FareCalculator.computeFare(distanceMeters, fareVersion, isUniversity)
 
             FareBreakdown(
@@ -723,7 +734,7 @@ class FirebaseTripRepository @Inject constructor(
                 totalCents = result.totalCents,
                 capped = result.capped,
                 minApplied = result.minApplied,
-                fareVersionId = "v1-arequipa-continuous"
+                fareVersionId = FARE_VERSION_ID
             )
         }
     }
@@ -807,17 +818,13 @@ private fun nearestStopIndex(route: RoutePath, position: TripPosition): Int {
     } ?: 0
 }
 
-private fun demoFareVersion(): FareVersionInput = FareVersionInput(
-    baseFarePerKmCents = 12,
-    minFareCents = 50,
-    maxFareCents = 0,
-    fuelIndex = 1.0,
-    roundingStepCents = 5
-)
+/** Identificador de la version tarifaria que publica el script diario de combustible. */
+private const val FARE_VERSION_ID = "v1"
 
 private fun com.pasajeya.app.feature.trip.domain.FareResult.toBreakdown(
     route: RoutePath,
-    isUniversity: Boolean
+    isUniversity: Boolean,
+    version: FareVersionInput
 ): FareBreakdown {
     val modelBenefit = benefit?.let { benefit ->
         FareBenefit(
@@ -830,8 +837,8 @@ private fun com.pasajeya.app.feature.trip.domain.FareResult.toBreakdown(
     }
     return FareBreakdown(
         distanceMeters = distanceMeters,
-        baseFarePerKmCents = demoFareVersion().baseFarePerKmCents,
-        fuelIndex = demoFareVersion().fuelIndex,
+        baseFarePerKmCents = version.baseFarePerKmCents,
+        fuelIndex = version.fuelIndex,
         calculatedCents = rawCalculatedCents.toInt(),
         officialFareCents = route.officialFareCents,
         regularCents = regularCents,
@@ -839,7 +846,7 @@ private fun com.pasajeya.app.feature.trip.domain.FareResult.toBreakdown(
         totalCents = totalCents,
         capped = capped,
         minApplied = minApplied,
-        fareVersionId = "demo-distance-v1"
+        fareVersionId = FARE_VERSION_ID
     )
 }
 

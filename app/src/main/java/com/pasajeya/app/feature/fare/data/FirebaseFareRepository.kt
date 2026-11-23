@@ -45,6 +45,10 @@ class FirebaseFareRepository @Inject constructor(
                 routeSnap.getLong("officialUniversityFareCents")?.toInt() ?: 0
         )
 
+        return RouteFareContext(route = route, version = loadFareVersion())
+    }
+
+    override suspend fun loadFareVersion(): FareVersionInput {
         // Si config/currentFare no existe se usa v1, que es la que escribe el script diario.
         val versionId = runCatching {
             firestore.collection("config").document("currentFare").get().await()
@@ -56,9 +60,9 @@ class FirebaseFareRepository @Inject constructor(
         // Lo que falte en Firestore usa el valor por defecto de FareVersionInput.
         val defaults = FareVersionInput()
         if (versionSnap == null || !versionSnap.exists()) {
-            return RouteFareContext(route = route, version = defaults)
+            return defaults
         }
-        val version = FareVersionInput(
+        return FareVersionInput(
             boardingFareCents = versionSnap.getLong("boardingFareCents")?.toInt()
                 ?.takeIf { it >= 0 } ?: defaults.boardingFareCents,
             baseFarePerKmCents = versionSnap.getLong("baseFarePerKmCents")?.toInt()
@@ -72,7 +76,6 @@ class FirebaseFareRepository @Inject constructor(
             roundingStepCents = versionSnap.getLong("roundingStepCents")?.toInt()
                 ?.takeIf { it > 0 } ?: defaults.roundingStepCents
         )
-        return RouteFareContext(route = route, version = version)
     }
 
     private companion object {

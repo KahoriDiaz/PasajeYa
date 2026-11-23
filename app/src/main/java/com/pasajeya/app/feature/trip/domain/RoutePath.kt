@@ -8,8 +8,9 @@ data class RoutePath(
     val id: String,
     val name: String,
     val stops: List<RouteStop>,
-    val officialFareCents: Int = 130,
-    val officialUniversityFareCents: Int = 65,
+    /** 0 = la ruta no declara pasaje oficial; manda el tope de la tarifa del dia. */
+    val officialFareCents: Int = 0,
+    val officialUniversityFareCents: Int = 0,
     val concessionaireName: String = ""
 ) {
     fun toRouteGeo(): RouteGeo = RouteGeo(
