@@ -59,7 +59,7 @@ fun CompanyHomeScreen(
     ) {
         val dashboard = state.dashboard
         ScreenHeading(
-            title = dashboard?.businessName?.ifBlank { null }
+            title = dashboard?.businessName?.takeIf { it.isNotBlank() }
                 ?: stringResource(R.string.company_title),
             subtitle = dashboard?.ruc?.takeIf { it.isNotBlank() }
                 ?.let { stringResource(R.string.company_ruc_label, it) }
@@ -148,9 +148,11 @@ fun CompanyHomeScreen(
                     )
                 }
                 dashboard.units.forEach { unit ->
+                    val plateLabel = unit.plate.takeIf { it.isNotBlank() }
+                        ?: stringResource(R.string.company_no_plate)
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(
-                            text = unit.plate.ifBlank { stringResource(R.string.company_no_plate) },
+                            text = plateLabel,
                             fontWeight = FontWeight.Bold,
                             color = TextPrimary
                         )

@@ -5,15 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.pasajeya.app.feature.auth.domain.AuthRepository
 import com.pasajeya.app.core.map.MapUserPosition
 import com.pasajeya.app.feature.fare.domain.FareEstimator
-import com.pasajeya.app.feature.fare.domain.FareEstimator
 import com.pasajeya.app.feature.fare.domain.FareRepository
 import com.pasajeya.app.feature.fare.domain.RouteFareContext
 import com.pasajeya.app.feature.fare.domain.RouteGeo
 import com.pasajeya.app.feature.trip.domain.GpsFix
 import com.pasajeya.app.feature.trip.domain.TripDistanceTracker
 import com.pasajeya.app.feature.trip.domain.TripRepository
-import com.pasajeya.app.feature.wallet.domain.WalletRepository
 import com.pasajeya.app.feature.trip.location.LocationProvider
+import com.pasajeya.app.feature.wallet.domain.WalletRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
