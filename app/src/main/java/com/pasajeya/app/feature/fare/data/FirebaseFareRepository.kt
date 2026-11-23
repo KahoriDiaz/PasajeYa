@@ -45,23 +45,38 @@ class FirebaseFareRepository @Inject constructor(
                 routeSnap.getLong("officialUniversityFareCents")?.toInt() ?: 0
         )
 
-        val versionId = firestore.collection("config").document("currentFare")
-            .get().await().getString("versionId")
-            ?: throw TripOperationException("No hay una versión tarifaria vigente.")
-        val versionSnap = firestore.collection("fareVersions").document(versionId)
-            .get().await()
-        if (!versionSnap.exists()) {
-            throw TripOperationException("No hay una versión tarifaria vigente.")
+        // Si config/currentFare no existe se usa v1, que es la que escribe el script diario.
+        val versionId = runCatching {
+            firestore.collection("config").document("currentFare").get().await()
+                .getString("versionId")
+        }.getOrNull() ?: DEFAULT_FARE_VERSION_ID
+        val versionSnap = runCatching {
+            firestore.collection("fareVersions").document(versionId).get().await()
+        }.getOrNull()
+        // Lo que falte en Firestore usa el valor por defecto de FareVersionInput.
+        val defaults = FareVersionInput()
+        if (versionSnap == null || !versionSnap.exists()) {
+            return RouteFareContext(route = route, version = defaults)
         }
         val version = FareVersionInput(
+            boardingFareCents = versionSnap.getLong("boardingFareCents")?.toInt()
+                ?.takeIf { it >= 0 } ?: defaults.boardingFareCents,
             baseFarePerKmCents = versionSnap.getLong("baseFarePerKmCents")?.toInt()
-                ?: throw TripOperationException("La versión tarifaria está incompleta."),
-            fuelIndex = versionSnap.getDouble("fuelIndex") ?: 1.0,
-            minFareCents = versionSnap.getLong("minFareCents")?.toInt() ?: 0,
+                ?.takeIf { it > 0 } ?: defaults.baseFarePerKmCents,
+            fuelIndex = versionSnap.getDouble("fuelIndex")?.takeIf { it > 0.0 }
+                ?: defaults.fuelIndex,
+            minFareCents = versionSnap.getLong("minFareCents")?.toInt()
+                ?.takeIf { it > 0 } ?: defaults.minFareCents,
+            maxFareCents = versionSnap.getLong("maxFareCents")?.toInt()
+                ?.takeIf { it > 0 } ?: defaults.maxFareCents,
             roundingStepCents = versionSnap.getLong("roundingStepCents")?.toInt()
-                ?.takeIf { it > 0 } ?: 5
+                ?.takeIf { it > 0 } ?: defaults.roundingStepCents
         )
         return RouteFareContext(route = route, version = version)
+    }
+
+    private companion object {
+        const val DEFAULT_FARE_VERSION_ID = "v1"
     }
 
     override fun observeUniversityBenefit(uid: String): Flow<Boolean> = callbackFlow {

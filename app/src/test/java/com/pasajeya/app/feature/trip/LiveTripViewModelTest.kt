@@ -45,6 +45,8 @@ private class FakeFareRepository : FareRepository {
             officialUniversityFareCents = 165
         ),
         version = FareVersionInput(
+            boardingFareCents = 0,
+            maxFareCents = 0,
             baseFarePerKmCents = 120,
             fuelIndex = 1.0,
             minFareCents = 50,

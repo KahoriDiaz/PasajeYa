@@ -1,15 +1,13 @@
 package com.pasajeya.app.feature.history.data
 
-import com.google.firebase.firestore.AggregateField
-import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.Source
-import com.google.firebase.Timestamp
 import com.pasajeya.app.feature.history.domain.HistoryCursor
+import com.pasajeya.app.feature.history.domain.HistoryDateRange
 import com.pasajeya.app.feature.history.domain.HistoryDateRanges
 import com.pasajeya.app.feature.history.domain.HistoryFilter
 import com.pasajeya.app.feature.history.domain.HistoryPage
@@ -18,7 +16,7 @@ import com.pasajeya.app.feature.history.domain.HistoryTrip
 import com.pasajeya.app.feature.history.domain.OperatorShiftSummary
 import com.pasajeya.app.feature.trip.data.toShift
 import com.pasajeya.app.feature.trip.data.toTrip
-import java.util.Date
+import com.pasajeya.app.feature.trip.domain.model.Trip
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.tasks.await
@@ -33,28 +31,18 @@ class FirebaseHistoryRepository @Inject constructor(
         filter: HistoryFilter,
         cursor: HistoryCursor?
     ): HistoryPage {
-        var query = firestore.collection("trips")
+        // Solo una igualdad en Firestore: asi no hace falta ningun indice compuesto.
+        val query = firestore.collection("trips")
             .whereEqualTo("passengerUid", passengerUid)
-            .whereIn("status", PASSENGER_STATUSES)
-            .limit(PAGE_SIZE.toLong() * 2)
 
-        HistoryDateRanges.range(filter)?.let { range ->
-            query = query
-                .whereGreaterThanOrEqualTo(
-                    "startedAt",
-                    Timestamp(Date(range.startInclusiveMillis))
-                )
-                .whereLessThan(
-                    "startedAt",
-                    Timestamp(Date(range.endExclusiveMillis))
-                )
-        }
-
+        val range = HistoryDateRanges.range(filter)
         val snapshot = snapshotOf(query)
         var trips = snapshot.documents.mapNotNull { document ->
             document.toTrip()?.let { trip ->
                 HistoryTrip(trip = trip, routeName = trip.routeId)
             }
+        }.filter { item ->
+            item.trip.status in PASSENGER_STATUSES && item.trip.inRange(range)
         }
         // Firestore no exige índice compuesto: se ordena en memoria por createdAt descendente.
         trips = trips.sortedByDescending { it.trip.startedAtMillis ?: 0L }
@@ -89,28 +77,14 @@ class FirebaseHistoryRepository @Inject constructor(
         passengerUid: String,
         filter: HistoryFilter
     ): Long {
-        var query = firestore.collection("trips")
+        val query = firestore.collection("trips")
             .whereEqualTo("passengerUid", passengerUid)
-            .whereEqualTo("status", "closed")
 
-        HistoryDateRanges.range(filter)?.let { range ->
-            query = query
-                .whereGreaterThanOrEqualTo(
-                    "startedAt",
-                    Timestamp(Date(range.startInclusiveMillis))
-                )
-                .whereLessThan(
-                    "startedAt",
-                    Timestamp(Date(range.endExclusiveMillis))
-                )
-        }
-
-        val totalField = AggregateField.sum("fareBreakdown.totalCents")
-        val snapshot = query
-            .aggregate(totalField)
-            .get(AggregateSource.SERVER)
-            .await()
-        return (snapshot.get(totalField) as? Number)?.toLong() ?: 0L
+        val range = HistoryDateRanges.range(filter)
+        return snapshotOf(query).documents
+            .mapNotNull { it.toTrip() }
+            .filter { it.status == "closed" && it.inRange(range) }
+            .sumOf { (it.fareBreakdown?.totalCents ?: 0).toLong() }
     }
 
     override suspend fun loadLatestOperatorShiftSummary(
@@ -118,10 +92,9 @@ class FirebaseHistoryRepository @Inject constructor(
     ): OperatorShiftSummary? {
         val shiftQuery = firestore.collection("shifts")
             .whereEqualTo("operatorUid", operatorUid)
-            .limit(1)
         val shift = snapshotOf(shiftQuery).documents
-            .firstOrNull()
-            ?.toShift()
+            .mapNotNull { it.toShift() }
+            .maxByOrNull { it.startedAtMillis ?: 0L }
             ?: return null
 
         val tripsQuery = firestore.collection("trips")
@@ -161,6 +134,13 @@ class FirebaseHistoryRepository @Inject constructor(
             throw error
         }
         query.get(Source.CACHE).await()
+    }
+
+    /** El rango se compara en memoria para no exigir indices compuestos. */
+    private fun Trip.inRange(range: HistoryDateRange?): Boolean {
+        if (range == null) return true
+        val startedAt = startedAtMillis ?: return false
+        return startedAt >= range.startInclusiveMillis && startedAt < range.endExclusiveMillis
     }
 
     private companion object {

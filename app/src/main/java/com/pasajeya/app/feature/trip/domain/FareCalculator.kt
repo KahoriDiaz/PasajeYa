@@ -1,6 +1,7 @@
 package com.pasajeya.app.feature.trip.domain
 
 import com.pasajeya.app.feature.fare.domain.FareBenefit
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -11,16 +12,22 @@ data class FareResult(
     val benefit: FareBenefit? = null,
     val capped: Boolean = false,
     val minApplied: Boolean = false,
-    val rawCalculatedCents: Double = 0.0
+    val rawCalculatedCents: Double = 0.0,
+    /** Desglose para mostrar en pantalla: banderazo + lo que cobro la distancia. */
+    val boardingCents: Int = 0,
+    val distanceCents: Int = 0,
+    /** Costo por km ya ajustado por el indice de combustible. */
+    val perKmCents: Double = 0.0
 )
 
 object FareCalculator {
 
     /**
-     * Tarifa por tramo: distancia (km) × tarifa base por km × índice de combustible.
-     * El resultado se redondea al paso configurado, se aplica la tarifa mínima y el tope
-     * oficial de la ruta (limitado al techo de seguridad). El beneficio universitario es el
-     * 50 % del pasaje regular, redondeado al mismo paso.
+     * Tarifa por tramo: banderazo + distancia (km) x costo por km. Los tres parametros
+     * (banderazo, costo por km y minimo) ya vienen indexados al combustible del dia, asi
+     * que aqui no se vuelve a multiplicar por el indice. Luego se redondea al paso
+     * configurado, se aplica la tarifa minima y el tope mas bajo entre el de la ruta y el
+     * de la version vigente. El beneficio universitario es el 50 % del pasaje regular.
      */
     fun computeFare(
         distanceMeters: Double,
@@ -29,7 +36,10 @@ object FareCalculator {
         officialFareCents: Int? = null
     ): FareResult {
         val km = distanceMeters.coerceAtLeast(0.0) / 1000.0
-        val rawCalculatedCents = km * version.baseFarePerKmCents * version.fuelIndex
+        val perKmCents = version.baseFarePerKmCents.coerceAtLeast(0)
+        val distanceCents = km * perKmCents
+        val boardingCents = version.boardingFareCents.coerceAtLeast(0)
+        val rawCalculatedCents = boardingCents + distanceCents
         val step = version.roundingStepCents.takeIf { it > 0 } ?: 5
         val rounded = roundToStep(rawCalculatedCents, step)
 
@@ -37,18 +47,21 @@ object FareCalculator {
         val afterMinimum = rounded.coerceAtLeast(minCents)
         val minApplied = afterMinimum > rounded
 
-        val capCents = officialFareCents
-            ?.takeIf { it > 0 }
-            ?: version.maxFareCents.takeIf { it > 0 }
+        // Manda el tope mas bajo: el de la ruta o el de la version vigente.
+        val capCents = listOfNotNull(
+            officialFareCents?.takeIf { it > 0 },
+            version.maxFareCents.takeIf { it > 0 }
+        ).minOrNull()
         val regularCents = capCents?.let { afterMinimum.coerceAtMost(it) } ?: afterMinimum
         val capped = capCents != null && afterMinimum > capCents
 
         var finalCents = regularCents
         var benefit: FareBenefit? = null
         if (hasUniversityBenefit) {
-            finalCents = roundToStep(regularCents / 2.0, step).coerceAtMost(regularCents)
-            // Piso universitario: la mitad de la tarifa mínima (65 céntimos / S/ 0.65)
-            val universityMinCents = (version.minFareCents / 2.0).roundToInt()
+            // Se redondea a favor del estudiante: nunca paga mas de la mitad.
+            finalCents = floorToStep(regularCents / 2.0, step).coerceAtMost(regularCents)
+            // Piso universitario: la mitad de la tarifa minima del dia.
+            val universityMinCents = floorToStep(version.minFareCents / 2.0, step)
             finalCents = finalCents.coerceAtLeast(universityMinCents)
             benefit = FareBenefit(
                 type = "UNIVERSITY",
@@ -64,8 +77,17 @@ object FareCalculator {
             benefit = benefit,
             capped = capped,
             minApplied = minApplied && !capped,
-            rawCalculatedCents = rawCalculatedCents
+            rawCalculatedCents = rawCalculatedCents,
+            boardingCents = boardingCents,
+            distanceCents = distanceCents.roundToInt(),
+            perKmCents = perKmCents.toDouble()
         )
+    }
+
+    private fun floorToStep(value: Double, step: Int): Int {
+        if (value <= 0.0) return 0
+        val steps = floor(value / step).toInt()
+        return max(step, steps * step)
     }
 
     private fun roundToStep(value: Double, step: Int): Int {

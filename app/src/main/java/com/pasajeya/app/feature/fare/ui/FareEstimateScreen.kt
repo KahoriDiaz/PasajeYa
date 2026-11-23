@@ -57,6 +57,7 @@ import com.pasajeya.app.feature.fare.domain.RouteFareContext
 import com.pasajeya.app.feature.fare.domain.RouteStop
 import com.pasajeya.app.feature.fare.presentation.FuelHistoryCard
 import com.pasajeya.app.feature.trip.domain.FareCalculator
+import com.pasajeya.app.feature.trip.domain.FareVersionInput
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,15 +74,8 @@ fun FareEstimateScreen(
     var fuelHistory by remember { mutableStateOf<List<FuelRecord>>(emptyList()) }
 
     LaunchedEffect(Unit) {
-        val records = fuelRepository.getRecentFuelHistory(limitCount = 4)
-        if (records.isNotEmpty()) {
-            fuelHistory = records
-        } else {
-            fuelHistory = listOf(
-                FuelRecord(price = 17.50, fuelIndex = 1.13, changePercent = 2.3, source = "Osinergmin Arequipa"),
-                FuelRecord(price = 17.10, fuelIndex = 1.10, changePercent = 1.8, source = "Osinergmin Arequipa")
-            )
-        }
+        // Solo datos reales: si Firestore no tiene historial, la tarjeta no se muestra.
+        fuelHistory = fuelRepository.getRecentFuelHistory(limitCount = 5)
     }
 
     AuthScreen(
@@ -203,9 +197,60 @@ fun FareEstimateScreen(
                 context = state.context,
                 hasBenefit = state.hasUniversityBenefit
             )
-            FuelHistoryCard(
-                history = fuelHistory,
-                modifier = Modifier.padding(top = 10.dp, bottom = 24.dp)
+        }
+
+        // La tarifa del dia y el combustible se ven siempre, con o sin estimacion.
+        state.context?.version?.let { version -> TariffTodayCard(version) }
+        FuelHistoryCard(
+            history = fuelHistory,
+            modifier = Modifier.padding(top = 10.dp, bottom = 24.dp)
+        )
+    }
+}
+
+/** Tarifa vigente del dia, indexada al precio del diesel por el script de las 06:00. */
+@Composable
+private fun TariffTodayCard(version: FareVersionInput) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, BorderLight)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.fare_today_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            FareRow(
+                label = stringResource(R.string.fare_breakdown_boarding),
+                value = formatCentsInt(version.boardingFareCents)
+            )
+            FareRow(
+                label = stringResource(R.string.fare_today_per_km),
+                value = formatCentsInt(version.baseFarePerKmCents)
+            )
+            FareRow(
+                label = stringResource(R.string.fare_today_min),
+                value = formatCentsInt(version.minFareCents)
+            )
+            FareRow(
+                label = stringResource(R.string.fare_today_max),
+                value = formatCentsInt(version.maxFareCents)
+            )
+            Text(
+                text = stringResource(
+                    R.string.fare_today_note,
+                    "%.2f".format(version.fuelIndex)
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = TextGray
             )
         }
     }
@@ -271,7 +316,7 @@ private fun TransparentFareResult(
 ) {
     val fare = estimate.fare
     val km = fare.distanceMeters / 1000.0
-    val fuelFactor = context?.version?.fuelIndex ?: 1.13
+    val version = context?.version
     val steppedFareCents = FareCalculator.computeSteppedFareCents(fare.distanceMeters)
 
     Card(
@@ -287,7 +332,7 @@ private fun TransparentFareResult(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "1. Tarifa Continua Proporcional (Oficial)",
+                text = stringResource(R.string.fare_breakdown_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -298,7 +343,7 @@ private fun TransparentFareResult(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "A pagar (redondeo al alza):",
+                    text = stringResource(R.string.fare_breakdown_pay),
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
@@ -310,37 +355,93 @@ private fun TransparentFareResult(
                 )
             }
 
-            Text(
-                text = "• Distancia exacta: ${"%.2f".format(km)} km\n" +
-                       "• Costo neto continuo: S/ ${"%.2f".format(fare.rawCalculatedCents / 100.0)}\n" +
-                       "• Factor Osinergmin: ${"%.2f".format(fuelFactor)}x",
-                style = MaterialTheme.typography.bodySmall,
-                color = TextGray
-            )
-
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
-            Text(
-                text = "2. Comparativa con Esquema Rígido (Por Zonas):",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
+            // Desglose: de donde sale cada centimo.
+            FareRow(
+                label = stringResource(R.string.fare_breakdown_boarding),
+                value = formatCentsInt(fare.boardingCents)
             )
+            FareRow(
+                label = stringResource(
+                    R.string.fare_breakdown_distance,
+                    "%.2f".format(km),
+                    "%.2f".format(fare.perKmCents / 100.0)
+                ),
+                value = formatCentsInt(fare.distanceCents)
+            )
+            HorizontalDivider()
+            FareRow(
+                label = stringResource(R.string.fare_breakdown_subtotal),
+                value = formatCentsInt(fare.rawCalculatedCents.toInt()),
+                emphasized = true
+            )
+
+            if (fare.minApplied && version != null) {
+                Text(
+                    text = stringResource(
+                        R.string.fare_breakdown_min,
+                        formatCentsInt(version.minFareCents)
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextGray
+                )
+            }
+            if (fare.capped) {
+                Text(
+                    text = stringResource(
+                        R.string.fare_breakdown_cap,
+                        formatCentsInt(fare.regularCents)
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = SuccessGreen
+                )
+            }
+
+            if (fare.benefit != null) {
+                FareRow(
+                    label = stringResource(R.string.fare_breakdown_regular),
+                    value = formatCentsInt(fare.regularCents)
+                )
+                Text(
+                    text = stringResource(
+                        R.string.fare_breakdown_benefit,
+                        fare.benefit.percent
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = SuccessGreen
+                )
+            }
+
             Text(
-                text = "Bajo el esquema convencional plano pagarías: ${formatCentsInt(steppedFareCents)}. Con la curva continua de PasajeYa! el pasaje asciende de forma proporcional a los kilómetros reales.",
+                text = stringResource(
+                    R.string.fare_breakdown_flat,
+                    formatCentsInt(steppedFareCents)
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = TextGray
             )
-
-            if (fare.benefit != null || hasBenefit) {
-                fare.benefit?.let {
-                    Text(
-                        text = "✓ Descuento universitario aplicado (${it.percent}%)",
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.SemiBold,
-                        color = SuccessGreen
-                    )
-                }
-            }
         }
+    }
+}
+
+@Composable
+private fun FareRow(label: String, value: String, emphasized: Boolean = false) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = if (emphasized) MaterialTheme.colorScheme.onSurface else TextGray
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = if (emphasized) FontWeight.Bold else FontWeight.Normal
+        )
     }
 }

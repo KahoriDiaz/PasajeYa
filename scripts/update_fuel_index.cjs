@@ -6,15 +6,15 @@ const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 initializeApp({ credential: cert(serviceAccount) });
 const db = getFirestore();
 
-// Precio base de calibración histórica en Arequipa
+// Precio base de calibraciÃ³n histÃ³rica en Arequipa
 const BASE_FUEL_PRICE = 15.50;
 
 // Constantes base de referencia (cuando fuelIndex = 1.0)
-const BASE_BOARDING_CENTS = 70;      // 70 céntimos de arranque base
-const BASE_KM_RATE_CENTS = 7;        // 7 céntimos por km base
-const BASE_MIN_FARE_CENTS = 90;      // Mínimo base: S/ 0.90
-const BASE_MAX_FARE_CENTS = 140;     // Tope base: S/ 1.40
-const ROUNDING_STEP = 10;            // Pasos comerciales de 10 céntimos
+const BASE_BOARDING_CENTS = 60;      // Banderazo base: S/ 0.60
+const BASE_KM_RATE_CENTS = 9;        // 9 centimos por km base
+const BASE_MIN_FARE_CENTS = 80;      // Minimo base: S/ 0.80
+const BASE_MAX_FARE_CENTS = 130;     // Tope base: S/ 1.30
+const ROUNDING_STEP = 10;            // Pasos comerciales de 10 cÃ©ntimos
 
 async function fetchArequipaDieselPrice() {
   try {
@@ -39,25 +39,33 @@ async function main() {
   const currentPrice = await fetchArequipaDieselPrice();
   const fuelIndex = Math.round((currentPrice / BASE_FUEL_PRICE) * 100) / 100;
 
-  // Escalado dinámico e indexado de cada parámetro:
+  // Escalado dinÃ¡mico e indexado de cada parÃ¡metro:
   const dynamicMinFare = roundToStep(BASE_MIN_FARE_CENTS * fuelIndex, ROUNDING_STEP);
   const dynamicMaxFare = roundToStep(BASE_MAX_FARE_CENTS * fuelIndex, ROUNDING_STEP);
   const dynamicKmRate = Math.round(BASE_KM_RATE_CENTS * fuelIndex);
+  const dynamicBoarding = Math.round(BASE_BOARDING_CENTS * fuelIndex);
 
   const lastSnap = await db.collection("fareVersions").doc("v1").get();
   const previousPrice = lastSnap.data()?.lastFuelPrice || BASE_FUEL_PRICE;
   const changePercent = Math.round(((currentPrice - previousPrice) / previousPrice) * 1000) / 10;
 
-  // Actualización del contrato de tarifas en Firestore
+  // ActualizaciÃ³n del contrato de tarifas en Firestore
   await db.collection("fareVersions").doc("v1").set({
     fuelIndex: fuelIndex,
     lastFuelPrice: currentPrice,
+    boardingFareCents: dynamicBoarding,
     baseFarePerKmCents: dynamicKmRate,
     minFareCents: dynamicMinFare,
     maxFareCents: dynamicMaxFare,
     roundingStepCents: ROUNDING_STEP,
     updatedAt: FieldValue.serverTimestamp()
   }, { merge: true });
+
+  // La app lee la version vigente desde aqui; si no existe, no podria tarifar.
+  await db.collection("config").doc("currentFare").set(
+    { versionId: "v1", updatedAt: FieldValue.serverTimestamp() },
+    { merge: true }
+  );
 
   // Registro del historial para transparencia al usuario
   await db.collection("fuelHistory").add({
@@ -69,10 +77,11 @@ async function main() {
   });
 
   console.log(`Tarifas actualizadas a las 06:00 AM:`);
-  console.log(`- Diésel: S/ ${currentPrice} (Factor: ${fuelIndex}x)`);
+  console.log(`- DiÃ©sel: S/ ${currentPrice} (Factor: ${fuelIndex}x)`);
+  console.log(`- Banderazo: S/ ${(dynamicBoarding / 100).toFixed(2)}`);
   console.log(`- Tasa por Km: S/ ${(dynamicKmRate / 100).toFixed(2)}`);
-  console.log(`- Piso Mínimo Dinámico: S/ ${(dynamicMinFare / 100).toFixed(2)}`);
-  console.log(`- Tope Máximo Dinámico: S/ ${(dynamicMaxFare / 100).toFixed(2)}`);
+  console.log(`- Piso MÃ­nimo DinÃ¡mico: S/ ${(dynamicMinFare / 100).toFixed(2)}`);
+  console.log(`- Tope MÃ¡ximo DinÃ¡mico: S/ ${(dynamicMaxFare / 100).toFixed(2)}`);
 }
 
 main().then(() => process.exit(0)).catch(err => { console.error(err); process.exit(1); });

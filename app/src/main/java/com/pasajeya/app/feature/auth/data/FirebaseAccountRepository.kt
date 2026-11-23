@@ -1,12 +1,14 @@
-﻿package com.pasajeya.app.feature.auth.data
+package com.pasajeya.app.feature.auth.data
 
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.functions.FirebaseFunctions
-import com.google.firebase.functions.FirebaseFunctionsException
+import com.pasajeya.app.core.util.ageFromBirthDate
 import com.pasajeya.app.feature.auth.domain.AccountRepository
 import com.pasajeya.app.feature.auth.domain.model.AccountException
 import com.pasajeya.app.feature.auth.domain.model.AccountFailure
@@ -17,6 +19,7 @@ import com.pasajeya.app.feature.auth.domain.model.RouteOption
 import com.pasajeya.app.feature.auth.domain.model.UserProfile
 import com.pasajeya.app.feature.auth.domain.model.UserRole
 import java.io.IOException
+import java.security.MessageDigest
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -155,22 +158,57 @@ class FirebaseAccountRepository @Inject constructor(
         consentVersion: String
     ) {
         val session = requireActiveSession()
-        callFunction(
-            "completeProfile",
-            mapOf(
-                "sessionId" to session.sessionId,
-                "firstName" to firstName,
-                "lastName" to lastName,
-                "dni" to dni,
-                "birthDate" to birthDate,
-                "role" to role.wireValue,
-                "consentAccepted" to true,
-                "consentVersion" to consentVersion
-            )
-        )
+        val uid = session.uid
+        val userRef = firestore.collection("users").document(uid)
+        val indexRef = firestore.collection("dniIndex").document(hashedDni(dni))
+
+        try {
+            // Un DNI solo puede pertenecer a una cuenta.
+            val index = indexRef.get().await()
+            if (index.exists() && index.getString("uid") != uid) {
+                throw AccountException(AccountFailure.DniAlreadyRegistered)
+            }
+
+            val existing = userRef.get().await()
+            if (existing.exists() && UserRole.fromWire(existing.get("role")) != null) {
+                _deviceSession.update { current ->
+                    if (current?.uid == uid) current.copy(profileComplete = true) else current
+                }
+                return
+            }
+
+            val now = FieldValue.serverTimestamp()
+            userRef.set(
+                mapOf(
+                    "role" to role.wireValue,
+                    "firstName" to firstName,
+                    "lastName" to lastName,
+                    "fullName" to listOf(firstName, lastName).joinToString(" ").trim(),
+                    "birthDate" to birthDate,
+                    "age" to (ageFromBirthDate(birthDate) ?: 0),
+                    "createdAt" to now,
+                    "privacyConsent" to mapOf(
+                        "version" to consentVersion,
+                        "acceptedAt" to now
+                    ),
+                    "benefit" to mapOf("status" to "none")
+                ),
+                SetOptions.merge()
+            ).await()
+            firestore.collection("users_private").document(uid)
+                .set(mapOf("dni" to dni), SetOptions.merge())
+                .await()
+            indexRef.set(mapOf("uid" to uid)).await()
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: AccountException) {
+            throw error
+        } catch (error: Exception) {
+            throw AccountException(error.toAccountFailure())
+        }
 
         _deviceSession.update { current ->
-            if (current?.sessionId == session.sessionId) {
+            if (current?.uid == uid) {
                 current.copy(profileComplete = true, role = role)
             } else {
                 current
@@ -185,32 +223,65 @@ class FirebaseAccountRepository @Inject constructor(
         routeIds: List<String>
     ): OperatorRegistration {
         val session = requireActiveSession()
-        val response = callFunction(
-            "registerOperator",
-            mapOf(
-                "sessionId" to session.sessionId,
-                "licenseNumber" to licenseNumber,
-                "licenseClass" to licenseClass,
-                "plate" to plate,
-                "routeIds" to routeIds
-            )
-        )
+        val uid = session.uid
+        if (routeIds.isEmpty()) {
+            throw AccountException(AccountFailure.RouteUnavailable)
+        }
+        val vehicleRef = firestore.collection("vehicles").document(plate)
+        var status = OPERATOR_STATUS_UNVERIFIED
 
-        _deviceSession.update { current ->
-            if (current?.sessionId == session.sessionId) {
-                current.copy(operatorComplete = true)
-            } else {
-                current
+        try {
+            // Una placa solo puede pertenecer a un conductor.
+            val vehicle = vehicleRef.get().await()
+            if (vehicle.exists() && vehicle.getString("ownerUid") != uid) {
+                throw AccountException(AccountFailure.PlateAlreadyRegistered)
             }
+
+            // El conductor avalado por una empresa queda verificado; el independiente, en revision.
+            val companyId = firestore.collection("users").document(uid).get().await()
+                .getString("companyId")
+                .orEmpty()
+            if (companyId.isNotBlank()) {
+                status = OPERATOR_STATUS_VERIFIED_BY_COMPANY
+            }
+
+            firestore.collection("operators").document(uid).set(
+                mapOf(
+                    "licenseNumber" to licenseNumber,
+                    "licenseClass" to licenseClass,
+                    "plate" to plate,
+                    "routeIds" to routeIds,
+                    "status" to status,
+                    "companyId" to companyId,
+                    "updatedAt" to FieldValue.serverTimestamp()
+                ),
+                SetOptions.merge()
+            ).await()
+            vehicleRef.set(mapOf("ownerUid" to uid), SetOptions.merge()).await()
+            // Espejo en users/{uid} para el panel del operador y el anuncio de voz.
+            firestore.collection("users").document(uid).set(
+                mapOf(
+                    "plate" to plate,
+                    "vehiclePlate" to plate,
+                    "assignedRouteId" to routeIds.first(),
+                    "licenseClass" to licenseClass,
+                    "driverStatus" to status
+                ),
+                SetOptions.merge()
+            ).await()
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: AccountException) {
+            throw error
+        } catch (error: Exception) {
+            throw AccountException(error.toAccountFailure())
         }
 
-        return OperatorRegistration(
-            plate = response.string("plate") ?: plate,
-            routeIds = (response["routeIds"] as? List<*>)
-                ?.mapNotNull { it as? String }
-                ?: routeIds,
-            status = response.string("status").orEmpty()
-        )
+        _deviceSession.update { current ->
+            if (current?.uid == uid) current.copy(operatorComplete = true) else current
+        }
+
+        return OperatorRegistration(plate = plate, routeIds = routeIds, status = status)
     }
 
     private suspend fun requireActiveSession(): DeviceSession {
@@ -232,56 +303,19 @@ class FirebaseAccountRepository @Inject constructor(
         }
     }
 
-    private suspend fun callFunction(
-        name: String,
-        data: Map<String, Any>
-    ): Map<*, *> {
-        return try {
-            val result = functions.getHttpsCallable(name).call(data).await()
-            result.getData() as? Map<*, *> ?: throw AccountException(AccountFailure.Unknown)
-        } catch (error: CancellationException) {
-            throw error
-        } catch (error: AccountException) {
-            throw error
-        } catch (error: FirebaseFunctionsException) {
-            throw AccountException(error.toAccountFailure())
-        } catch (error: IOException) {
-            throw AccountException(AccountFailure.Network)
-        } catch (error: Exception) {
-            throw AccountException(AccountFailure.Unknown)
-        }
+    private fun hashedDni(dni: String): String {
+        val digest = MessageDigest.getInstance("SHA-256").digest(dni.trim().toByteArray())
+        return digest.joinToString("") { byte -> "%02x".format(byte) }
     }
 
-    private fun FirebaseFunctionsException.toAccountFailure(): AccountFailure {
-        val lowerMessage = message.orEmpty().lowercase(Locale.ROOT)
-        return when (code) {
-            FirebaseFunctionsException.Code.ALREADY_EXISTS ->
-                if ("placa" in lowerMessage) {
-                    AccountFailure.PlateAlreadyRegistered
-                } else {
-                    AccountFailure.DniAlreadyRegistered
-                }
-            FirebaseFunctionsException.Code.PERMISSION_DENIED ->
-                AccountFailure.SessionInactive
-            FirebaseFunctionsException.Code.FAILED_PRECONDITION ->
-                when {
-                    "correo" in lowerMessage -> AccountFailure.EmailNotVerified
-                    "perfil ya" in lowerMessage -> AccountFailure.ProfileAlreadyComplete
-                    else -> AccountFailure.InvalidData
-                }
-            FirebaseFunctionsException.Code.INVALID_ARGUMENT ->
-                if ("ruta" in lowerMessage) {
-                    AccountFailure.RouteUnavailable
-                } else {
-                    AccountFailure.InvalidData
-                }
-            FirebaseFunctionsException.Code.UNAUTHENTICATED ->
-                AccountFailure.NotAuthenticated
-            FirebaseFunctionsException.Code.UNAVAILABLE,
-            FirebaseFunctionsException.Code.DEADLINE_EXCEEDED ->
-                AccountFailure.Network
-            else -> AccountFailure.Unknown
-        }
+    private fun Throwable.toAccountFailure(): AccountFailure = when {
+        this is FirebaseNetworkException || this is IOException -> AccountFailure.Network
+        this is FirebaseFirestoreException &&
+            code == FirebaseFirestoreException.Code.PERMISSION_DENIED ->
+            AccountFailure.NotAuthenticated
+        this is FirebaseFirestoreException &&
+            code == FirebaseFirestoreException.Code.UNAVAILABLE -> AccountFailure.Network
+        else -> AccountFailure.Unknown
     }
 
     private fun DocumentSnapshot.toUserProfile(): UserProfile? {
@@ -295,7 +329,11 @@ class FirebaseAccountRepository @Inject constructor(
         )
     }
 
-    private fun Map<*, *>.string(key: String): String? = this[key] as? String
+    companion object {
+        /** Conductor independiente: solo con documentos, pendiente de revision. */
+        const val OPERATOR_STATUS_UNVERIFIED = "unverified"
 
-    private fun Map<*, *>.boolean(key: String): Boolean = this[key] as? Boolean ?: false
+        /** Conductor avalado por una empresa formal. */
+        const val OPERATOR_STATUS_VERIFIED_BY_COMPANY = "verified_by_company"
+    }
 }

@@ -17,7 +17,7 @@ object FareEstimator {
     /** Techo de seguridad utilizado por la billetera para retenciones previas al viaje (S/ 5.00) */
     const val SAFETY_CEILING_CENTS = 500
 
-    /** Tope máximo aceptado para el cálculo tarifario de una ruta (S/ 3.30) */
+    /** Tope de cordura del calculo cuando la ruta no declara su pasaje oficial (S/ 3.30) */
     const val MAX_FARE_CEILING_CENTS = 330
 
     fun ceilingCents(route: RouteGeo): Int {
