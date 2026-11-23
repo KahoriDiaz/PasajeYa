@@ -141,3 +141,11 @@ tiene hoy el proyecto.
 
 Para el producto de verdad corresponde un convenio directo con el MTC; el proveedor es el
 puente mientras no exista.
+
+## Dónde vive cada automatización
+
+Los workflows programados (la tarifa diaria de combustible y la verificación de brevetes)
+solo corren desde la rama por defecto del repositorio. Mientras los cambios estén en
+`feature/roles-operador`, la tarea de las 06:00 ejecuta la versión antigua del script, que no
+publica el banderazo. Al fusionar la rama en `main` queda alineado. Entretanto se puede
+ejecutar a mano desde Actions eligiendo la rama.
