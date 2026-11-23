@@ -73,7 +73,16 @@ class ProfileViewModel @Inject constructor(
                     val age = doc.getLong("age")?.toInt() ?: 0
                     val role = doc.getString("role") ?: ""
                     val benefitTypeRaw = doc.getString("benefitType") ?: "regular"
-                    val benefitLabel = if (benefitTypeRaw == "university") "Universitario" else "Regular"
+                    val universityStatus = doc.getString("universityStatus") ?: ""
+                    val legacyBenefit = doc.get("benefit") as? Map<*, *>
+                    val benefitApproved = universityStatus == "VERIFIED" ||
+                        legacyBenefit?.get("status")?.toString()?.lowercase() == "approved"
+                    // Pedir el beneficio no es tenerlo: se activa al verificar el correo.
+                    val benefitLabel = when {
+                        benefitTypeRaw != "university" -> "Regular"
+                        benefitApproved -> "Universitario"
+                        else -> "Universitario (por verificar)"
+                    }
 
                     _uiState.update {
                         it.copy(

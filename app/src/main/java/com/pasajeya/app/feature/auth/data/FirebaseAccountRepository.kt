@@ -49,8 +49,9 @@ class FirebaseAccountRepository @Inject constructor(
 
     override suspend fun ensureSession(uid: String): DeviceSession = sessionMutex.withLock {
         requireCurrentUid(uid)
+        // Una sesion cacheada sin rol esta a medio registrar: conviene volver a leerla.
         _deviceSession.value
-            ?.takeIf { it.uid == uid }
+            ?.takeIf { it.uid == uid && it.role != null }
             ?.let { return@withLock it }
 
         val deviceId = deviceIdStore.getOrCreate()
@@ -64,11 +65,26 @@ class FirebaseAccountRepository @Inject constructor(
         }
 
         val role = UserRole.fromWire(userDoc.get("role"))
-        val companyComplete = if (role == UserRole.COMPANY) {
-            runCatching { firestore.collection("companies").document(uid).get().await().exists() }
-                .getOrDefault(false)
-        } else {
-            true
+        // La empresa necesita su ficha en companies/{uid}; el conductor, placa y ruta.
+        val roleDataComplete = when (role) {
+            UserRole.COMPANY -> runCatching {
+                firestore.collection("companies").document(uid).get().await().exists()
+            }.getOrDefault(false)
+
+            UserRole.DRIVER -> {
+                val plate = userDoc.getString("plate")
+                    ?: userDoc.getString("vehiclePlate")
+                val route = userDoc.getString("assignedRouteId")
+                if (!plate.isNullOrBlank() && !route.isNullOrBlank()) {
+                    true
+                } else {
+                    runCatching {
+                        firestore.collection("operators").document(uid).get().await().exists()
+                    }.getOrDefault(false)
+                }
+            }
+
+            else -> true
         }
         val session = DeviceSession(
             uid = uid,
@@ -76,7 +92,7 @@ class FirebaseAccountRepository @Inject constructor(
             profileComplete = userDoc.exists() && role != null,
             emailVerified = auth.currentUser?.isEmailVerified ?: true,
             role = role,
-            operatorComplete = companyComplete
+            operatorComplete = roleDataComplete
         )
         _deviceSession.value = session
         session

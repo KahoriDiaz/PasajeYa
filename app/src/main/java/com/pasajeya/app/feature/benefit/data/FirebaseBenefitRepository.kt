@@ -183,6 +183,7 @@ class FirebaseBenefitRepository @Inject constructor(
         firestore.collection("users").document(uid).set(
             mapOf(
                 "benefitType" to "university",
+                "universityStatus" to "VERIFIED",
                 "institutionalEmail" to email,
                 "benefit" to mapOf(
                     "kind" to "university",

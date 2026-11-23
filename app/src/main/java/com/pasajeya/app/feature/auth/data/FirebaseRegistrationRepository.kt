@@ -47,24 +47,15 @@ class FirebaseRegistrationRepository @Inject constructor(
                 }
             }
             universityData["benefitDiscount"] = 0.50
-            universityData["universityStatus"] = "VERIFIED"
+            // El beneficio queda PEDIDO, no concedido: se activa recien cuando la persona
+            // verifica su correo institucional. Si no, cualquiera escribe un codigo y
+            // viaja a mitad de precio.
+            universityData["universityStatus"] = "PENDING"
             universityCardExpiry?.let {
                 universityData["universityCardExpiryDate"] = Timestamp(
                     it.atStartOfDay(ZoneId.systemDefault()).toInstant()
                 )
             }
-            val benefit = mutableMapOf<String, Any>(
-                "kind" to "university",
-                "status" to "approved",
-                "percent" to 50,
-                "discountCents" to 0
-            )
-            universityCardExpiry?.let {
-                benefit["validUntil"] = Timestamp(
-                    it.atStartOfDay(ZoneId.systemDefault()).toInstant()
-                )
-            }
-            universityData["benefit"] = benefit
         } else {
             universityData["benefitType"] = benefitType.wireValue
         }
