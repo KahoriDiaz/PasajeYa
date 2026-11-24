@@ -14,6 +14,7 @@ import com.pasajeya.app.feature.history.domain.HistoryPage
 import com.pasajeya.app.feature.history.domain.HistoryRepository
 import com.pasajeya.app.feature.history.domain.HistoryTrip
 import com.pasajeya.app.feature.history.domain.OperatorShiftSummary
+import com.pasajeya.app.feature.trip.data.RouteCatalog
 import com.pasajeya.app.feature.trip.data.toShift
 import com.pasajeya.app.feature.trip.data.toTrip
 import com.pasajeya.app.feature.trip.domain.model.Trip
@@ -23,7 +24,8 @@ import kotlinx.coroutines.tasks.await
 
 @Singleton
 class FirebaseHistoryRepository @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val routeCatalog: RouteCatalog
 ) : HistoryRepository {
 
     override suspend fun loadPage(
@@ -37,9 +39,21 @@ class FirebaseHistoryRepository @Inject constructor(
 
         val range = HistoryDateRanges.range(filter)
         val snapshot = snapshotOf(query)
+        val routeNames = mutableMapOf<String, String>()
+        snapshot.documents.mapNotNull { it.getString("routeId") }.distinct().forEach { routeId ->
+            routeCatalog.find(routeId)?.name?.takeIf { it.isNotBlank() }?.let { name ->
+                routeNames[routeId] = name
+            }
+        }
         var trips = snapshot.documents.mapNotNull { document ->
             document.toTrip()?.let { trip ->
-                HistoryTrip(trip = trip, routeName = trip.routeId)
+                // El nombre de la ruta se lee del catalogo: antes solo salia el codigo.
+                HistoryTrip(
+                    trip = trip,
+                    routeName = routeNames.getOrPut(trip.routeId) {
+                        trip.routeId
+                    }
+                )
             }
         }.filter { item ->
             item.trip.status in PASSENGER_STATUSES && item.trip.inRange(range)

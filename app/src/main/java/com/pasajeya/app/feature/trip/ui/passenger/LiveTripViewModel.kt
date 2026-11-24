@@ -128,9 +128,19 @@ class LiveTripViewModel @Inject constructor(
         }
 
         val tracker = TripDistanceTracker()
+        val oneWayMeters = runCatching {
+            FareEstimator.routeDistanceMeters(
+                context.route.stops,
+                0,
+                context.route.stops.lastIndex
+            )
+        }.getOrNull() ?: 0.0
+        val maxTripMeters = if (oneWayMeters > 0.0) oneWayMeters * 2 else Double.MAX_VALUE
         var hasBenefit = false
-        // En modo demostracion la distancia sale de los paraderos de la ruta y no del GPS.
+        // La distancia la mide la unidad (odometro del turno); el GPS del telefono solo se
+        // usa si el turno todavia no reporta nada.
         var simulatedMeters: Double? = null
+        var simulationOn = false
 
         fun publish(position: GpsFix?) {
             val meters = simulatedMeters ?: tracker.distanceMeters
@@ -144,7 +154,7 @@ class LiveTripViewModel @Inject constructor(
                     isLoading = false,
                     route = context.route,
                     distanceMeters = meters,
-                    isSimulated = simulatedMeters != null,
+                    isSimulated = simulationOn,
                     fareCents = fare.totalCents,
                     regularCents = fare.regularCents,
                     hasUniversityBenefit = hasBenefit,
@@ -166,6 +176,61 @@ class LiveTripViewModel @Inject constructor(
                 }
         }
 
+        // El pasajero ve lo mismo que el conductor: posicion de la unidad, paradero por el
+        // que va y la distancia que mide la unidad. Antes este bloque iba despues del
+        // collect del GPS, que nunca termina, asi que no se ejecutaba nunca.
+        shiftJob?.cancel()
+        shiftJob = launch {
+            tripRepository.observeShift(shiftId)
+                .catch { error -> if (error is CancellationException) throw error }
+                .collect { shift ->
+                    val simulating = shift?.simulationEnabled == true
+                    simulationOn = simulating
+                    val position = if (simulating) {
+                        shift?.simulatedLatitude?.let { lat ->
+                            shift.simulatedLongitude?.let { lng -> MapUserPosition(lat, lng) }
+                        }
+                    } else {
+                        shift?.lastLatitude?.let { lat ->
+                            shift.lastLongitude?.let { lng -> MapUserPosition(lat, lng) }
+                        } ?: shift?.simulatedLatitude?.let { lat ->
+                            shift.simulatedLongitude?.let { lng -> MapUserPosition(lat, lng) }
+                        }
+                    }
+                    // La distancia que se cobra la mide la unidad, no el telefono del
+                    // pasajero: su odometro solo crece, asi que vale igual si la combi
+                    // da la vuelta completa y vuelve a pasar por el mismo paradero.
+                    val boardingOdometer = trip.boardingOdometerMeters
+                    val odometer = shift?.odometerMeters
+                    val boardingIndex = trip.boardingStopIndex
+                    if (boardingOdometer != null && odometer != null &&
+                        odometer > boardingOdometer
+                    ) {
+                        // Mismo tope que al cobrar: nadie anda mas que la ruta completa de
+                        // ida y vuelta, aunque el odometro venga con un valor raro.
+                        simulatedMeters = (odometer - boardingOdometer)
+                            .coerceAtMost(maxTripMeters)
+                    } else if (simulating && boardingIndex != null) {
+                        simulatedMeters = runCatching {
+                            FareEstimator.routeDistanceMeters(
+                                context.route.stops,
+                                boardingIndex,
+                                shift.simulatedStopIndex
+                            )
+                        }.getOrNull() ?: simulatedMeters
+                    }
+                    _uiState.update {
+                        it.copy(
+                            busPosition = position ?: it.busPosition,
+                            currentStopName = shift?.simulatedStopName?.takeIf { name ->
+                                name.isNotBlank() && simulating
+                            } ?: it.currentStopName
+                        )
+                    }
+                    publish(position = null)
+                }
+        }
+
         permission
             .flatMapLatest { granted ->
                 if (granted) locationProvider.locationUpdates() else emptyFlow()
@@ -179,48 +244,6 @@ class LiveTripViewModel @Inject constructor(
             .collect { fix ->
                 if (simulatedMeters == null) tracker.onFix(fix)
                 publish(position = fix)
-            }
-
-            // Observar el turno del operador para actualizar la posición del bus en tiempo real.
-            shiftJob?.cancel()
-            shiftJob = viewModelScope.launch {
-                tripRepository.observeShift(shiftId)
-                    .catch { error -> if (error is CancellationException) throw error }
-                    .collect { shift ->
-                        val pos = shift?.let { s ->
-                            s.simulatedLatitude?.let { lat ->
-                                s.simulatedLongitude?.let { lng ->
-                                    MapUserPosition(lat, lng)
-                                }
-                            }
-                        }
-                        // La distancia que se cobra la mide la unidad, no el telefono del
-                        // pasajero: su odometro solo crece, asi que vale igual si la combi
-                        // da la vuelta completa y vuelve a pasar por el mismo paradero.
-                        val boardingOdometer = trip.boardingOdometerMeters
-                        val odometer = shift?.odometerMeters
-                        val boardingIndex = trip.boardingStopIndex
-                        if (boardingOdometer != null && odometer != null &&
-                            odometer > boardingOdometer
-                        ) {
-                            simulatedMeters = odometer - boardingOdometer
-                        } else if (shift?.simulationEnabled == true && boardingIndex != null) {
-                            simulatedMeters = runCatching {
-                                FareEstimator.routeDistanceMeters(
-                                    context.route.stops,
-                                    boardingIndex,
-                                    shift.simulatedStopIndex
-                                )
-                            }.getOrNull() ?: simulatedMeters
-                        }
-                        _uiState.update {
-                            it.copy(
-                                busPosition = pos,
-                                currentStopName = shift?.simulatedStopName ?: it.currentStopName
-                            )
-                        }
-                        publish(position = null)
-                    }
             }
     }
 }

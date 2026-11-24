@@ -24,6 +24,7 @@ import com.google.android.gms.location.Priority
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.pasajeya.app.MainActivity
 import com.pasajeya.app.R
 import com.pasajeya.app.feature.trip.domain.GpsFix
@@ -54,6 +55,10 @@ class ShiftLocationService : Service() {
     private var pendingMeters = 0.0
     private var isFlushing = false
     private var lastFlushAt = 0L
+    private var lastPositionAt = 0L
+    private var shiftRegistration: ListenerRegistration? = null
+    /** Con la demostracion activa manda la posicion simulada: el GPS real no se publica. */
+    private var simulating = false
 
     private val callback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult) {
@@ -80,6 +85,7 @@ class ShiftLocationService : Service() {
             flushBlocking()
         }
         activeShiftId = shiftId
+        observeSimulationFlag(shiftId)
         startInForeground()
         requestUpdates()
         return START_STICKY
@@ -88,6 +94,8 @@ class ShiftLocationService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onDestroy() {
+        shiftRegistration?.remove()
+        shiftRegistration = null
         client.removeLocationUpdates(callback)
         flushBlocking()
         scope.cancel()
@@ -130,6 +138,20 @@ class ShiftLocationService : Service() {
             0
         }
         ServiceCompat.startForeground(this, NOTIFICATION_ID, notification, type)
+    }
+
+    /**
+     * Mientras el conductor tenga la demostracion activa, el turno lo mueve la ruta y no el
+     * GPS del telefono: asi la distancia no se cuenta dos veces.
+     */
+    private fun observeSimulationFlag(shiftId: String) {
+        shiftRegistration?.remove()
+        shiftRegistration = firestore.collection("shifts")
+            .document(shiftId)
+            .addSnapshotListener { snapshot, _ ->
+                simulating = snapshot?.getBoolean("simulationEnabled") == true
+                if (simulating) pendingMeters = 0.0
+            }
     }
 
     private fun requestUpdates() {
@@ -189,15 +211,45 @@ class ShiftLocationService : Service() {
             "acc" to if (location.hasAccuracy()) location.accuracy.toDouble() else 0.0,
             "t" to Timestamp(Date(now))
         )
+        publishPosition(location, now)
         if (buffer.size >= MAX_POINTS || now - lastFlushAt >= FLUSH_INTERVAL_MS) {
             flush()
             publishOdometer()
         }
     }
 
+    /**
+     * Deja en el turno la ultima posicion real de la unidad para que el pasajero la vea en
+     * su mapa aunque el conductor no este en modo demostracion.
+     */
+    private fun publishPosition(location: Location, now: Long) {
+        val shiftId = activeShiftId ?: return
+        if (simulating) return
+        if (now - lastPositionAt < POSITION_INTERVAL_MS) return
+        lastPositionAt = now
+        scope.launch {
+            runCatching {
+                firestore.collection("shifts")
+                    .document(shiftId)
+                    .update(
+                        mapOf(
+                            "lastLat" to location.latitude,
+                            "lastLng" to location.longitude,
+                            "lastFixAt" to Timestamp(Date(now))
+                        )
+                    )
+                    .await()
+            }
+        }
+    }
+
     /** Suma al odometro del turno los metros que la unidad recorrio de verdad. */
     private fun publishOdometer() {
         val shiftId = activeShiftId ?: return
+        if (simulating) {
+            pendingMeters = 0.0
+            return
+        }
         val meters = pendingMeters
         if (meters <= 0.0) return
         pendingMeters = 0.0
@@ -283,6 +335,7 @@ class ShiftLocationService : Service() {
         private const val INTERVAL_MS = 5_000L
         private const val STATIONARY_INTERVAL_MS = 15_000L
         private const val FLUSH_INTERVAL_MS = 30_000L
+        private const val POSITION_INTERVAL_MS = 10_000L
         private const val MAX_POINTS = 30
 
         fun start(context: Context, shiftId: String) {

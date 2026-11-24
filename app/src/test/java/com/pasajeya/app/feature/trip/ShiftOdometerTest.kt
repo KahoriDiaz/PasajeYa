@@ -1,7 +1,7 @@
 package com.pasajeya.app.feature.trip
 
 import com.pasajeya.app.feature.fare.domain.RouteStop
-import com.pasajeya.app.feature.trip.data.forwardMeters
+import com.pasajeya.app.feature.trip.data.odometerMetersAt
 import com.pasajeya.app.feature.trip.data.travelledMeters
 import com.pasajeya.app.feature.trip.domain.RoutePath
 import com.pasajeya.app.feature.trip.domain.model.Shift
@@ -55,22 +55,37 @@ class ShiftOdometerTest {
     )
 
     @Test
-    fun `avanzar un paradero suma ese tramo`() {
-        assertEquals(1112.0, forwardMeters(route, 0, 1), 3.0)
-        assertEquals(2224.0, forwardMeters(route, 1, 3), 3.0)
+    fun `el odometro es lo andado desde el primer paradero`() {
+        assertEquals(0.0, odometerMetersAt(route, 0, 0.0), 0.0)
+        assertEquals(1112.0, odometerMetersAt(route, 1, 0.0), 3.0)
+        assertEquals(routeLength, odometerMetersAt(route, 3, 0.0), 5.0)
     }
 
     @Test
-    fun `quedarse en el mismo paradero no suma nada`() {
-        assertEquals(0.0, forwardMeters(route, 2, 2), 0.0)
+    fun `el mismo aviso repetido no suma dos veces`() {
+        val once = odometerMetersAt(route, 2, 0.0)
+        val twice = odometerMetersAt(route, 2, 0.0)
+        assertEquals(once, twice, 0.0)
+        assertEquals(2224.0, once, 3.0)
     }
 
     @Test
-    fun `al terminar la ruta y volver a empezar suma el regreso completo`() {
-        // Del ultimo paradero al primero: la unidad hizo todo el camino de vuelta.
-        assertEquals(routeLength, forwardMeters(route, 3, 0), 5.0)
-        // Del ultimo al segundo: el regreso completo mas un tramo.
-        assertEquals(routeLength + 1112.0, forwardMeters(route, 3, 1), 5.0)
+    fun `al volver a empezar el odometro sigue desde donde iba`() {
+        // La unidad termino el recorrido (routeLength) y arranca de nuevo.
+        assertEquals(routeLength, odometerMetersAt(route, 0, routeLength), 5.0)
+        assertEquals(routeLength + 1112.0, odometerMetersAt(route, 1, routeLength), 5.0)
+    }
+
+    @Test
+    fun `un viaje nunca mide mas que la ruta de ida y vuelta`() {
+        val meters = travelledMeters(
+            trip = trip(boardingOdometer = 0.0, boardingIndex = 0),
+            shift = shift(odometer = 100_000.0),
+            route = route,
+            boardingIndex = 0,
+            alightingIndex = 1
+        )
+        assertEquals(routeLength * 2, meters, 5.0)
     }
 
     @Test

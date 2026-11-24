@@ -69,7 +69,17 @@ data class Shift(
      * Metros recorridos por la unidad desde que arranco el turno. Solo crece, asi que
      * sirve igual si la combi da la vuelta completa y vuelve a pasar por el mismo paradero.
      */
-    val odometerMeters: Double = 0.0
+    val odometerMeters: Double = 0.0,
+    /**
+     * Metros que la unidad ya habia recorrido cuando empezo otra vez el recorrido. El
+     * odometro se calcula como base + lo andado desde el primer paradero: asi nunca suma
+     * dos veces el mismo tramo si una escritura llega repetida o fuera de orden.
+     */
+    val odometerBaseMeters: Double = 0.0,
+    /** Ultima posicion real de la unidad, para cuando el conductor no esta en demostracion. */
+    val lastLatitude: Double? = null,
+    val lastLongitude: Double? = null,
+    val lastFixAtMillis: Long? = null
 ) {
     val isActive: Boolean get() = status == "active"
 }

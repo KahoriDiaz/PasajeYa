@@ -381,6 +381,21 @@ private fun HistoryTripCard(
                 color = TextPrimary
             )
 
+            // Donde subio y donde bajo: la ruta sola no dice nada del tramo.
+            val boarding = trip.boardingStopName?.takeIf { it.isNotBlank() }
+            val alighting = trip.alightingStopName?.takeIf { it.isNotBlank() }
+            if (boarding != null || alighting != null) {
+                Text(
+                    text = stringResource(
+                        R.string.history_stops,
+                        boarding ?: stringResource(R.string.history_stop_unknown),
+                        alighting ?: stringResource(R.string.history_stop_unknown)
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextGray
+                )
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,

@@ -16,7 +16,7 @@
     <string name="fare_today_min">Mínimo por viaje</string>
     <string name="fare_today_max">Tope por viaje</string>
     <string name="fare_today_note">Los cuatro valores se recalculan todos los días a las 6:00 con el precio del diésel en Arequipa. Índice de hoy: %1$sx sobre el precio base.</string>
-    <string name="live_trip_simulated">Distancia medida sobre los paraderos de la ruta (modo demostración del conductor)</string>
+    <string name="live_trip_simulated">El conductor está en modo demostración: la unidad avanza por los paraderos de la ruta</string>
     <string name="fuel_history_title">Transparencia tarifaria: combustible</string>
     <string name="fuel_history_source">Fuente oficial: Osinergmin (Arequipa)</string>
     <string name="fuel_history_price">S/ %1$s por galón</string>
@@ -26,6 +26,8 @@
     <string name="fare_benefit_schedule_short">Lunes a sábado, de 5:00 a medianoche</string>
     <string name="fuel_history_index">Índice de hoy: %1$sx sobre el precio base</string>
     <string name="fuel_history_empty">Todavía no hay registros guardados. El precio se consulta cada día a las 6:00.</string>
+    <string name="history_stops">%1$s \u2192 %2$s</string>
+    <string name="history_stop_unknown">paradero sin registrar</string>
     <string name="live_trip_distance_start">Recién subiste, aún sin recorrido</string>
     <string name="live_trip_boarding">Subiste en %1$s</string>
     <string name="live_trip_current_stop">La unidad va por %1$s</string>

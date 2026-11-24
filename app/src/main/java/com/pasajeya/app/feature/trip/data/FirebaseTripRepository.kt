@@ -168,12 +168,7 @@ class FirebaseTripRepository @Inject constructor(
     ) {
         val route = loadRoutePath(routeId)
         val stopName = route?.stops?.getOrNull(stopIndex)?.name
-        val previousIndex = loadShift(shiftId)?.simulatedStopIndex
-        val advanced = if (!resetOdometer && route != null && previousIndex != null) {
-            forwardMeters(route, previousIndex, stopIndex)
-        } else {
-            0.0
-        }
+        val shift = loadShift(shiftId)
         val changes = mutableMapOf<String, Any?>(
             "simulationEnabled" to enabled,
             "simulatedStopIndex" to stopIndex,
@@ -182,10 +177,20 @@ class FirebaseTripRepository @Inject constructor(
             "simulatedStopName" to stopName,
             "simulatedUpdatedAt" to FieldValue.serverTimestamp()
         )
-        if (resetOdometer) {
-            changes["odometerMeters"] = 0.0
-        } else if (advanced > 0.0) {
-            changes["odometerMeters"] = FieldValue.increment(advanced)
+        // Solo la demostracion escribe el odometro; en marcha real lo lleva el servicio de
+        // ubicacion con el GPS de la unidad.
+        if (enabled && route != null && route.stops.size > 1) {
+            // El odometro se escribe completo, no sumando: base del recorrido anterior mas
+            // lo andado desde el primer paradero. Sumando, una escritura repetida o leida
+            // con retraso volvia a contar el mismo tramo y la distancia se iba a 100 km.
+            val base = if (resetOdometer) {
+                // La unidad empieza otra vez: el odometro sigue desde donde iba.
+                shift?.odometerMeters ?: 0.0
+            } else {
+                shift?.odometerBaseMeters ?: 0.0
+            }
+            changes["odometerBaseMeters"] = base
+            changes["odometerMeters"] = odometerMetersAt(route, stopIndex, base)
         }
         firestore.collection("shifts").document(shiftId).update(changes).await()
     }
@@ -837,20 +842,16 @@ internal fun travelledMeters(
     return FareEstimator.routeDistanceMeters(route.stops, boardingIndex, alightingIndex)
 }
 
-internal fun forwardMeters(route: RoutePath, from: Int, to: Int): Double {
+/**
+ * Odometro de la unidad: lo que llevaba recorrido al empezar este recorrido mas lo andado
+ * desde el primer paradero. Se calcula completo en cada aviso, nunca sumando, para que un
+ * aviso repetido o atrasado no cuente dos veces el mismo tramo.
+ */
+internal fun odometerMetersAt(route: RoutePath, stopIndex: Int, baseMeters: Double): Double {
     val stops = route.stops
-    if (stops.size < 2) return 0.0
-    val start = from.coerceIn(stops.indices)
-    val end = to.coerceIn(stops.indices)
-    if (start == end) return 0.0
-    if (end > start) {
-        return FareEstimator.routeDistanceMeters(stops, start, end)
-    }
-    // La unidad llego al final y volvio a empezar: avanzo lo que faltaba hasta el ultimo
-    // paradero, el recorrido de regreso completo y lo andado desde el primero.
-    return FareEstimator.routeDistanceMeters(stops, start, stops.lastIndex) +
-        FareEstimator.routeDistanceMeters(stops, 0, stops.lastIndex) +
-        FareEstimator.routeDistanceMeters(stops, 0, end)
+    if (stops.size < 2) return baseMeters
+    val index = stopIndex.coerceIn(stops.indices)
+    return baseMeters + FareEstimator.routeDistanceMeters(stops, 0, index)
 }
 
 private fun nearestStopIndex(route: RoutePath, position: TripPosition): Int {
@@ -1008,7 +1009,11 @@ internal fun DocumentSnapshot.toShift(): Shift? {
         simulatedLongitude = getDouble("simulatedLng"),
         simulatedStopName = getString("simulatedStopName"),
         simulatedUpdatedAtMillis = getTimestamp("simulatedUpdatedAt")?.toDate()?.time,
-        odometerMeters = getDouble("odometerMeters") ?: 0.0
+        odometerMeters = getDouble("odometerMeters") ?: 0.0,
+        odometerBaseMeters = getDouble("odometerBaseMeters") ?: 0.0,
+        lastLatitude = getDouble("lastLat"),
+        lastLongitude = getDouble("lastLng"),
+        lastFixAtMillis = getTimestamp("lastFixAt")?.toDate()?.time
     )
 }
 
