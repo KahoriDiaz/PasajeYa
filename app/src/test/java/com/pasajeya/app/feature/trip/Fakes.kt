@@ -230,7 +230,8 @@ class FakeTripRepository : TripRepository {
         routeId: String,
         stopIndex: Int,
         position: TripPosition,
-        enabled: Boolean
+        enabled: Boolean,
+        resetOdometer: Boolean
     ) = Unit
 
     override suspend fun passengerTapIn(

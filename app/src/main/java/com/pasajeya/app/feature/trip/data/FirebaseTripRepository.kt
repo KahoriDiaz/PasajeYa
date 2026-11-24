@@ -92,9 +92,9 @@ class FirebaseTripRepository @Inject constructor(
     }
 
     override suspend fun loadRouteName(routeId: String): String? =
-        loadRoutePath(routeId)?.name ?: runCatching {
+        loadRoutePath(routeId)?.name?.takeIf { it.isNotBlank() } ?: runCatching {
             val doc = firestore.collection("routes").document(routeId).get().await()
-            doc.getString("name")
+            doc.getString("name")?.takeIf { it.isNotBlank() }
         }.getOrNull()
 
     override suspend fun loadRoutePath(routeId: String): RoutePath? {
@@ -163,12 +163,13 @@ class FirebaseTripRepository @Inject constructor(
         routeId: String,
         stopIndex: Int,
         position: TripPosition,
-        enabled: Boolean
+        enabled: Boolean,
+        resetOdometer: Boolean
     ) {
         val route = loadRoutePath(routeId)
         val stopName = route?.stops?.getOrNull(stopIndex)?.name
         val previousIndex = loadShift(shiftId)?.simulatedStopIndex
-        val advanced = if (route != null && previousIndex != null) {
+        val advanced = if (!resetOdometer && route != null && previousIndex != null) {
             forwardMeters(route, previousIndex, stopIndex)
         } else {
             0.0
@@ -181,7 +182,9 @@ class FirebaseTripRepository @Inject constructor(
             "simulatedStopName" to stopName,
             "simulatedUpdatedAt" to FieldValue.serverTimestamp()
         )
-        if (advanced > 0.0) {
+        if (resetOdometer) {
+            changes["odometerMeters"] = 0.0
+        } else if (advanced > 0.0) {
             changes["odometerMeters"] = FieldValue.increment(advanced)
         }
         firestore.collection("shifts").document(shiftId).update(changes).await()
@@ -824,8 +827,12 @@ internal fun travelledMeters(
 ): Double {
     val boardingOdometer = trip.boardingOdometerMeters
     val currentOdometer = shift?.odometerMeters
+    // Nadie puede andar mas que la ruta completa de ida y vuelta: evita cobrar un recorrido
+    // acumulado de turnos anteriores si el odometro quedo sin reiniciar.
+    val oneWayMeters = FareEstimator.routeDistanceMeters(route.stops, 0, route.stops.lastIndex)
+    val maxMeters = if (oneWayMeters > 0.0) oneWayMeters * 2 else Double.MAX_VALUE
     if (boardingOdometer != null && currentOdometer != null && currentOdometer > boardingOdometer) {
-        return currentOdometer - boardingOdometer
+        return (currentOdometer - boardingOdometer).coerceAtMost(maxMeters)
     }
     return FareEstimator.routeDistanceMeters(route.stops, boardingIndex, alightingIndex)
 }
@@ -947,6 +954,8 @@ internal fun DocumentSnapshot.toTrip(): Trip? {
         passengerAge = getLong("passengerAge")?.toInt(),
         fareType = getString("fareType") ?: "regular",
         boardingStopIndex = getLong("boardingStopIndex")?.toInt(),
+        boardingStopName = getString("boardingStopName"),
+        alightingStopName = getString("alightingStopName"),
         boardingOdometerMeters = getDouble("boardingOdometerMeters"),
         alightingStopIndex = getLong("alightingStopIndex")?.toInt(),
         heldAmountCents = getLong("heldAmountCents")?.toInt() ?: 0,

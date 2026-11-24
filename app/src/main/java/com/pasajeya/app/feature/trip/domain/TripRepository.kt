@@ -67,12 +67,17 @@ interface TripRepository {
     /** Busca un viaje abierto de un pasajero (cualquier turno). */
     suspend fun findOpenTripForPassenger(passengerUid: String): Trip?
 
+    /**
+     * @param resetOdometer true cuando la unidad vuelve a empezar el recorrido: el odometro
+     * arranca de cero para que el tramo anterior no se sume al viaje siguiente.
+     */
     suspend fun updateSimulation(
         shiftId: String,
         routeId: String,
         stopIndex: Int,
         position: TripPosition,
-        enabled: Boolean
+        enabled: Boolean,
+        resetOdometer: Boolean = false
     )
 
     suspend fun passengerTapIn(

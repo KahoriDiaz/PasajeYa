@@ -45,6 +45,8 @@ data class LiveTripUiState(
     val busPosition: MapUserPosition? = null,
     /** La distancia viene de la ruta porque el conductor tiene el modo demostracion activo. */
     val isSimulated: Boolean = false,
+    val boardingStopName: String? = null,
+    val currentStopName: String? = null,
     val error: String? = null
 ) {
     val hasTrip: Boolean get() = tripId != null
@@ -105,6 +107,7 @@ class LiveTripViewModel @Inject constructor(
         val shiftId = trip.shiftId
         _uiState.value = LiveTripUiState(
             tripId = tripId,
+            boardingStopName = trip.boardingStopName,
             isLoading = true,
             permissionGranted = permission.value,
             busPosition = null
@@ -210,7 +213,12 @@ class LiveTripViewModel @Inject constructor(
                                 )
                             }.getOrNull() ?: simulatedMeters
                         }
-                        _uiState.update { it.copy(busPosition = pos) }
+                        _uiState.update {
+                            it.copy(
+                                busPosition = pos,
+                                currentStopName = shift?.simulatedStopName ?: it.currentStopName
+                            )
+                        }
                         publish(position = null)
                     }
             }

@@ -292,10 +292,11 @@ private fun MovementRow(tx: WalletTransaction) {
     val (label, sign, color) = when (tx.type) {
         WalletTransactionType.RECHARGE ->
             Triple(stringResource(R.string.wallet_kind_recharge), "+", SuccessGreen)
+        // El signo deja claro que la retencion sale y vuelve: antes solo se veia la salida.
         WalletTransactionType.HOLD ->
-            Triple(stringResource(R.string.wallet_kind_hold), "", ReviewAmber)
+            Triple(stringResource(R.string.wallet_kind_hold), "-", ReviewAmber)
         WalletTransactionType.RELEASE ->
-            Triple(stringResource(R.string.wallet_kind_release), "", TextGray)
+            Triple(stringResource(R.string.wallet_kind_release), "+", SuccessGreen)
         WalletTransactionType.CHARGE ->
             Triple(stringResource(R.string.wallet_kind_charge), "-", TextPrimary)
     }

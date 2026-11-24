@@ -118,6 +118,8 @@ fun LiveTripCard(
                         benefitPercent = if (state.hasUniversityBenefit) 50 else null,
                         capped = state.capped,
                         isSimulated = state.isSimulated,
+                        boardingStopName = state.boardingStopName,
+                        currentStopName = state.currentStopName,
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(10.dp)
@@ -176,6 +178,8 @@ private fun FloatingFareCard(
     benefitPercent: Int?,
     capped: Boolean,
     isSimulated: Boolean,
+    boardingStopName: String?,
+    currentStopName: String?,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -200,8 +204,27 @@ private fun FloatingFareCard(
                 color = PrimaryBlue,
                 modifier = Modifier.testTag("live_trip_fare")
             )
+            boardingStopName?.takeIf { it.isNotBlank() }?.let { stop ->
+                Text(
+                    text = stringResource(R.string.live_trip_boarding, stop),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextPrimary
+                )
+            }
+            currentStopName?.takeIf { it.isNotBlank() }?.let { stop ->
+                Text(
+                    text = stringResource(R.string.live_trip_current_stop, stop),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = PrimaryBlue
+                )
+            }
             Text(
-                text = stringResource(R.string.live_trip_distance, formatKm(distanceMeters)),
+                text = if (distanceMeters < 50) {
+                    stringResource(R.string.live_trip_distance_start)
+                } else {
+                    stringResource(R.string.live_trip_distance, formatKm(distanceMeters))
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextPrimary,
                 modifier = Modifier.testTag("live_trip_distance")

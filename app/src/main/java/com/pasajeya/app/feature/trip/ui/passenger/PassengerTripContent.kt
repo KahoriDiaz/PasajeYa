@@ -374,7 +374,7 @@ private fun ActiveTripCard(trip: Trip?, routeName: String?) {
                 Text(
                     text = stringResource(
                         R.string.passenger_trip_route,
-                        routeName ?: trip.routeId
+                        routeName?.takeIf { it.isNotBlank() } ?: trip.routeId
                     ),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold,
@@ -390,11 +390,13 @@ private fun ActiveTripCard(trip: Trip?, routeName: String?) {
                         color = TextGray
                     )
                 }
-                Text(
-                    text = stringResource(R.string.operator_trip_waiting),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = TextGray
-                )
+                trip.boardingStopName?.takeIf { it.isNotBlank() }?.let { stopName ->
+                    Text(
+                        text = stringResource(R.string.passenger_trip_boarding, stopName),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = TextGray
+                    )
+                }
             }
         }
     }

@@ -50,15 +50,25 @@ object WalletLogic {
         if (finalCents < 0) return WalletResult.Failure(WalletError.INVALID_AMOUNT)
         if (!wallet.hasActiveHold) return WalletResult.Failure(WalletError.NO_HOLD)
         val charged = min(finalCents, wallet.holdCents)
-        return WalletResult.Success(
-            wallet.copy(
-                balanceCents = wallet.balanceCents - charged,
-                holdCents = 0,
-                transactions = wallet.record(
-                    WalletTransaction(nowMillis, WalletTransactionType.CHARGE, charged)
-                )
+        val returned = wallet.holdCents - charged
+        // Queda constancia de lo que se devuelve: si no, parece que se fueron los S/ 5.
+        val settled = wallet.copy(
+            balanceCents = wallet.balanceCents - charged,
+            holdCents = 0,
+            transactions = wallet.record(
+                WalletTransaction(nowMillis, WalletTransactionType.CHARGE, charged)
             )
         )
+        val finalWallet = if (returned > 0) {
+            settled.copy(
+                transactions = settled.record(
+                    WalletTransaction(nowMillis, WalletTransactionType.RELEASE, returned)
+                )
+            )
+        } else {
+            settled
+        }
+        return WalletResult.Success(finalWallet)
     }
 
     fun release(wallet: DemoWallet, nowMillis: Long): WalletResult {

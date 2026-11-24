@@ -520,7 +520,9 @@ class OperatorTripViewModel @Inject constructor(
         tapInCardJob?.cancel()
         simulationJob?.cancel()
         tripEventsJob?.cancel()
-        speechAnnouncer.release()
+        // El motor de voz es compartido por toda la app: apagarlo aqui dejaba al conductor
+        // sin voz al volver desde otra pestana. Solo se corta lo que este sonando.
+        speechAnnouncer.stop()
         super.onCleared()
     }
 
@@ -781,7 +783,8 @@ class OperatorTripViewModel @Inject constructor(
                     routeId = route.id,
                     stopIndex = 0,
                     position = simulator.positionAt(0),
-                    enabled = shift.simulationEnabled
+                    enabled = shift.simulationEnabled,
+                    resetOdometer = true
                 )
             }
             _uiState.update { current ->

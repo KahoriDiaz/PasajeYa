@@ -60,7 +60,20 @@ class WalletLogicTest {
         assertEquals(865, wallet.balanceCents)
         assertEquals(0, wallet.holdCents)
         assertEquals(865, wallet.availableCents)
-        assertEquals(135, wallet.transactions.first().amountCents)
+        // El historial muestra el cobro y la devolucion del resto de la retencion.
+        val movements = wallet.transactions.take(2)
+        assertEquals(WalletTransactionType.RELEASE, movements[0].type)
+        assertEquals(195, movements[0].amountCents)
+        assertEquals(WalletTransactionType.CHARGE, movements[1].type)
+        assertEquals(135, movements[1].amountCents)
+    }
+
+    @Test
+    fun `cobrar todo lo retenido no agrega devolucion`() {
+        val held = DemoWallet(balanceCents = 1_000, holdCents = 135)
+        val wallet = success(WalletLogic.charge(held, 135, 1L))
+        assertEquals(1, wallet.transactions.size)
+        assertEquals(WalletTransactionType.CHARGE, wallet.transactions.first().type)
     }
 
     @Test

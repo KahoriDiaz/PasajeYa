@@ -42,7 +42,9 @@ data class Trip(
     val passengerAge: Int?,
     val fareType: String = "regular",
     val boardingStopIndex: Int? = null,
+    val boardingStopName: String? = null,
     val alightingStopIndex: Int? = null,
+    val alightingStopName: String? = null,
     /** Lectura del odometro del turno cuando el pasajero subio. */
     val boardingOdometerMeters: Double? = null,
     val fareBreakdown: FareBreakdown? = null,
