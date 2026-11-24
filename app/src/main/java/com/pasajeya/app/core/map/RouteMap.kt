@@ -2,8 +2,11 @@ package com.pasajeya.app.core.map
 
 import android.content.Context
 import android.graphics.Color as AndroidColor
+import android.graphics.Paint
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.view.MotionEvent
+import androidx.core.content.ContextCompat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +19,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.pasajeya.app.R
 import com.pasajeya.app.feature.fare.domain.RouteStop
 import java.io.File
 import org.osmdroid.config.Configuration
@@ -28,11 +32,13 @@ import org.osmdroid.views.overlay.CopyrightOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
-private const val COLOR_ROUTE = 0xFF1F6FB2.toInt()
-private const val COLOR_STOP = 0xFF6E7A87.toInt()
-private const val COLOR_BOARDING = 0xFF2E9E5B.toInt()
-private const val COLOR_ALIGHTING = 0xFFD64545.toInt()
-private const val COLOR_USER = 0xFFE0A100.toInt()
+// Mismos colores que el resto de la app.
+private const val COLOR_ROUTE = 0xFF006ADA.toInt()
+private const val COLOR_ROUTE_CASING = 0xFFFFFFFF.toInt()
+private const val COLOR_STOP = 0xFF9DB2CE.toInt()
+private const val COLOR_BOARDING = 0xFF10B981.toInt()
+private const val COLOR_ALIGHTING = 0xFFE11D48.toInt()
+private const val COLOR_USER = 0xFFFFA500.toInt()
 
 /** Posición real del usuario (GPS) para dibujarla sobre el mapa. */
 data class MapUserPosition(val lat: Double, val lng: Double)
@@ -110,13 +116,28 @@ fun RouteMap(
             view.overlays.clear()
             view.overlays.add(CopyrightOverlay(view.context))
 
+            val density = view.resources.displayMetrics.density
             val points = stops.map { GeoPoint(it.lat, it.lng) }
             if (points.size >= 2) {
+                // Linea blanca debajo: hace que la ruta se despegue del mapa.
+                view.overlays.add(
+                    Polyline(view).apply {
+                        setPoints(points)
+                        outlinePaint.color = COLOR_ROUTE_CASING
+                        outlinePaint.strokeWidth = 11f * density
+                        outlinePaint.strokeCap = Paint.Cap.ROUND
+                        outlinePaint.strokeJoin = Paint.Join.ROUND
+                        outlinePaint.isAntiAlias = true
+                    }
+                )
                 view.overlays.add(
                     Polyline(view).apply {
                         setPoints(points)
                         outlinePaint.color = COLOR_ROUTE
-                        outlinePaint.strokeWidth = 9f
+                        outlinePaint.strokeWidth = 6f * density
+                        outlinePaint.strokeCap = Paint.Cap.ROUND
+                        outlinePaint.strokeJoin = Paint.Join.ROUND
+                        outlinePaint.isAntiAlias = true
                     }
                 )
             }
@@ -137,9 +158,7 @@ fun RouteMap(
                 )
             }
             busPosition?.let {
-                view.overlays.add(
-                    stopMarker(view, "Bus", it.lat, it.lng, COLOR_ROUTE, true, sizeDp = 20)
-                )
+                view.overlays.add(busMarker(view, it.lat, it.lng))
             }
             view.invalidate()
 
@@ -174,6 +193,33 @@ fun RouteMap(
     )
 }
 
+/** Marcador del bus: el mismo dibujo del icono de la app sobre un circulo blanco. */
+private fun busMarker(view: MapView, lat: Double, lng: Double): Marker {
+    val density = view.resources.displayMetrics.density
+    val size = (34 * density).toInt()
+    val circle = GradientDrawable().apply {
+        shape = GradientDrawable.OVAL
+        setColor(AndroidColor.WHITE)
+        setStroke((2 * density).toInt(), COLOR_ROUTE)
+    }
+    val bus = ContextCompat.getDrawable(view.context, R.drawable.ic_launcher_mono)
+    val icon = if (bus == null) {
+        circle
+    } else {
+        LayerDrawable(arrayOf(circle, bus)).apply {
+            val inset = (6 * density).toInt()
+            setLayerInset(1, inset, inset, inset, inset)
+        }
+    }
+    icon.setBounds(0, 0, size, size)
+    return Marker(view).apply {
+        position = GeoPoint(lat, lng)
+        this.icon = icon
+        setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+        setInfoWindow(null)
+    }
+}
+
 private fun stopMarker(
     view: MapView,
     title: String,
@@ -181,7 +227,7 @@ private fun stopMarker(
     lng: Double,
     color: Int,
     highlighted: Boolean,
-    sizeDp: Int = if (highlighted) 16 else 10
+    sizeDp: Int = if (highlighted) 18 else 9
 ): Marker {
     val density = view.resources.displayMetrics.density
     val sizePx = (sizeDp * density).toInt()
