@@ -19,8 +19,10 @@ fun PassengerHomeScreen(
     onHistory: () -> Unit,
     onWallet: () -> Unit,
     onBenefits: () -> Unit,
+    onProfile: () -> Unit,
     onTripFinished: (String) -> Unit,
     modifier: Modifier = Modifier,
+    bottomBar: @Composable () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel(),
     tripViewModel: PassengerQrViewModel = hiltViewModel()
 ) {
@@ -44,14 +46,17 @@ fun PassengerHomeScreen(
         onHistory = onHistory,
         onWallet = onWallet,
         onBenefits = onBenefits,
+        onProfile = onProfile,
         viewModel = tripViewModel,
-        modifier = modifier
+        modifier = modifier,
+        bottomBar = bottomBar
     )
 }
 
 @Composable
 fun OperatorHomeScreen(
     onNavigate: (AuthDestination) -> Unit,
+    onProfile: () -> Unit,
     onTripFinished: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
@@ -73,6 +78,7 @@ fun OperatorHomeScreen(
         profileLoading = state.isLoading,
         profileError = state.hasError,
         onLogout = viewModel::logout,
+        onProfile = onProfile,
         viewModel = tripViewModel,
         modifier = modifier
     )

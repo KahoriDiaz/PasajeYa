@@ -63,9 +63,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
-    onBack: () -> Unit,
+    onBack: (() -> Unit)? = null,
     onTripClick: (String) -> Unit,
     modifier: Modifier = Modifier,
+    bottomBar: @Composable () -> Unit = {},
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -73,15 +74,18 @@ fun HistoryScreen(
     Scaffold(
         modifier = modifier.testTag("history_screen"),
         containerColor = MaterialTheme.colorScheme.background,
+        bottomBar = bottomBar,
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.history_title)) },
                 navigationIcon = {
-                    TextButton(onClick = onBack) {
-                        Text(
-                            text = stringResource(R.string.action_back),
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
+                    if (onBack != null) {
+                        TextButton(onClick = onBack) {
+                            Text(
+                                text = stringResource(R.string.action_back),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

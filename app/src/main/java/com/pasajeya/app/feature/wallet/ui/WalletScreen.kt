@@ -46,8 +46,9 @@ import com.pasajeya.app.feature.wallet.domain.WalletTransactionType
 
 @Composable
 fun WalletScreen(
-    onBack: () -> Unit,
+    onBack: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
+    bottomBar: @Composable () -> Unit = {},
     viewModel: WalletViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -55,6 +56,7 @@ fun WalletScreen(
     AuthScreen(
         title = stringResource(R.string.wallet_title),
         onBack = onBack,
+        bottomBar = bottomBar,
         modifier = modifier.testTag("wallet_screen")
     ) {
         // Aviso obligatorio: el saldo no es dinero real.

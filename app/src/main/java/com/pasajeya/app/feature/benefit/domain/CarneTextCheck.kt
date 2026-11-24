@@ -3,9 +3,10 @@ package com.pasajeya.app.feature.benefit.domain
 import java.text.Normalizer
 
 /**
- * Verificaci�n asistida del carn� universitario.
- * Valida presencia de palabras institucionales o t�rminos est�ndar de carn� (SUNEDU / UCSM / UNIVERSIDAD).
- * La validaci�n de fondo se consolida con el correo institucional @ucsm.edu.pe (OTP).
+ * Verificacion asistida del carne universitario.
+ * Valida la presencia de palabras institucionales o terminos estandar de carne
+ * (SUNEDU / UCSM / UNIVERSIDAD). La verificacion de fondo la hace el correo
+ * institucional .edu.pe con el enlace de Firebase Auth.
  */
 object CarneTextCheck {
     private val KEYWORDS = listOf(

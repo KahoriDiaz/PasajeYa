@@ -11,8 +11,12 @@ import androidx.compose.ui.unit.dp
 private val PasajeYaColorScheme = lightColorScheme(
     primary = PrimaryBlue,
     onPrimary = Color.White,
-    secondary = PrimaryBlue,
-    onSecondary = Color.White,
+    primaryContainer = BlueSoft,
+    onPrimaryContainer = DeepBlue,
+    secondary = AccentOrange,
+    onSecondary = Navy,
+    secondaryContainer = AccentOrangeSoft,
+    onSecondaryContainer = Navy,
     tertiary = SuccessGreen,
     onTertiary = Color.White,
     background = BackgroundLight,
@@ -27,9 +31,11 @@ private val PasajeYaColorScheme = lightColorScheme(
 )
 
 private val PasajeYaShapes = Shapes(
-    small = RoundedCornerShape(8.dp),
-    medium = RoundedCornerShape(14.dp),
-    large = RoundedCornerShape(16.dp)
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(18.dp),
+    large = RoundedCornerShape(24.dp),
+    extraLarge = RoundedCornerShape(28.dp)
 )
 
 @Composable

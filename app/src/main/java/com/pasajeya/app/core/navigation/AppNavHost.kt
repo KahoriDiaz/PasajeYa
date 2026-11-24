@@ -1,5 +1,17 @@
 ﻿package com.pasajeya.app.core.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalanceWallet
+import androidx.compose.material.icons.filled.DirectionsBus
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.pasajeya.app.core.ui.NavBarItem
+import com.pasajeya.app.core.ui.PasajeYaNavBar
+import com.pasajeya.app.feature.auth.ui.common.SessionActionsViewModel
+import com.pasajeya.app.feature.profile.ui.ProfileDetailScreen
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -50,6 +62,7 @@ object AppRoutes {
     const val OPERATOR_PROFILE = "operator_profile"
     const val OPERATOR_DETAILS = "operator_details"
     const val OPERATOR_HOME = "operator_home"
+    const val PROFILE = "profile"
     const val COMPANY_PROFILE = "company_profile"
     const val COMPANY_DETAILS = "company_details"
     const val COMPANY_HOME = "company_home"
@@ -74,6 +87,24 @@ fun routeFor(destination: AuthDestination): String = when (destination) {
     AuthDestination.COMPANY_HOME -> AppRoutes.COMPANY_HOME
 }
 
+/** Pestañas de la barra inferior del pasajero. */
+@Composable
+private fun passengerTabs(): List<NavBarItem> = listOf(
+    NavBarItem(AppRoutes.PASSENGER_HOME, stringResource(R.string.tab_home), Icons.Filled.Home),
+    NavBarItem(
+        AppRoutes.FARE_ESTIMATE,
+        stringResource(R.string.tab_fare),
+        Icons.Filled.DirectionsBus
+    ),
+    NavBarItem(AppRoutes.HISTORY, stringResource(R.string.tab_history), Icons.Filled.History),
+    NavBarItem(
+        AppRoutes.WALLET,
+        stringResource(R.string.tab_wallet),
+        Icons.Filled.AccountBalanceWallet
+    ),
+    NavBarItem(AppRoutes.PROFILE, stringResource(R.string.tab_profile), Icons.Filled.Person)
+)
+
 @Composable
 fun AppNavHost(
     startDestination: AuthDestination,
@@ -92,6 +123,20 @@ fun AppNavHost(
 
     fun navigateTo(destination: AuthDestination) {
         clearAndNavigate(routeFor(destination))
+    }
+
+    // Las pestañas no apilan pantallas: se cambia entre ellas y se conserva su estado.
+    fun openTab(route: String) {
+        navController.navigate(route) {
+            popUpTo(AppRoutes.PASSENGER_HOME) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    val tabs = passengerTabs()
+    val passengerBar: @Composable (String) -> Unit = { current ->
+        PasajeYaNavBar(items = tabs, currentRoute = current, onSelect = ::openTab)
     }
 
     NavHost(
@@ -209,19 +254,33 @@ fun AppNavHost(
         composable(AppRoutes.PASSENGER_HOME) {
             PassengerHomeScreen(
                 onNavigate = ::navigateTo,
-                onEstimate = { navController.navigate(AppRoutes.FARE_ESTIMATE) },
-                onHistory = { navController.navigate(AppRoutes.HISTORY) },
-                onWallet = { navController.navigate(AppRoutes.WALLET) },
+                onEstimate = { openTab(AppRoutes.FARE_ESTIMATE) },
+                onHistory = { openTab(AppRoutes.HISTORY) },
+                onWallet = { openTab(AppRoutes.WALLET) },
                 onBenefits = { navController.navigate(AppRoutes.BENEFITS) },
+                onProfile = { openTab(AppRoutes.PROFILE) },
                 onTripFinished = { tripId ->
                     navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
-                }
+                },
+                bottomBar = { passengerBar(AppRoutes.PASSENGER_HOME) }
+            )
+        }
+
+        composable(AppRoutes.PROFILE) {
+            val sessionViewModel: SessionActionsViewModel = hiltViewModel()
+            LaunchedEffect(sessionViewModel) {
+                sessionViewModel.events.collect(::navigateTo)
+            }
+            ProfileDetailScreen(
+                onLogout = sessionViewModel::signOut,
+                bottomBar = { passengerBar(AppRoutes.PROFILE) }
             )
         }
 
         composable(AppRoutes.OPERATOR_HOME) {
             OperatorHomeScreen(
                 onNavigate = ::navigateTo,
+                onProfile = { navController.navigate(AppRoutes.PROFILE) },
                 onTripFinished = { tripId ->
                     navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
                 }
@@ -239,9 +298,7 @@ fun AppNavHost(
         }
 
         composable(AppRoutes.FARE_ESTIMATE) {
-            FareEstimateScreen(
-                onBack = { navController.popBackStack() }
-            )
+            FareEstimateScreen(bottomBar = { passengerBar(AppRoutes.FARE_ESTIMATE) })
         }
 
         composable(
@@ -262,15 +319,15 @@ fun AppNavHost(
 
         composable(AppRoutes.HISTORY) {
             HistoryScreen(
-                onBack = { navController.popBackStack() },
                 onTripClick = { tripId ->
                     navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
-                }
+                },
+                bottomBar = { passengerBar(AppRoutes.HISTORY) }
             )
         }
 
         composable(AppRoutes.WALLET) {
-            WalletScreen(onBack = { navController.popBackStack() })
+            WalletScreen(bottomBar = { passengerBar(AppRoutes.WALLET) })
         }
 
         composable(AppRoutes.CAPTURE_CARNE) {

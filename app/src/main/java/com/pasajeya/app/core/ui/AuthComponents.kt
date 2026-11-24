@@ -58,11 +58,13 @@ fun AuthScreen(
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     actions: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
+        bottomBar = bottomBar,
         topBar = {
             TopAppBar(
                 title = { Text(text = title) },
@@ -379,7 +381,7 @@ fun PasswordRequirements(
 private fun PasswordRequirementRow(text: String, met: Boolean) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
-            text = if (met) "✓" else "•",
+            text = if (met) "•" else "·",
             modifier = Modifier.width(20.dp),
             color = if (met) SuccessGreen else TextGray
         )

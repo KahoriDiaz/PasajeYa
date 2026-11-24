@@ -160,4 +160,12 @@
     <string name="privacy_security_body">Solo puedes leer tu propio perfil. Los montos, roles y estados los escribe únicamente el servidor. Una cuenta mantiene una sola sesión activa.</string>
     <string name="privacy_rights_title">Tus derechos</string>
     <string name="privacy_rights_body">Puedes solicitar acceso, corrección o eliminación de tus datos personales por los canales oficiales de soporte de PasajeYa!.</string>
+    <string name="profile_section_personal">Datos personales</string>
+    <string name="profile_section_travel">Tus viajes</string>
+    <string name="profile_balance_note">El saldo es de demostración: no es dinero real.</string>
+    <string name="tab_home">Inicio</string>
+    <string name="tab_fare">Pasaje</string>
+    <string name="tab_history">Viajes</string>
+    <string name="tab_wallet">Billetera</string>
+    <string name="tab_profile">Perfil</string>
 </resources>

@@ -3,6 +3,7 @@ package com.pasajeya.app.feature.profile.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.pasajeya.app.core.util.ageFromBirthDate
 import com.pasajeya.app.feature.auth.domain.AuthRepository
 import com.pasajeya.app.feature.wallet.domain.WalletRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,7 +71,10 @@ class ProfileViewModel @Inject constructor(
                     val fullName = doc.getString("fullName") ?: doc.getString("firstName") ?: ""
                     val dni = doc.getString("dni") ?: ""
                     val birthDate = doc.getString("birthDate") ?: ""
-                    val age = doc.getLong("age")?.toInt() ?: 0
+                    // Si el documento no trae la edad, se calcula de la fecha de nacimiento.
+                    val age = doc.getLong("age")?.toInt()?.takeIf { it > 0 }
+                        ?: ageFromBirthDate(birthDate)
+                        ?: 0
                     val role = doc.getString("role") ?: ""
                     val benefitTypeRaw = doc.getString("benefitType") ?: "regular"
                     val universityStatus = doc.getString("universityStatus") ?: ""

@@ -61,8 +61,9 @@ import com.pasajeya.app.feature.trip.domain.FareVersionInput
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FareEstimateScreen(
-    onBack: () -> Unit,
+    onBack: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
+    bottomBar: @Composable () -> Unit = {},
     viewModel: FareEstimateViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -80,6 +81,7 @@ fun FareEstimateScreen(
     AuthScreen(
         title = stringResource(R.string.estimate_title),
         onBack = onBack,
+        bottomBar = bottomBar,
         modifier = modifier.testTag("fare_estimate_screen")
     ) {
         when {

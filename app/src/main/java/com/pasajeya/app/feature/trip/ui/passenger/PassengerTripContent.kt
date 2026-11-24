@@ -49,7 +49,6 @@ import com.pasajeya.app.core.ui.MessageTone
 import com.pasajeya.app.core.ui.ScreenHeading
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.ui.generateQrBitmap
-import com.pasajeya.app.feature.profile.ui.ProfileScreen
 import com.pasajeya.app.feature.profile.ui.ProfileUserIcon
 import com.pasajeya.app.feature.trip.ui.operator.QrScannerDialog
 import java.text.SimpleDateFormat
@@ -67,18 +66,20 @@ fun PassengerTripContent(
     onHistory: () -> Unit,
     onWallet: () -> Unit,
     onBenefits: () -> Unit,
+    onProfile: () -> Unit,
     viewModel: PassengerQrViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    bottomBar: @Composable () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val showProfile = remember { mutableStateOf<Boolean>(false) }
+
     val scope = rememberCoroutineScope()
 
     AuthScreen(
         title = stringResource(R.string.app_name),
         modifier = modifier.testTag("passenger_home_screen"),
         actions = {
-            ProfileUserIcon(onProfileClick = { showProfile.value = true })
+            ProfileUserIcon(onProfileClick = onProfile)
             TextButton(onClick = onLogout) {
                 Text(
                     text = stringResource(R.string.action_logout),
@@ -235,9 +236,6 @@ fun PassengerTripContent(
         )
     }
 
-    if (showProfile.value) {
-        ProfileScreen(visible = showProfile.value, onDismiss = { showProfile.value = false })
-    }
 }
 
 @Composable

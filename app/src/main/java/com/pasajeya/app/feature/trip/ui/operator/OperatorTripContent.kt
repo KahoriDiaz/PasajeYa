@@ -85,7 +85,6 @@ import com.pasajeya.app.feature.trip.domain.model.Shift
 import com.pasajeya.app.feature.trip.domain.model.TapInResult
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.ui.generateQrBitmap
-import com.pasajeya.app.feature.profile.ui.ProfileScreen
 import com.pasajeya.app.feature.profile.ui.ProfileUserIcon
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -98,6 +97,7 @@ fun OperatorTripContent(
     profileLoading: Boolean,
     profileError: Boolean,
     onLogout: () -> Unit,
+    onProfile: () -> Unit,
     viewModel: OperatorTripViewModel,
     modifier: Modifier = Modifier,
     summaryViewModel: OperatorShiftSummaryViewModel = hiltViewModel()
@@ -111,7 +111,7 @@ fun OperatorTripContent(
     }
     var pendingStart by rememberSaveable { mutableStateOf(false) }
     var targetPosition by remember { mutableStateOf<MapUserPosition?>(null) }
-    var showProfile by remember { mutableStateOf(false) }
+
 
     val busPosition: MapUserPosition? = state.shift?.let { shift ->
         shift.simulatedLatitude?.let { lat ->
@@ -184,7 +184,7 @@ fun OperatorTripContent(
         title = stringResource(R.string.app_name),
         modifier = modifier.testTag("operator_home_screen"),
         actions = {
-            ProfileUserIcon(onProfileClick = { showProfile = true })
+            ProfileUserIcon(onProfileClick = onProfile)
             TextButton(onClick = onLogout) {
                 Text(
                     text = stringResource(R.string.action_logout),
@@ -397,9 +397,6 @@ fun OperatorTripContent(
         )
     }
 
-    if (showProfile) {
-        ProfileScreen(visible = showProfile, onDismiss = { showProfile = false })
-    }
 }
 
 @Composable
