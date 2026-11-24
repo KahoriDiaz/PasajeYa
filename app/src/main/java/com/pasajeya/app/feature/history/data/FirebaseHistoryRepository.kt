@@ -39,21 +39,9 @@ class FirebaseHistoryRepository @Inject constructor(
 
         val range = HistoryDateRanges.range(filter)
         val snapshot = snapshotOf(query)
-        val routeNames = mutableMapOf<String, String>()
-        snapshot.documents.mapNotNull { it.getString("routeId") }.distinct().forEach { routeId ->
-            routeCatalog.find(routeId)?.name?.takeIf { it.isNotBlank() }?.let { name ->
-                routeNames[routeId] = name
-            }
-        }
         var trips = snapshot.documents.mapNotNull { document ->
             document.toTrip()?.let { trip ->
-                // El nombre de la ruta se lee del catalogo: antes solo salia el codigo.
-                HistoryTrip(
-                    trip = trip,
-                    routeName = routeNames.getOrPut(trip.routeId) {
-                        trip.routeId
-                    }
-                )
+                HistoryTrip(trip = trip, routeName = trip.routeId)
             }
         }.filter { item ->
             item.trip.status in PASSENGER_STATUSES && item.trip.inRange(range)
@@ -127,18 +115,31 @@ class FirebaseHistoryRepository @Inject constructor(
         )
     }
 
+    /**
+     * Nombre de cada ruta. Las rutas de la demo viven en el catalogo local, asi que si
+     * Firestore no las tiene se usa ese: antes el historial mostraba solo el codigo.
+     */
     private suspend fun loadRouteNames(routeIds: Set<String>): Map<String, String> {
         if (routeIds.isEmpty()) return emptyMap()
-        return runCatching {
+        val remote = runCatching {
             firestore.collection("routes")
                 .whereIn(FieldPath.documentId(), routeIds.toList())
                 .get()
                 .await()
                 .documents
-                .associate { document ->
-                    document.id to (document.getString("name") ?: document.id)
+                .mapNotNull { document ->
+                    document.getString("name")
+                        ?.takeIf { it.isNotBlank() }
+                        ?.let { document.id to it }
                 }
+                .toMap()
         }.getOrDefault(emptyMap())
+        val missing = routeIds - remote.keys
+        if (missing.isEmpty()) return remote
+        val local = missing.mapNotNull { routeId ->
+            routeCatalog.find(routeId)?.name?.takeIf { it.isNotBlank() }?.let { routeId to it }
+        }.toMap()
+        return remote + local
     }
 
     private suspend fun snapshotOf(query: Query): QuerySnapshot = try {
