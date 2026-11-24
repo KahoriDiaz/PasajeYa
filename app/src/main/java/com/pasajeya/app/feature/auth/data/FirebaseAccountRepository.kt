@@ -52,7 +52,15 @@ class FirebaseAccountRepository @Inject constructor(
         // Una sesion cacheada sin rol esta a medio registrar: conviene volver a leerla.
         _deviceSession.value
             ?.takeIf { it.uid == uid && it.role != null }
-            ?.let { return@withLock it }
+            ?.let { cached ->
+                // El correo pudo verificarse despues de crear la sesion.
+                val verified = auth.currentUser?.isEmailVerified ?: cached.emailVerified
+                val fresh = cached.copy(emailVerified = verified)
+                if (fresh != cached) {
+                    _deviceSession.value = fresh
+                }
+                return@withLock fresh
+            }
 
         val deviceId = deviceIdStore.getOrCreate()
         // Sesion local: el rol sale de users/{uid}. Si no se puede leer, no se adivina el rol.

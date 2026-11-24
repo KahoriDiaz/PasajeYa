@@ -422,6 +422,11 @@ private fun TransparentFareResult(
                 style = MaterialTheme.typography.bodySmall,
                 color = TextGray
             )
+            Text(
+                text = stringResource(R.string.fare_breakdown_explained),
+                style = MaterialTheme.typography.bodySmall,
+                color = TextGray
+            )
         }
     }
 }

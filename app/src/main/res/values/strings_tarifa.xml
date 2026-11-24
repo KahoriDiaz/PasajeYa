@@ -2,12 +2,12 @@
 <resources>
     <string name="fare_breakdown_title">Pasaje de este tramo</string>
     <string name="fare_breakdown_pay">A pagar</string>
-    <string name="fare_breakdown_boarding">Subida (banderazo)</string>
+    <string name="fare_breakdown_boarding">Subir a la unidad (parte fija)</string>
     <string name="fare_breakdown_distance">%1$s km × %2$s por km</string>
     <string name="fare_breakdown_subtotal">Subtotal</string>
     <string name="fare_breakdown_rounding">Redondeado a %1$s</string>
-    <string name="fare_breakdown_min">Se aplicó la tarifa mínima de %1$s, porque el tramo es corto.</string>
-    <string name="fare_breakdown_cap">Tope de la ruta: %1$s. Nunca pagas más que la tarifa oficial.</string>
+    <string name="fare_breakdown_min">El tramo da menos que el mínimo del día (%1$s), así que se cobra el mínimo.</string>
+    <string name="fare_breakdown_cap">Tope del día: %1$s. Por lejos que vayas, no pagas más.</string>
     <string name="fare_breakdown_flat">Con tarifa plana pagarías %1$s por este mismo viaje.</string>
     <string name="fare_breakdown_regular">Pasaje regular</string>
     <string name="fare_breakdown_benefit">Descuento universitario del %1$d %% aplicado</string>
@@ -17,4 +17,9 @@
     <string name="fare_today_max">Tope por viaje</string>
     <string name="fare_today_note">Los cuatro valores se recalculan todos los días a las 6:00 con el precio del diésel en Arequipa. Índice de hoy: %1$sx sobre el precio base.</string>
     <string name="live_trip_simulated">Distancia medida sobre los paraderos de la ruta (modo demostración del conductor)</string>
+    <string name="fuel_history_title">Transparencia tarifaria: combustible</string>
+    <string name="fuel_history_source">Fuente oficial: Osinergmin (Arequipa)</string>
+    <string name="fuel_history_price">S/ %1$s por galón</string>
+    <string name="fuel_history_recent">Reciente</string>
+    <string name="fare_breakdown_explained">La parte fija cubre el costo de arrancar el viaje, igual que el banderazo de un taxi. Los kilómetros se miden siguiendo los paraderos de la ruta, uno por uno, no en línea recta.</string>
 </resources>

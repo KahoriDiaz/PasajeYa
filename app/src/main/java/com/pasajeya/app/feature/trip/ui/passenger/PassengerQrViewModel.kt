@@ -95,6 +95,19 @@ class PassengerQrViewModel @Inject constructor(
         _uiState.update { it.copy(scannerOpen = false) }
     }
 
+    /**
+     * Vuelve a preguntarle a Firebase si el correo ya quedo verificado. Hace falta al
+     * regresar de verificar el correo institucional: sin esto el aviso rojo seguia ahi
+     * hasta cerrar y abrir la app.
+     */
+    fun refreshEmailVerified() {
+        viewModelScope.launch {
+            val user = runCatching { authRepository.reloadUser() }.getOrNull()
+                ?: authRepository.currentUser()
+            _uiState.update { it.copy(emailVerified = user?.emailVerified == true) }
+        }
+    }
+
     suspend fun resendVerification() {
         authRepository.sendEmailVerification()
     }
