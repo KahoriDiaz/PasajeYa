@@ -62,9 +62,6 @@ fun PassengerTripContent(
     profileLoading: Boolean,
     profileError: Boolean,
     onLogout: () -> Unit,
-    onEstimate: () -> Unit,
-    onHistory: () -> Unit,
-    onWallet: () -> Unit,
     onBenefits: () -> Unit,
     onProfile: () -> Unit,
     viewModel: PassengerQrViewModel,
@@ -78,15 +75,8 @@ fun PassengerTripContent(
     AuthScreen(
         title = stringResource(R.string.app_name),
         modifier = modifier.testTag("passenger_home_screen"),
-        actions = {
-            ProfileUserIcon(onProfileClick = onProfile)
-            TextButton(onClick = onLogout) {
-                Text(
-                    text = stringResource(R.string.action_logout),
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-        }
+        bottomBar = bottomBar,
+        actions = { ProfileUserIcon(onProfileClick = onProfile) }
     ) {
         ScreenHeading(
             title = stringResource(R.string.home_greeting, displayName),
@@ -186,25 +176,7 @@ fun PassengerTripContent(
             LiveTripCard()
         }
 
-        Button(
-            onClick = onEstimate,
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(14.dp)
-        ) {
-            Text(text = stringResource(R.string.estimate_title))
-        }
-
-        Button(
-            onClick = onWallet,
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 52.dp)
-                .testTag("open_wallet"),
-            shape = RoundedCornerShape(14.dp)
-        ) {
-            Text(text = stringResource(R.string.home_open_wallet))
-        }
-
+        // Lo demas vive en la barra de abajo; aqui solo queda lo que no es pestaña.
         OutlinedButton(
             onClick = onBenefits,
             modifier = Modifier
@@ -214,17 +186,6 @@ fun PassengerTripContent(
             shape = RoundedCornerShape(14.dp)
         ) {
             Text(text = stringResource(R.string.home_open_benefits))
-        }
-
-        OutlinedButton(
-            onClick = onHistory,
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 52.dp)
-                .testTag("open_history"),
-            shape = RoundedCornerShape(14.dp)
-        ) {
-            Text(text = stringResource(R.string.history_open))
         }
     }
 

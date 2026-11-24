@@ -28,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pasajeya.app.R
 import com.pasajeya.app.feature.auth.domain.model.AuthDestination
+import com.pasajeya.app.feature.auth.domain.model.UserRole
 import com.pasajeya.app.feature.auth.ui.company.CompanyDetailsScreen
 import com.pasajeya.app.feature.auth.ui.profile.CompanyPersonalProfileScreen
 import com.pasajeya.app.feature.claims.ui.ClaimScreen
@@ -65,6 +66,7 @@ object AppRoutes {
     const val OPERATOR_HOME = "operator_home"
     const val PROFILE = "profile"
     const val CLAIM = "claim/{tripId}"
+    const val OPERATOR_SUMMARY = "operator_summary"
     const val COMPANY_PROFILE = "company_profile"
     const val COMPANY_DETAILS = "company_details"
     const val COMPANY_HOME = "company_home"
@@ -107,6 +109,22 @@ private fun passengerTabs(): List<NavBarItem> = listOf(
     NavBarItem(AppRoutes.PROFILE, stringResource(R.string.tab_profile), Icons.Filled.Person)
 )
 
+/** Pestañas del conductor. */
+@Composable
+private fun driverTabs(): List<NavBarItem> = listOf(
+    NavBarItem(
+        AppRoutes.OPERATOR_HOME,
+        stringResource(R.string.operator_tab_shift),
+        Icons.Filled.DirectionsBus
+    ),
+    NavBarItem(
+        AppRoutes.OPERATOR_SUMMARY,
+        stringResource(R.string.operator_tab_summary),
+        Icons.Filled.History
+    ),
+    NavBarItem(AppRoutes.PROFILE, stringResource(R.string.tab_profile), Icons.Filled.Person)
+)
+
 @Composable
 fun AppNavHost(
     startDestination: AuthDestination,
@@ -128,17 +146,24 @@ fun AppNavHost(
     }
 
     // Las pestañas no apilan pantallas: se cambia entre ellas y se conserva su estado.
-    fun openTab(route: String) {
+    fun openTab(home: String, route: String) {
         navController.navigate(route) {
-            popUpTo(AppRoutes.PASSENGER_HOME) { saveState = true }
+            popUpTo(home) { inclusive = route == home }
             launchSingleTop = true
-            restoreState = true
         }
     }
 
     val tabs = passengerTabs()
+    val driverItems = driverTabs()
     val passengerBar: @Composable (String) -> Unit = { current ->
-        PasajeYaNavBar(items = tabs, currentRoute = current, onSelect = ::openTab)
+        PasajeYaNavBar(items = tabs, currentRoute = current) { route ->
+            openTab(AppRoutes.PASSENGER_HOME, route)
+        }
+    }
+    val driverBar: @Composable (String) -> Unit = { current ->
+        PasajeYaNavBar(items = driverItems, currentRoute = current) { route ->
+            openTab(AppRoutes.OPERATOR_HOME, route)
+        }
     }
 
     NavHost(
@@ -256,11 +281,8 @@ fun AppNavHost(
         composable(AppRoutes.PASSENGER_HOME) {
             PassengerHomeScreen(
                 onNavigate = ::navigateTo,
-                onEstimate = { openTab(AppRoutes.FARE_ESTIMATE) },
-                onHistory = { openTab(AppRoutes.HISTORY) },
-                onWallet = { openTab(AppRoutes.WALLET) },
                 onBenefits = { navController.navigate(AppRoutes.BENEFITS) },
-                onProfile = { openTab(AppRoutes.PROFILE) },
+                onProfile = { openTab(AppRoutes.PASSENGER_HOME, AppRoutes.PROFILE) },
                 onTripFinished = { tripId ->
                     navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
                 },
@@ -275,17 +297,36 @@ fun AppNavHost(
             }
             ProfileDetailScreen(
                 onLogout = sessionViewModel::signOut,
-                bottomBar = { passengerBar(AppRoutes.PROFILE) }
+                bottomBar = { role ->
+                    when (UserRole.fromWire(role)) {
+                        UserRole.DRIVER -> driverBar(AppRoutes.PROFILE)
+                        UserRole.PASSENGER -> passengerBar(AppRoutes.PROFILE)
+                        else -> Unit
+                    }
+                }
             )
         }
 
         composable(AppRoutes.OPERATOR_HOME) {
             OperatorHomeScreen(
                 onNavigate = ::navigateTo,
-                onProfile = { navController.navigate(AppRoutes.PROFILE) },
+                onProfile = { openTab(AppRoutes.OPERATOR_HOME, AppRoutes.PROFILE) },
                 onTripFinished = { tripId ->
                     navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
-                }
+                },
+                bottomBar = { driverBar(AppRoutes.OPERATOR_HOME) }
+            )
+        }
+
+        composable(AppRoutes.OPERATOR_SUMMARY) {
+            OperatorHomeScreen(
+                onNavigate = ::navigateTo,
+                onProfile = { openTab(AppRoutes.OPERATOR_HOME, AppRoutes.PROFILE) },
+                onTripFinished = { tripId ->
+                    navController.navigate(AppRoutes.TRIP_SUMMARY.replace("{tripId}", tripId))
+                },
+                showSummaryOnly = true,
+                bottomBar = { driverBar(AppRoutes.OPERATOR_SUMMARY) }
             )
         }
 

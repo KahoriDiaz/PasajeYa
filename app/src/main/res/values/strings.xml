@@ -168,4 +168,6 @@
     <string name="tab_history">Viajes</string>
     <string name="tab_wallet">Billetera</string>
     <string name="tab_profile">Perfil</string>
+    <string name="operator_tab_shift">Turno</string>
+    <string name="operator_tab_summary">Resumen</string>
 </resources>

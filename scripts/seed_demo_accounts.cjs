@@ -114,6 +114,7 @@ async function main() {
       firstName: DRIVER.firstName,
       lastName: DRIVER.lastName,
       fullName: `${DRIVER.firstName} ${DRIVER.lastName}`,
+      dni: DRIVER.dni,
       birthDate: DRIVER.birthDate,
       age: ageFrom(DRIVER.birthDate),
       plate: DRIVER.plate,

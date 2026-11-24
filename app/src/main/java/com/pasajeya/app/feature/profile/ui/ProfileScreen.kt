@@ -53,7 +53,8 @@ fun ProfileDetailScreen(
     onBack: (() -> Unit)? = null,
     onLogout: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
-    bottomBar: @Composable () -> Unit = {},
+    /** La barra de abajo depende del rol de la cuenta que esta en sesion. */
+    bottomBar: @Composable (role: String) -> Unit = {},
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -63,7 +64,7 @@ fun ProfileDetailScreen(
     AuthScreen(
         title = stringResource(R.string.profile_title),
         onBack = onBack,
-        bottomBar = bottomBar,
+        bottomBar = { bottomBar(state.role) },
         modifier = modifier.testTag("profile_screen")
     ) {
         if (state.isLoading) {

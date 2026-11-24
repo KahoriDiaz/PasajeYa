@@ -15,9 +15,6 @@ import com.pasajeya.app.feature.trip.ui.passenger.PassengerTripContent
 @Composable
 fun PassengerHomeScreen(
     onNavigate: (AuthDestination) -> Unit,
-    onEstimate: () -> Unit,
-    onHistory: () -> Unit,
-    onWallet: () -> Unit,
     onBenefits: () -> Unit,
     onProfile: () -> Unit,
     onTripFinished: (String) -> Unit,
@@ -42,9 +39,6 @@ fun PassengerHomeScreen(
         profileLoading = state.isLoading,
         profileError = state.hasError,
         onLogout = viewModel::logout,
-        onEstimate = onEstimate,
-        onHistory = onHistory,
-        onWallet = onWallet,
         onBenefits = onBenefits,
         onProfile = onProfile,
         viewModel = tripViewModel,
@@ -59,6 +53,8 @@ fun OperatorHomeScreen(
     onProfile: () -> Unit,
     onTripFinished: (String) -> Unit,
     modifier: Modifier = Modifier,
+    showSummaryOnly: Boolean = false,
+    bottomBar: @Composable () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel(),
     tripViewModel: OperatorTripViewModel = hiltViewModel()
 ) {
@@ -80,6 +76,8 @@ fun OperatorHomeScreen(
         onLogout = viewModel::logout,
         onProfile = onProfile,
         viewModel = tripViewModel,
+        showSummaryOnly = showSummaryOnly,
+        bottomBar = bottomBar,
         modifier = modifier
     )
 }

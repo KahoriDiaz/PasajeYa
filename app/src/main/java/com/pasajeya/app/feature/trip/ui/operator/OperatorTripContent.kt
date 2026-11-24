@@ -100,6 +100,9 @@ fun OperatorTripContent(
     onProfile: () -> Unit,
     viewModel: OperatorTripViewModel,
     modifier: Modifier = Modifier,
+    /** Pestaña que se muestra: el turno o el resumen del dia. */
+    showSummaryOnly: Boolean = false,
+    bottomBar: @Composable () -> Unit = {},
     summaryViewModel: OperatorShiftSummaryViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -183,20 +186,30 @@ fun OperatorTripContent(
     AuthScreen(
         title = stringResource(R.string.app_name),
         modifier = modifier.testTag("operator_home_screen"),
-        actions = {
-            ProfileUserIcon(onProfileClick = onProfile)
-            TextButton(onClick = onLogout) {
-                Text(
-                    text = stringResource(R.string.action_logout),
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-        }
+        bottomBar = bottomBar,
+        actions = { ProfileUserIcon(onProfileClick = onProfile) }
     ) {
         ScreenHeading(
-            title = stringResource(R.string.home_greeting, displayName),
-            subtitle = email
+            title = if (showSummaryOnly) {
+                stringResource(R.string.operator_tab_summary)
+            } else {
+                stringResource(R.string.home_greeting, displayName)
+            },
+            subtitle = if (showSummaryOnly) null else email
         )
+
+        if (showSummaryOnly) {
+            OperatorShiftSummaryCard(
+                state = summaryState,
+                onRetry = summaryViewModel::refresh
+            )
+            VoiceSettingsCard(
+                enabled = state.voiceEnabled,
+                onEnabledChange = viewModel::setVoiceEnabled,
+                onTest = viewModel::testVoice
+            )
+            return@AuthScreen
+        }
 
         if (profileLoading) {
             Row(
@@ -331,17 +344,6 @@ fun OperatorTripContent(
                 onTapOut = viewModel::requestTapOut
             )
         }
-
-        OperatorShiftSummaryCard(
-            state = summaryState,
-            onRetry = summaryViewModel::refresh
-        )
-
-        VoiceSettingsCard(
-            enabled = state.voiceEnabled,
-            onEnabledChange = viewModel::setVoiceEnabled,
-            onTest = viewModel::testVoice
-        )
 
         NfcReaderEffect(viewModel = viewModel)
     }
