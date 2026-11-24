@@ -2,6 +2,7 @@ package com.pasajeya.app.feature.fare.domain
 
 import com.pasajeya.app.core.util.Haversine
 import com.pasajeya.app.feature.trip.domain.FareCalculator
+import com.pasajeya.app.feature.trip.domain.UniversityBenefitSchedule
 import java.time.LocalDateTime
 import com.pasajeya.app.feature.trip.domain.FareResult
 import kotlin.math.max
@@ -49,7 +50,7 @@ object FareEstimator {
         context: RouteFareContext,
         distanceMeters: Double,
         hasUniversityBenefit: Boolean,
-        now: LocalDateTime = LocalDateTime.now()
+        now: LocalDateTime = UniversityBenefitSchedule.now()
     ): FareResult = FareCalculator.computeFare(
         distanceMeters = distanceMeters,
         version = context.version,

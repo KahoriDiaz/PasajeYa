@@ -5,14 +5,45 @@ import com.pasajeya.app.feature.fare.domain.RouteFareContext
 import com.pasajeya.app.feature.fare.domain.RouteGeo
 import com.pasajeya.app.feature.fare.domain.RouteStop
 import com.pasajeya.app.feature.trip.domain.FareVersionInput
+import com.pasajeya.app.feature.trip.domain.UniversityBenefitSchedule
+import java.time.LocalDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 
 class FareEstimatorTest {
+
+    // Lunes al mediodia: dentro del horario del medio pasaje.
+    private val monday = LocalDateTime.of(2026, 11, 23, 12, 0)
+
+    @Before
+    fun fixClock() {
+        UniversityBenefitSchedule.fixedNow = monday
+    }
+
+    @After
+    fun releaseClock() {
+        UniversityBenefitSchedule.fixedNow = null
+    }
+
+    @Test
+    fun `el medio pasaje no vale los domingos ni de madrugada`() {
+        val sunday = LocalDateTime.of(2026, 11, 22, 12, 0)
+        val dawn = LocalDateTime.of(2026, 11, 23, 4, 30)
+        assertFalse(UniversityBenefitSchedule.isActiveAt(sunday))
+        assertFalse(UniversityBenefitSchedule.isActiveAt(dawn))
+        assertTrue(UniversityBenefitSchedule.isActiveAt(monday))
+
+        UniversityBenefitSchedule.fixedNow = sunday
+        val fare = FareEstimator.fareForDistance(context(), 5_000.0, true)
+        assertEquals(120, fare.totalCents)
+        assertTrue(fare.benefitOutsideSchedule)
+    }
 
     // Paraderos sobre un meridiano: cada 0.01° de latitud son ~1112 m.
     private val stops = listOf(

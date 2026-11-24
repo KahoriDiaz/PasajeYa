@@ -37,7 +37,7 @@ object FareCalculator {
         version: FareVersionInput,
         hasUniversityBenefit: Boolean = false,
         officialFareCents: Int? = null,
-        now: LocalDateTime = LocalDateTime.now()
+        now: LocalDateTime = UniversityBenefitSchedule.now()
     ): FareResult {
         val km = distanceMeters.coerceAtLeast(0.0) / 1000.0
         val perKmCents = version.baseFarePerKmCents.coerceAtLeast(0)

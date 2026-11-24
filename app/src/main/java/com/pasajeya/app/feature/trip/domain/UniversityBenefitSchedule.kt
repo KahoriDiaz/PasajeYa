@@ -17,5 +17,10 @@ object UniversityBenefitSchedule {
         return moment.hour >= START_HOUR
     }
 
-    fun isActiveNow(): Boolean = isActiveAt(LocalDateTime.now())
+    /** Momento que se considera "ahora". Las pruebas lo fijan para no depender del reloj. */
+    internal var fixedNow: LocalDateTime? = null
+
+    fun now(): LocalDateTime = fixedNow ?: LocalDateTime.now()
+
+    fun isActiveNow(): Boolean = isActiveAt(now())
 }

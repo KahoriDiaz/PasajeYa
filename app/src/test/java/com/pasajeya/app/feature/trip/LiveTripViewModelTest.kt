@@ -6,6 +6,7 @@ import com.pasajeya.app.feature.fare.domain.RouteFareContext
 import com.pasajeya.app.feature.fare.domain.RouteGeo
 import com.pasajeya.app.feature.fare.domain.RouteStop
 import com.pasajeya.app.feature.trip.domain.FareVersionInput
+import com.pasajeya.app.feature.trip.domain.UniversityBenefitSchedule
 import com.pasajeya.app.feature.trip.domain.GpsFix
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.location.LocationProvider
@@ -87,6 +88,17 @@ class LiveTripViewModelTest {
         passengerFirstName = "Ana",
         passengerAge = 20
     )
+
+    @Before
+    fun fixBenefitClock() {
+        // Lunes al mediodia: el medio pasaje esta vigente.
+        UniversityBenefitSchedule.fixedNow = java.time.LocalDateTime.of(2026, 11, 23, 12, 0)
+    }
+
+    @After
+    fun releaseBenefitClock() {
+        UniversityBenefitSchedule.fixedNow = null
+    }
 
     @Before
     fun setUp() {
