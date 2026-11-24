@@ -196,7 +196,7 @@ fun RouteMap(
 /** Marcador del bus: el mismo dibujo del icono de la app sobre un circulo blanco. */
 private fun busMarker(view: MapView, lat: Double, lng: Double): Marker {
     val density = view.resources.displayMetrics.density
-    val size = (34 * density).toInt()
+    val size = (24 * density).toInt()
     val circle = GradientDrawable().apply {
         shape = GradientDrawable.OVAL
         setColor(AndroidColor.WHITE)
@@ -207,7 +207,7 @@ private fun busMarker(view: MapView, lat: Double, lng: Double): Marker {
         circle
     } else {
         LayerDrawable(arrayOf(circle, bus)).apply {
-            val inset = (6 * density).toInt()
+            val inset = (4 * density).toInt()
             setLayerInset(1, inset, inset, inset, inset)
         }
     }

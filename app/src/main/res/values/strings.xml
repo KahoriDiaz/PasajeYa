@@ -170,4 +170,6 @@
     <string name="tab_profile">Perfil</string>
     <string name="operator_tab_shift">Turno</string>
     <string name="operator_tab_summary">Resumen</string>
+    <string name="operator_route_finished">Llegaste al último paradero del recorrido.</string>
+    <string name="operator_restart_route">Reiniciar el recorrido</string>
 </resources>

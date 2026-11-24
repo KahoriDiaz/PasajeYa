@@ -21,10 +21,16 @@ class LocationSimulator(private val route: RoutePath) {
     fun stopNameAt(index: Int): String? =
         route.stops.getOrNull(index.coerceIn(0, (stopCount - 1).coerceAtLeast(0)))?.name
 
+    /**
+     * Siguiente paradero, o el mismo si ya es el ultimo: el recorrido de ida termina ahi.
+     * Antes volvia al primero y la unidad parecia regresar sin haber llegado al final.
+     */
     fun nextIndex(index: Int): Int {
         if (stopCount <= 1) return 0
-        return (index + 1) % stopCount
+        return (index + 1).coerceAtMost(stopCount - 1)
     }
+
+    fun isLastStop(index: Int): Boolean = stopCount > 0 && index >= stopCount - 1
 
     fun nearestStopIndex(position: TripPosition): Int {
         if (route.stops.isEmpty()) return 0

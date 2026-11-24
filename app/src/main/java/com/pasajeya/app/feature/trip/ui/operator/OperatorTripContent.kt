@@ -323,9 +323,11 @@ fun OperatorTripContent(
                 simulatedStopIndex = state.simulatedStopIndex,
                 simulatedStopName = state.simulatedStopName,
                 stopCount = state.stopCount,
+                routeFinished = state.routeFinished,
                 onToggleSimulation = viewModel::toggleSimulation,
                 onEndShift = viewModel::requestEndShift,
                 onAdvanceStop = ::advanceStop,
+                onRestartRoute = viewModel::restartRoute,
                 isEnding = state.isEndingShift
             )
             if (state.simulationEnabled && state.routeStops.isNotEmpty() && busPosition != null) {
@@ -721,11 +723,13 @@ private fun ActiveShiftCard(
     busQrPayload: String?,
     simulationEnabled: Boolean,
     simulatedStopIndex: Int,
+    routeFinished: Boolean,
     simulatedStopName: String?,
     stopCount: Int,
     onToggleSimulation: (Boolean) -> Unit,
     onEndShift: () -> Unit,
     onAdvanceStop: () -> Unit,
+    onRestartRoute: () -> Unit,
     isEnding: Boolean
 ) {    Card(
         modifier = Modifier.fillMaxWidth(),
@@ -846,13 +850,31 @@ private fun ActiveShiftCard(
                 )
             }
 
-            if (simulationEnabled && stopCount > 0) {
-                PrimaryButton(
-                    text = stringResource(R.string.operator_advance_stop),
-                    onClick = onAdvanceStop,
-                    modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
-                    enabled = !isEnding
+            if (simulationEnabled && routeFinished) {
+                Text(
+                    text = stringResource(R.string.operator_route_finished),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = SuccessGreen
                 )
+            }
+
+            if (simulationEnabled && stopCount > 0) {
+                if (routeFinished) {
+                    PrimaryButton(
+                        text = stringResource(R.string.operator_restart_route),
+                        onClick = onRestartRoute,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                        enabled = !isEnding
+                    )
+                } else {
+                    PrimaryButton(
+                        text = stringResource(R.string.operator_advance_stop),
+                        onClick = onAdvanceStop,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                        enabled = !isEnding
+                    )
+                }
             }
 
             OutlinedButton(

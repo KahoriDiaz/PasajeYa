@@ -64,7 +64,7 @@ fun ProfileDetailScreen(
     AuthScreen(
         title = stringResource(R.string.profile_title),
         onBack = onBack,
-        bottomBar = { bottomBar(state.role) },
+        bottomBar = { bottomBar(state.roleWire) },
         modifier = modifier.testTag("profile_screen")
     ) {
         if (state.isLoading) {

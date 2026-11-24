@@ -18,10 +18,9 @@ import java.util.Locale
 @Composable
 fun FuelHistoryCard(
     history: List<FuelRecord>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fuelIndex: Double? = null
 ) {
-    if (history.isEmpty()) return
-
     val dateFormat = SimpleDateFormat("dd MMM", Locale("es", "PE"))
 
     Card(
@@ -44,6 +43,26 @@ fun FuelHistoryCard(
             )
 
             Spacer(modifier = Modifier.height(10.dp))
+
+            if (fuelIndex != null) {
+                Text(
+                    text = stringResource(
+                        R.string.fuel_history_index,
+                        "%.2f".format(fuelIndex)
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+            }
+
+            if (history.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.fuel_history_empty),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
             history.forEach { record ->
                 Row(

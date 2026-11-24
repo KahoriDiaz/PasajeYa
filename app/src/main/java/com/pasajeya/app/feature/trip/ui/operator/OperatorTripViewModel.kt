@@ -100,7 +100,9 @@ data class OperatorTripUiState(
     val simulatedStopName: String? = null,
     val stopCount: Int = 0,
     val routeStops: List<RouteStop> = emptyList(),
-    val emailVerified: Boolean = false
+    val emailVerified: Boolean = false,
+    /** La unidad llego al ultimo paradero del recorrido. */
+    val routeFinished: Boolean = false
 )
 
 @HiltViewModel
@@ -712,6 +714,7 @@ class OperatorTripViewModel @Inject constructor(
         simulationJob?.cancel()
         simulationShiftId = shift.id
         simulationJob = viewModelScope.launch {
+            _uiState.update { it.copy(routeFinished = false) }
             var index = _uiState.value.simulatedStopIndex
             while (true) {
                 val route = routePath
@@ -741,7 +744,16 @@ class OperatorTripViewModel @Inject constructor(
                     )
                 }
                 delay(SIMULATION_STEP_MILLIS)
-                index = simulator.nextIndex(index)
+                val next = simulator.nextIndex(index)
+                if (next == index) {
+                    // Ultimo paradero: el recorrido de ida termino.
+                    _uiState.update { current ->
+                        if (current.shift?.id != shift.id) current
+                        else current.copy(routeFinished = true)
+                    }
+                    break
+                }
+                index = next
             }
         }
     }
@@ -755,6 +767,42 @@ class OperatorTripViewModel @Inject constructor(
         }
     }
 
+    /** Vuelve al primer paradero para repetir el recorrido. */
+    fun restartRoute() {
+        val shift = _uiState.value.shift ?: return
+        viewModelScope.launch {
+            val route = routePath
+                ?: runCatching { tripRepository.loadRoutePath(shift.routeId) }.getOrNull()
+            if (route == null || route.stops.isEmpty()) return@launch
+            val simulator = LocationSimulator(route)
+            runCatching {
+                tripRepository.updateSimulation(
+                    shiftId = shift.id,
+                    routeId = route.id,
+                    stopIndex = 0,
+                    position = simulator.positionAt(0),
+                    enabled = shift.simulationEnabled
+                )
+            }
+            _uiState.update { current ->
+                if (current.shift?.id != shift.id) {
+                    current
+                } else {
+                    current.copy(
+                        simulatedStopIndex = 0,
+                        simulatedStopName = simulator.stopNameAt(0),
+                        routeFinished = false
+                    )
+                }
+            }
+            if (_uiState.value.simulationEnabled) {
+                simulationJob?.cancel()
+                simulationShiftId = null
+                startSimulation(shift)
+            }
+        }
+    }
+
     fun advanceStop() {
         val shift = _uiState.value.shift ?: return
         if (!shift.simulationEnabled) return
@@ -764,6 +812,10 @@ class OperatorTripViewModel @Inject constructor(
                 ?: runCatching { tripRepository.loadRoutePath(shift.routeId) }.getOrNull()
             if (route == null || route.stops.isEmpty()) return@launch
             val nextIndex = (currentIndex + 1).coerceIn(0, route.stops.lastIndex)
+            if (nextIndex == currentIndex) {
+                _uiState.update { it.copy(routeFinished = true) }
+                return@launch
+            }
             val simulator = LocationSimulator(route)
             val position = simulator.positionAt(nextIndex)
             val stopName = simulator.stopNameAt(nextIndex)

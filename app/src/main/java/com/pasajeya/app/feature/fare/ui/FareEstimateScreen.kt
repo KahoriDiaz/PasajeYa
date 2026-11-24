@@ -44,6 +44,7 @@ import com.pasajeya.app.R
 import com.pasajeya.app.core.map.RouteMap
 import com.pasajeya.app.core.theme.BorderLight
 import com.pasajeya.app.core.theme.SuccessGreen
+import com.pasajeya.app.core.theme.PrimaryBlue
 import com.pasajeya.app.core.theme.ReviewAmber
 import com.pasajeya.app.core.theme.TextGray
 import com.pasajeya.app.core.ui.AuthScreen
@@ -205,7 +206,8 @@ fun FareEstimateScreen(
         state.context?.version?.let { version -> TariffTodayCard(version) }
         FuelHistoryCard(
             history = fuelHistory,
-            modifier = Modifier.padding(top = 10.dp, bottom = 24.dp)
+            modifier = Modifier.padding(top = 10.dp, bottom = 24.dp),
+            fuelIndex = state.context?.version?.fuelIndex
         )
     }
 }
@@ -253,6 +255,17 @@ private fun TariffTodayCard(version: FareVersionInput) {
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = TextGray
+            )
+            Text(
+                text = stringResource(R.string.fare_breakdown_explained),
+                style = MaterialTheme.typography.bodySmall,
+                color = TextGray
+            )
+            Text(
+                text = stringResource(R.string.fare_benefit_schedule),
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.SemiBold,
+                color = PrimaryBlue
             )
         }
     }
@@ -431,11 +444,6 @@ private fun TransparentFareResult(
                     R.string.fare_breakdown_flat,
                     formatCentsInt(steppedFareCents)
                 ),
-                style = MaterialTheme.typography.bodySmall,
-                color = TextGray
-            )
-            Text(
-                text = stringResource(R.string.fare_breakdown_explained),
                 style = MaterialTheme.typography.bodySmall,
                 color = TextGray
             )

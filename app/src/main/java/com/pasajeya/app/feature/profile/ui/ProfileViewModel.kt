@@ -26,6 +26,9 @@ data class ProfileUiState(
     val dni: String = "",
     val birthDate: String = "",
     val age: Int = 0,
+    /** Valor tal como esta en la base: passenger, operator o company. */
+    val roleWire: String = "",
+    /** Como se le muestra a la persona. */
     val role: String = "",
     val benefitType: String = "Regular",
     val balanceCents: Int = 0,
@@ -49,6 +52,14 @@ class ProfileViewModel @Inject constructor(
 
     init {
         loadProfile()
+    }
+
+    /** "operator" es el valor heredado del conductor; para la persona es "Conductor". */
+    private fun roleLabel(wire: String): String = when (wire.lowercase(Locale.ROOT)) {
+        "passenger" -> "Pasajero"
+        "operator", "driver" -> "Conductor"
+        "company" -> "Operador (empresa)"
+        else -> ""
     }
 
     private fun loadProfile() {
@@ -94,7 +105,8 @@ class ProfileViewModel @Inject constructor(
                             dni = dni,
                             birthDate = birthDate,
                             age = age,
-                            role = if (role.isNotBlank()) role.capitalize(Locale.ROOT) else "",
+                            roleWire = role,
+                            role = roleLabel(role),
                             benefitType = benefitLabel,
                             isLoading = false
                         )
