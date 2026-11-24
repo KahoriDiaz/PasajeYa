@@ -1,10 +1,14 @@
 package com.pasajeya.app.feature.company.data
 
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.pasajeya.app.feature.company.domain.CompanyClaim
 import com.pasajeya.app.feature.company.domain.CompanyDashboard
+import com.pasajeya.app.core.util.hashedDni
 import com.pasajeya.app.feature.company.domain.CompanyRepository
 import com.pasajeya.app.feature.company.domain.CompanyUnit
+import com.pasajeya.app.feature.company.domain.PendingDriver
 import com.pasajeya.app.feature.company.domain.SubscriptionPricing
 import java.time.LocalDate
 import java.time.ZoneId
@@ -79,6 +83,24 @@ class FirebaseCompanyRepository @Inject constructor(
                 .take(MAX_CLAIMS)
         }.getOrDefault(emptyList())
 
+        // Conductores dados de alta por la empresa que aun no se registran.
+        val pending = runCatching {
+            firestore.collection("driverInvites")
+                .whereEqualTo("companyId", companyUid)
+                .whereEqualTo("status", INVITE_PENDING)
+                .get()
+                .await()
+                .documents
+                .map { doc ->
+                    PendingDriver(
+                        dniHash = doc.id,
+                        fullName = doc.getString("fullName").orEmpty(),
+                        plate = doc.getString("plate").orEmpty(),
+                        routeId = doc.getString("routeId").orEmpty()
+                    )
+                }
+        }.getOrDefault(emptyList())
+
         // Empresa con RUC = formal, asi que paga el precio con descuento.
         val isFormal = company.getString("ruc").orEmpty().isNotBlank()
         return CompanyDashboard(
@@ -95,8 +117,29 @@ class FirebaseCompanyRepository @Inject constructor(
             } else {
                 0L
             },
-            claims = claims
+            claims = claims,
+            pendingDrivers = pending
         )
+    }
+
+    override suspend fun registerDriver(
+        companyUid: String,
+        fullName: String,
+        dni: String,
+        plate: String,
+        routeId: String
+    ) {
+        firestore.collection("driverInvites").document(hashedDni(dni)).set(
+            mapOf(
+                "companyId" to companyUid,
+                "fullName" to fullName,
+                "plate" to plate,
+                "routeId" to routeId,
+                "status" to INVITE_PENDING,
+                "createdAt" to FieldValue.serverTimestamp()
+            ),
+            SetOptions.merge()
+        ).await()
     }
 
     private companion object {
@@ -104,5 +147,6 @@ class FirebaseCompanyRepository @Inject constructor(
         const val DRIVER_VERIFIED = "verified_by_company"
         const val LICENSE_REJECTED = "RECHAZADO"
         const val MAX_CLAIMS = 10
+        const val INVITE_PENDING = "pending"
     }
 }

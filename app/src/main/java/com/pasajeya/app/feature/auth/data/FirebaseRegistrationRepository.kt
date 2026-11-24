@@ -4,9 +4,11 @@ import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.Timestamp
 import com.pasajeya.app.feature.auth.domain.BenefitType
 import com.pasajeya.app.feature.auth.domain.OperatorRouteChoice
+import com.pasajeya.app.core.util.hashedDni
 import com.pasajeya.app.feature.auth.domain.RegistrationConfig
 import com.pasajeya.app.feature.auth.domain.RegistrationRepository
 import com.pasajeya.app.feature.auth.domain.model.AccountException
@@ -85,10 +87,19 @@ class FirebaseRegistrationRepository @Inject constructor(
         companyId: String?,
         companyRuc: String?
     ) {
-        val companyData = if (companyId != null) {
-            mapOf("companyId" to companyId, "companyRuc" to companyRuc.orEmpty())
-        } else {
-            emptyMap()
+        // Si su empresa ya lo dio de alta por DNI, queda vinculado solo.
+        val inviteRef = firestore.collection("driverInvites").document(hashedDni(dni))
+        val invite = runCatching { inviteRef.get().await() }.getOrNull()
+            ?.takeIf { it.exists() && it.getString("status") == "pending" }
+        val invitedCompanyId = invite?.getString("companyId")
+
+        val companyData = when {
+            companyId != null ->
+                mapOf("companyId" to companyId, "companyRuc" to companyRuc.orEmpty())
+
+            invitedCompanyId != null -> mapOf("companyId" to invitedCompanyId)
+
+            else -> emptyMap()
         }
         write(
             uid,
@@ -115,6 +126,15 @@ class FirebaseRegistrationRepository @Inject constructor(
                 "activeDeviceId" to deviceId
             ) + companyData
         )
+
+        if (invite != null) {
+            runCatching {
+                inviteRef.set(
+                    mapOf("status" to "accepted", "driverUid" to uid),
+                    SetOptions.merge()
+                ).await()
+            }
+        }
     }
 
     override suspend fun saveCompany(

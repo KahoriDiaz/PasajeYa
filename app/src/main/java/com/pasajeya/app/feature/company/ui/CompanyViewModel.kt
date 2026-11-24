@@ -17,7 +17,14 @@ import kotlinx.coroutines.launch
 data class CompanyUiState(
     val dashboard: CompanyDashboard? = null,
     val isLoading: Boolean = true,
-    val hasError: Boolean = false
+    val hasError: Boolean = false,
+    // Alta de un conductor de la empresa.
+    val driverName: String = "",
+    val driverDni: String = "",
+    val driverPlate: String = "",
+    val isRegisteringDriver: Boolean = false,
+    val driverRegistered: Boolean = false,
+    val driverError: Boolean = false
 )
 
 @HiltViewModel
@@ -31,6 +38,68 @@ class CompanyViewModel @Inject constructor(
 
     init {
         refresh()
+    }
+
+    fun onDriverNameChange(value: String) {
+        _uiState.update { it.copy(driverName = value.take(60), driverRegistered = false) }
+    }
+
+    fun onDriverDniChange(value: String) {
+        _uiState.update {
+            it.copy(
+                driverDni = value.filter(Char::isDigit).take(8),
+                driverRegistered = false
+            )
+        }
+    }
+
+    fun onDriverPlateChange(value: String) {
+        _uiState.update {
+            it.copy(
+                driverPlate = value.uppercase().filter(Char::isLetterOrDigit).take(6),
+                driverRegistered = false
+            )
+        }
+    }
+
+    /** Da de alta a un conductor por DNI: al registrarse en la app queda vinculado. */
+    fun registerDriver() {
+        val state = _uiState.value
+        val uid = authRepository.currentUser()?.uid ?: return
+        if (state.isRegisteringDriver) return
+        if (state.driverName.isBlank() || state.driverDni.length != 8) {
+            _uiState.update { it.copy(driverError = true) }
+            return
+        }
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isRegisteringDriver = true, driverError = false) }
+            try {
+                companyRepository.registerDriver(
+                    companyUid = uid,
+                    fullName = state.driverName.trim(),
+                    dni = state.driverDni,
+                    plate = state.driverPlate,
+                    routeId = ""
+                )
+                _uiState.update {
+                    it.copy(
+                        isRegisteringDriver = false,
+                        driverRegistered = true,
+                        driverName = "",
+                        driverDni = "",
+                        driverPlate = ""
+                    )
+                }
+                refresh()
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                _uiState.update {
+                    it.copy(isRegisteringDriver = false, driverError = true)
+                }
+            }
+        }
     }
 
     fun refresh() {

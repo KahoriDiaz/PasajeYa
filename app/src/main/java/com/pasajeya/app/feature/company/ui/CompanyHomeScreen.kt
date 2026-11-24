@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -180,6 +183,81 @@ fun CompanyHomeScreen(
                                 unit.verified -> SuccessGreen
                                 else -> ReviewAmber
                             }
+                        )
+                    }
+                }
+            }
+
+            FormCard {
+                Text(
+                    text = stringResource(R.string.company_add_driver_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = TextPrimary
+                )
+                Text(
+                    text = stringResource(R.string.company_add_driver_help),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextGray
+                )
+                OutlinedTextField(
+                    value = state.driverName,
+                    onValueChange = viewModel::onDriverNameChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    label = { Text(stringResource(R.string.company_driver_name)) }
+                )
+                OutlinedTextField(
+                    value = state.driverDni,
+                    onValueChange = viewModel::onDriverDniChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    label = { Text(stringResource(R.string.company_driver_dni)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(
+                    value = state.driverPlate,
+                    onValueChange = viewModel::onDriverPlateChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    label = { Text(stringResource(R.string.company_driver_plate)) }
+                )
+                if (state.driverError) {
+                    InlineMessage(
+                        text = stringResource(R.string.company_driver_error),
+                        tone = MessageTone.ERROR
+                    )
+                }
+                if (state.driverRegistered) {
+                    InlineMessage(
+                        text = stringResource(R.string.company_driver_registered),
+                        tone = MessageTone.SUCCESS
+                    )
+                }
+                PrimaryButton(
+                    text = stringResource(R.string.company_add_driver_action),
+                    onClick = viewModel::registerDriver,
+                    loading = state.isRegisteringDriver,
+                    enabled = !state.isRegisteringDriver
+                )
+
+                if (dashboard.pendingDrivers.isNotEmpty()) {
+                    Text(
+                        text = stringResource(R.string.company_pending_drivers),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = TextPrimary
+                    )
+                    dashboard.pendingDrivers.forEach { pending ->
+                        Text(
+                            text = stringResource(
+                                R.string.company_pending_driver_line,
+                                pending.fullName,
+                                pending.plate.ifBlank {
+                                    stringResource(R.string.company_no_plate)
+                                }
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = TextGray
                         )
                     }
                 }

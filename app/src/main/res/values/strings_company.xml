@@ -24,4 +24,14 @@
     <string name="role_company_desc">Eres la empresa o el consorcio que paga la suscripción y ve a sus conductores.</string>
     <string name="profile_company_title">Datos del representante</string>
     <string name="company_driver_license_rejected">Brevete no habilitado según el MTC</string>
+    <string name="company_add_driver_title">Registrar un conductor</string>
+    <string name="company_add_driver_help">Da de alta a tu conductor con su DNI. Cuando él se registre en la app con ese DNI, queda vinculado a tu empresa y verificado, sin que tengas que hacer nada más.</string>
+    <string name="company_driver_name">Nombre del conductor</string>
+    <string name="company_driver_dni">DNI (8 dígitos)</string>
+    <string name="company_driver_plate">Placa de la unidad (opcional)</string>
+    <string name="company_add_driver_action">Dar de alta</string>
+    <string name="company_driver_error">Revisa el nombre y que el DNI tenga 8 dígitos.</string>
+    <string name="company_driver_registered">Conductor dado de alta. Ya puede registrarse en la app.</string>
+    <string name="company_pending_drivers">Esperando que se registren</string>
+    <string name="company_pending_driver_line">%1$s · unidad %2$s</string>
 </resources>

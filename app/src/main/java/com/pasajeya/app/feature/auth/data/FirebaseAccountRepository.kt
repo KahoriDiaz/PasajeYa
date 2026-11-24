@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.functions.FirebaseFunctions
 import com.pasajeya.app.core.util.ageFromBirthDate
+import com.pasajeya.app.core.util.hashedDni
 import com.pasajeya.app.feature.auth.domain.AccountRepository
 import com.pasajeya.app.feature.auth.domain.model.AccountException
 import com.pasajeya.app.feature.auth.domain.model.AccountFailure
@@ -19,7 +20,6 @@ import com.pasajeya.app.feature.auth.domain.model.RouteOption
 import com.pasajeya.app.feature.auth.domain.model.UserProfile
 import com.pasajeya.app.feature.auth.domain.model.UserRole
 import java.io.IOException
-import java.security.MessageDigest
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -375,11 +375,6 @@ class FirebaseAccountRepository @Inject constructor(
         if (auth.currentUser?.uid != uid) {
             throw AccountException(AccountFailure.NotAuthenticated)
         }
-    }
-
-    private fun hashedDni(dni: String): String {
-        val digest = MessageDigest.getInstance("SHA-256").digest(dni.trim().toByteArray())
-        return digest.joinToString("") { byte -> "%02x".format(byte) }
     }
 
     private fun Throwable.toAccountFailure(): AccountFailure = when {
