@@ -22,4 +22,6 @@
     <string name="fuel_history_price">S/ %1$s por galón</string>
     <string name="fuel_history_recent">Reciente</string>
     <string name="fare_breakdown_explained">La parte fija cubre el costo de arrancar el viaje, igual que el banderazo de un taxi. Los kilómetros se miden siguiendo los paraderos de la ruta, uno por uno, no en línea recta.</string>
+    <string name="fare_benefit_schedule">El medio pasaje vale de lunes a sábado, desde las 5:00 de la mañana hasta medianoche. Fuera de ese horario pagas pasaje completo.</string>
+    <string name="fare_benefit_schedule_short">Lunes a sábado, de 5:00 a medianoche</string>
 </resources>

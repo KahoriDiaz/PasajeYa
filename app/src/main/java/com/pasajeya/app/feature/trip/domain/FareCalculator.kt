@@ -1,6 +1,7 @@
 package com.pasajeya.app.feature.trip.domain
 
 import com.pasajeya.app.feature.fare.domain.FareBenefit
+import java.time.LocalDateTime
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -16,6 +17,8 @@ data class FareResult(
     /** Desglose para mostrar en pantalla: banderazo + lo que cobro la distancia. */
     val boardingCents: Int = 0,
     val distanceCents: Int = 0,
+    /** Tiene el beneficio, pero fuera del horario en que vale. */
+    val benefitOutsideSchedule: Boolean = false,
     /** Costo por km ya ajustado por el indice de combustible. */
     val perKmCents: Double = 0.0
 )
@@ -33,7 +36,8 @@ object FareCalculator {
         distanceMeters: Double,
         version: FareVersionInput,
         hasUniversityBenefit: Boolean = false,
-        officialFareCents: Int? = null
+        officialFareCents: Int? = null,
+        now: LocalDateTime = LocalDateTime.now()
     ): FareResult {
         val km = distanceMeters.coerceAtLeast(0.0) / 1000.0
         val perKmCents = version.baseFarePerKmCents.coerceAtLeast(0)
@@ -57,7 +61,8 @@ object FareCalculator {
 
         var finalCents = regularCents
         var benefit: FareBenefit? = null
-        if (hasUniversityBenefit) {
+        val benefitActive = hasUniversityBenefit && UniversityBenefitSchedule.isActiveAt(now)
+        if (benefitActive) {
             // Se redondea a favor del estudiante: nunca paga mas de la mitad.
             finalCents = floorToStep(regularCents / 2.0, step).coerceAtMost(regularCents)
             // Piso universitario: la mitad de la tarifa minima del dia.
@@ -77,6 +82,7 @@ object FareCalculator {
             benefit = benefit,
             capped = capped,
             minApplied = minApplied && !capped,
+            benefitOutsideSchedule = hasUniversityBenefit && !benefitActive,
             rawCalculatedCents = rawCalculatedCents,
             boardingCents = boardingCents,
             distanceCents = distanceCents.roundToInt(),

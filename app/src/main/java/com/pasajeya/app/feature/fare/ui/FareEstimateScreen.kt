@@ -44,6 +44,7 @@ import com.pasajeya.app.R
 import com.pasajeya.app.core.map.RouteMap
 import com.pasajeya.app.core.theme.BorderLight
 import com.pasajeya.app.core.theme.SuccessGreen
+import com.pasajeya.app.core.theme.ReviewAmber
 import com.pasajeya.app.core.theme.TextGray
 import com.pasajeya.app.core.ui.AuthScreen
 import com.pasajeya.app.core.ui.InlineMessage
@@ -397,6 +398,15 @@ private fun TransparentFareResult(
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.SemiBold,
                     color = SuccessGreen
+                )
+            }
+
+            if (fare.benefitOutsideSchedule) {
+                Text(
+                    text = stringResource(R.string.fare_benefit_schedule),
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = ReviewAmber
                 )
             }
 

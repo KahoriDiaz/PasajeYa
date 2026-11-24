@@ -3,6 +3,7 @@
     <string name="benefit_title">Beneficios</string>
     <string name="benefit_status_none">Sin beneficios activos</string>
     <string name="benefit_status_approved">Descuento universitario activo</string>
+    <string name="benefit_schedule_note">Vale de lunes a sábado, de 5:00 de la mañana a medianoche.</string>
     <string name="benefit_status_pending_carne">Revisando carné…</string>
     <string name="benefit_status_pending_code">Esperando código de correo</string>
     <string name="benefit_status_rejected">Solicitud rechazada</string>
