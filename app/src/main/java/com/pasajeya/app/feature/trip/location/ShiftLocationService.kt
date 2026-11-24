@@ -115,7 +115,7 @@ class ShiftLocationService : Service() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_launcher_mono)
             .setContentTitle(getString(R.string.operator_shift_active))
             .setContentText(getString(R.string.operator_battery_body))
             .setContentIntent(openApp)
