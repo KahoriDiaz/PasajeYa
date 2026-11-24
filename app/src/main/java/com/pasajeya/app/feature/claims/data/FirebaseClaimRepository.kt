@@ -16,10 +16,20 @@ class FirebaseClaimRepository @Inject constructor(
 ) : ClaimRepository {
 
     override suspend fun submitClaim(claim: Claim): Result<Unit> = runCatching {
+        // El reclamo guarda contra quien va: conductor, placa y empresa que responde.
+        val operatorDoc = claim.operatorId?.let { uid ->
+            runCatching { firestore.collection("operators").document(uid).get().await() }
+                .getOrNull()
+        }
         val claimData = hashMapOf(
             "tripId" to claim.tripId,
             "passengerId" to claim.passengerId,
+            "passengerName" to claim.passengerName,
             "operatorId" to claim.operatorId,
+            "companyId" to (claim.companyId ?: operatorDoc?.getString("companyId")),
+            "plate" to (claim.plate ?: operatorDoc?.getString("plate")),
+            "routeId" to claim.routeId,
+            "category" to claim.category,
             "reason" to claim.reason,
             "proposedDistanceMeters" to claim.proposedDistanceMeters,
             "status" to claim.status,
@@ -47,9 +57,15 @@ class FirebaseClaimRepository @Inject constructor(
         awaitClose { listener.remove() }
     }
 
-    override fun observePassengerClaims(passengerId: String): Flow<List<Claim>> = callbackFlow {
+    override fun observeCompanyClaims(companyId: String): Flow<List<Claim>> =
+        claimsWhere("companyId", companyId)
+
+    override fun observePassengerClaims(passengerId: String): Flow<List<Claim>> =
+        claimsWhere("passengerId", passengerId)
+
+    private fun claimsWhere(field: String, value: String): Flow<List<Claim>> = callbackFlow {
         val listener = firestore.collection("claims")
-            .whereEqualTo("passengerId", passengerId)
+            .whereEqualTo(field, value)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     trySend(emptyList())

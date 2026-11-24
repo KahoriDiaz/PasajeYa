@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="claim_title">Reportar un problema</string>
+    <string name="claim_subtitle">Cuéntanos qué pasó en este viaje. Lo revisa el soporte de PasajeYa! y le llega a la empresa que responde por esa unidad.</string>
+    <string name="claim_pick_reason">¿Qué pasó?</string>
+    <string name="claim_cat_overcharge">Me cobraron de más</string>
+    <string name="claim_cat_benefit">No me reconocieron el medio pasaje</string>
+    <string name="claim_cat_refused">No me recogió o no me dejó bajar</string>
+    <string name="claim_cat_treatment">Mal trato del conductor</string>
+    <string name="claim_cat_safety">Manejo imprudente o inseguro</string>
+    <string name="claim_cat_vehicle">La unidad estaba en mal estado</string>
+    <string name="claim_cat_other">Otro motivo</string>
+    <string name="claim_details_title">Cuéntanos más</string>
+    <string name="claim_details_label">Describe lo que pasó (opcional)</string>
+    <string name="claim_context">Viaje en la ruta %1$s</string>
+    <string name="claim_send">Enviar reclamo</string>
+    <string name="claim_routing_note">Tu reclamo llega al soporte de PasajeYa! y al operador de la unidad, con la placa y la ruta del viaje. El conductor no ve tu número ni tu correo.</string>
+    <string name="claim_sent">Reclamo enviado</string>
+    <string name="claim_sent_detail">Ya está en manos del soporte y del operador. Te avisaremos cuando lo resuelvan.</string>
+    <string name="claim_error_category">Elige un motivo antes de enviar.</string>
+    <string name="claim_error_generic">No pudimos enviar el reclamo. Revisa tu conexión.</string>
+    <string name="claim_open">Reportar un problema</string>
+    <string name="company_claims_title">Reclamos de tus pasajeros</string>
+    <string name="company_claims_empty">No hay reclamos contra tus unidades.</string>
+    <string name="company_claim_line">%1$s · unidad %2$s</string>
+</resources>

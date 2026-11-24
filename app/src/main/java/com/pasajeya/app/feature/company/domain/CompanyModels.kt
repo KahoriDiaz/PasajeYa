@@ -25,7 +25,17 @@ data class CompanyDashboard(
     /** Descuento frente a lo que pagaría un conductor independiente. */
     val discountPercent: Int,
     /** Ahorro mensual frente al precio de informal. */
-    val monthlySavingCents: Long
+    val monthlySavingCents: Long,
+    /** Reclamos abiertos contra las unidades de la empresa. */
+    val claims: List<CompanyClaim> = emptyList()
+)
+
+/** Un reclamo de pasajero visto desde la empresa. */
+data class CompanyClaim(
+    val claimId: String,
+    val category: String,
+    val plate: String,
+    val createdAtMillis: Long
 )
 
 interface CompanyRepository {

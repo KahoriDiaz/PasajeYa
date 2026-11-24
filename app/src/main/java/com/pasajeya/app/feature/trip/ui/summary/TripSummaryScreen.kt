@@ -15,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import com.pasajeya.app.feature.trip.domain.model.FareBreakdown
 @Composable
 fun TripSummaryScreen(
     viewModel: TripSummaryViewModel = hiltViewModel(),
+    onClaim: (String) -> Unit = {},
     onBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -75,6 +77,13 @@ fun TripSummaryScreen(
                 
                 Button(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
                     Text(text = stringResource(R.string.action_back))
+                }
+
+                TextButton(
+                    onClick = { onClaim(trip.id) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = stringResource(R.string.claim_open))
                 }
             }
         }

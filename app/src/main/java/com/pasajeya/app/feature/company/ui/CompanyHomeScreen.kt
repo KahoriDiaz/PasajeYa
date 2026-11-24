@@ -31,6 +31,7 @@ import com.pasajeya.app.core.ui.MessageTone
 import com.pasajeya.app.core.ui.PrimaryButton
 import com.pasajeya.app.core.ui.ScreenHeading
 import com.pasajeya.app.core.util.formatCents
+import com.pasajeya.app.feature.claims.domain.ClaimCategory
 import com.pasajeya.app.feature.auth.domain.model.AuthDestination
 import com.pasajeya.app.feature.auth.ui.common.SessionActionsViewModel
 
@@ -184,6 +185,33 @@ fun CompanyHomeScreen(
                 }
             }
 
+            FormCard {
+                Text(
+                    text = stringResource(R.string.company_claims_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = TextPrimary
+                )
+                if (dashboard.claims.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.company_claims_empty),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = TextGray
+                    )
+                }
+                dashboard.claims.forEach { claim ->
+                    Text(
+                        text = stringResource(
+                            R.string.company_claim_line,
+                            claimLabel(claim.category),
+                            claim.plate.ifBlank { stringResource(R.string.company_no_plate) }
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = TextPrimary
+                    )
+                }
+            }
+
             PrimaryButton(
                 text = stringResource(R.string.company_refresh),
                 onClick = viewModel::refresh
@@ -191,6 +219,19 @@ fun CompanyHomeScreen(
         }
     }
 }
+
+@Composable
+private fun claimLabel(category: String): String = stringResource(
+    when (ClaimCategory.fromWire(category)) {
+        ClaimCategory.OVERCHARGE -> R.string.claim_cat_overcharge
+        ClaimCategory.BENEFIT -> R.string.claim_cat_benefit
+        ClaimCategory.REFUSED -> R.string.claim_cat_refused
+        ClaimCategory.TREATMENT -> R.string.claim_cat_treatment
+        ClaimCategory.SAFETY -> R.string.claim_cat_safety
+        ClaimCategory.VEHICLE -> R.string.claim_cat_vehicle
+        ClaimCategory.OTHER -> R.string.claim_cat_other
+    }
+)
 
 @Composable
 private fun Metric(label: String, value: String, modifier: Modifier = Modifier) {

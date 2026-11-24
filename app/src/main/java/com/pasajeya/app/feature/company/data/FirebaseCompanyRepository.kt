@@ -1,6 +1,7 @@
 package com.pasajeya.app.feature.company.data
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.pasajeya.app.feature.company.domain.CompanyClaim
 import com.pasajeya.app.feature.company.domain.CompanyDashboard
 import com.pasajeya.app.feature.company.domain.CompanyRepository
 import com.pasajeya.app.feature.company.domain.CompanyUnit
@@ -59,6 +60,25 @@ class FirebaseCompanyRepository @Inject constructor(
             }
         }
 
+        // Reclamos de pasajeros contra las unidades de esta empresa.
+        val claims = runCatching {
+            firestore.collection("claims")
+                .whereEqualTo("companyId", companyUid)
+                .get()
+                .await()
+                .documents
+                .map { doc ->
+                    CompanyClaim(
+                        claimId = doc.id,
+                        category = doc.getString("category").orEmpty(),
+                        plate = doc.getString("plate").orEmpty(),
+                        createdAtMillis = doc.getLong("createdAt") ?: 0L
+                    )
+                }
+                .sortedByDescending { it.createdAtMillis }
+                .take(MAX_CLAIMS)
+        }.getOrDefault(emptyList())
+
         // Empresa con RUC = formal, asi que paga el precio con descuento.
         val isFormal = company.getString("ruc").orEmpty().isNotBlank()
         return CompanyDashboard(
@@ -74,7 +94,8 @@ class FirebaseCompanyRepository @Inject constructor(
                 SubscriptionPricing.monthlySavingCents(units.size)
             } else {
                 0L
-            }
+            },
+            claims = claims
         )
     }
 
@@ -82,5 +103,6 @@ class FirebaseCompanyRepository @Inject constructor(
         const val WHERE_IN_LIMIT = 10
         const val DRIVER_VERIFIED = "verified_by_company"
         const val LICENSE_REJECTED = "RECHAZADO"
+        const val MAX_CLAIMS = 10
     }
 }

@@ -30,6 +30,7 @@ import com.pasajeya.app.R
 import com.pasajeya.app.feature.auth.domain.model.AuthDestination
 import com.pasajeya.app.feature.auth.ui.company.CompanyDetailsScreen
 import com.pasajeya.app.feature.auth.ui.profile.CompanyPersonalProfileScreen
+import com.pasajeya.app.feature.claims.ui.ClaimScreen
 import com.pasajeya.app.feature.company.ui.CompanyHomeScreen
 import com.pasajeya.app.feature.auth.ui.forgot.ForgotPasswordScreen
 import com.pasajeya.app.feature.auth.ui.home.OperatorHomeScreen
@@ -63,6 +64,7 @@ object AppRoutes {
     const val OPERATOR_DETAILS = "operator_details"
     const val OPERATOR_HOME = "operator_home"
     const val PROFILE = "profile"
+    const val CLAIM = "claim/{tripId}"
     const val COMPANY_PROFILE = "company_profile"
     const val COMPANY_DETAILS = "company_details"
     const val COMPANY_HOME = "company_home"
@@ -302,10 +304,23 @@ fun AppNavHost(
         }
 
         composable(
+            route = AppRoutes.CLAIM,
+            arguments = listOf(navArgument("tripId") { type = NavType.StringType })
+        ) { entry ->
+            ClaimScreen(
+                tripId = entry.arguments?.getString("tripId").orEmpty(),
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
             route = AppRoutes.TRIP_SUMMARY,
             arguments = listOf(navArgument("tripId") { type = NavType.StringType })
         ) {
             TripSummaryScreen(
+                onClaim = { tripId ->
+                    navController.navigate(AppRoutes.CLAIM.replace("{tripId}", tripId))
+                },
                 onBack = { navController.popBackStack() }
             )
         }
