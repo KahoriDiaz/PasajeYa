@@ -83,6 +83,7 @@ import com.pasajeya.app.feature.history.ui.OperatorShiftSummaryCard
 import com.pasajeya.app.feature.history.ui.OperatorShiftSummaryViewModel
 import com.pasajeya.app.feature.trip.domain.model.Shift
 import com.pasajeya.app.feature.trip.domain.model.TapInResult
+import com.pasajeya.app.feature.trip.domain.TripProgress
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.ui.generateQrBitmap
 import com.pasajeya.app.feature.profile.ui.ProfileUserIcon
@@ -342,6 +343,9 @@ fun OperatorTripContent(
             OpenTripsCard(
                 trips = state.openTrips,
                 simulatedStopIndex = state.simulatedStopIndex,
+                routeStops = state.routeStops,
+                laps = state.shift?.odometerLaps ?: 0,
+                simulationEnabled = state.shift?.simulationEnabled == true,
                 tapOutTripId = state.tapOutTripId,
                 onTapOut = viewModel::requestTapOut
             )
@@ -943,6 +947,9 @@ private fun BatteryCard() {
 private fun OpenTripsCard(
     trips: List<Trip>,
     simulatedStopIndex: Int,
+    routeStops: List<com.pasajeya.app.feature.fare.domain.RouteStop>,
+    laps: Int,
+    simulationEnabled: Boolean,
     tapOutTripId: String?,
     onTapOut: (Trip) -> Unit
 ) {
@@ -1011,15 +1018,26 @@ private fun OpenTripsCard(
                                 style = MaterialTheme.typography.bodySmall,
                                 color = TextGray
                             )
-                            val kmRecorridos = (simulatedStopIndex - (trip.boardingStopIndex ?: 0)) * 1.2
-                            Text(
-                                text = stringResource(
-                                    R.string.operator_trip_km,
-                                    kmRecorridos.coerceAtLeast(0.0)
-                                ),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = TextGray
-                            )
+                            // Lo mismo que ve el pasajero y lo mismo que se cobra: antes
+                            // aqui se multiplicaba cada paradero por 1.2 km inventados.
+                            val boardingIndex = trip.boardingStopIndex
+                            if (simulationEnabled && boardingIndex != null) {
+                                val meters = TripProgress.tripMeters(
+                                    stops = routeStops,
+                                    boardingLaps = trip.boardingLaps ?: laps,
+                                    boardingStopIndex = boardingIndex,
+                                    laps = laps,
+                                    stopIndex = simulatedStopIndex
+                                )
+                                Text(
+                                    text = stringResource(
+                                        R.string.operator_trip_km,
+                                        meters / 1000.0
+                                    ),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = TextGray
+                                )
+                            }
                             trip.startedAtMillis?.let { startedAt ->
                                 Text(
                                     text = formatOperatorTime(startedAt),

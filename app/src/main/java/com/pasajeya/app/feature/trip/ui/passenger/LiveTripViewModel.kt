@@ -10,6 +10,7 @@ import com.pasajeya.app.feature.fare.domain.RouteFareContext
 import com.pasajeya.app.feature.fare.domain.RouteGeo
 import com.pasajeya.app.feature.trip.domain.GpsFix
 import com.pasajeya.app.feature.trip.domain.TripDistanceTracker
+import com.pasajeya.app.feature.trip.domain.TripProgress
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.location.LocationProvider
@@ -128,13 +129,7 @@ class LiveTripViewModel @Inject constructor(
         }
 
         val tracker = TripDistanceTracker()
-        val oneWayMeters = runCatching {
-            FareEstimator.routeDistanceMeters(
-                context.route.stops,
-                0,
-                context.route.stops.lastIndex
-            )
-        }.getOrNull() ?: 0.0
+        val oneWayMeters = TripProgress.routeMeters(context.route.stops)
         val maxTripMeters = if (oneWayMeters > 0.0) oneWayMeters * 2 else Double.MAX_VALUE
         var hasBenefit = false
         // La distancia la mide la unidad (odometro del turno); el GPS del telefono solo se
@@ -197,27 +192,26 @@ class LiveTripViewModel @Inject constructor(
                             shift.simulatedLongitude?.let { lng -> MapUserPosition(lat, lng) }
                         }
                     }
-                    // La distancia que se cobra la mide la unidad, no el telefono del
-                    // pasajero: su odometro solo crece, asi que vale igual si la combi
-                    // da la vuelta completa y vuelve a pasar por el mismo paradero.
-                    val boardingOdometer = trip.boardingOdometerMeters
-                    val odometer = shift?.odometerMeters
+                    // La distancia la mide la unidad, no el telefono del pasajero, y se
+                    // calcula igual que al cobrar: vueltas completas mas el paradero.
                     val boardingIndex = trip.boardingStopIndex
-                    if (boardingOdometer != null && odometer != null &&
-                        odometer > boardingOdometer
-                    ) {
-                        // Mismo tope que al cobrar: nadie anda mas que la ruta completa de
-                        // ida y vuelta, aunque el odometro venga con un valor raro.
-                        simulatedMeters = (odometer - boardingOdometer)
-                            .coerceAtMost(maxTripMeters)
-                    } else if (simulating && boardingIndex != null) {
-                        simulatedMeters = runCatching {
-                            FareEstimator.routeDistanceMeters(
-                                context.route.stops,
-                                boardingIndex,
-                                shift.simulatedStopIndex
-                            )
-                        }.getOrNull() ?: simulatedMeters
+                    if (simulating && shift != null && boardingIndex != null) {
+                        simulatedMeters = TripProgress.tripMeters(
+                            stops = context.route.stops,
+                            boardingLaps = trip.boardingLaps ?: shift.odometerLaps,
+                            boardingStopIndex = boardingIndex,
+                            laps = shift.odometerLaps,
+                            stopIndex = shift.simulatedStopIndex
+                        )
+                    } else {
+                        val boardingOdometer = trip.boardingOdometerMeters
+                        val odometer = shift?.odometerMeters
+                        if (boardingOdometer != null && odometer != null &&
+                            odometer > boardingOdometer
+                        ) {
+                            simulatedMeters = (odometer - boardingOdometer)
+                                .coerceAtMost(maxTripMeters)
+                        }
                     }
                     _uiState.update {
                         it.copy(

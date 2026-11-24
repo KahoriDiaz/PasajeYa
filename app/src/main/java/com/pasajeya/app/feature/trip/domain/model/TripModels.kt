@@ -47,6 +47,8 @@ data class Trip(
     val alightingStopName: String? = null,
     /** Lectura del odometro del turno cuando el pasajero subio. */
     val boardingOdometerMeters: Double? = null,
+    /** Cuantas veces la unidad habia recorrido la ruta completa cuando la persona subio. */
+    val boardingLaps: Int? = null,
     val fareBreakdown: FareBreakdown? = null,
     val heldAmountCents: Int = 0
 )
@@ -69,13 +71,14 @@ data class Shift(
      * Metros recorridos por la unidad desde que arranco el turno. Solo crece, asi que
      * sirve igual si la combi da la vuelta completa y vuelve a pasar por el mismo paradero.
      */
+    /** Metros medidos con el GPS de la unidad. Solo se usa cuando no hay demostracion. */
     val odometerMeters: Double = 0.0,
     /**
-     * Metros que la unidad ya habia recorrido cuando empezo otra vez el recorrido. El
-     * odometro se calcula como base + lo andado desde el primer paradero: asi nunca suma
-     * dos veces el mismo tramo si una escritura llega repetida o fuera de orden.
+     * Veces que la unidad ya recorrio la ruta completa en este turno. Con esto y el
+     * paradero actual se sabe su avance sin sumar nada: un aviso repetido da el mismo
+     * resultado.
      */
-    val odometerBaseMeters: Double = 0.0,
+    val odometerLaps: Int = 0,
     /** Ultima posicion real de la unidad, para cuando el conductor no esta en demostracion. */
     val lastLatitude: Double? = null,
     val lastLongitude: Double? = null,

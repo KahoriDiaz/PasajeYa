@@ -16,6 +16,7 @@ import com.pasajeya.app.feature.trip.domain.FareCalculator
 import com.pasajeya.app.feature.trip.domain.FareVersionInput
 import com.pasajeya.app.feature.trip.domain.RoutePath
 import com.pasajeya.app.feature.trip.domain.TripPosition
+import com.pasajeya.app.feature.trip.domain.TripProgress
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.EndShiftResult
 import com.pasajeya.app.feature.trip.domain.model.FareBenefit
@@ -168,7 +169,6 @@ class FirebaseTripRepository @Inject constructor(
     ) {
         val route = loadRoutePath(routeId)
         val stopName = route?.stops?.getOrNull(stopIndex)?.name
-        val shift = loadShift(shiftId)
         val changes = mutableMapOf<String, Any?>(
             "simulationEnabled" to enabled,
             "simulatedStopIndex" to stopIndex,
@@ -177,20 +177,11 @@ class FirebaseTripRepository @Inject constructor(
             "simulatedStopName" to stopName,
             "simulatedUpdatedAt" to FieldValue.serverTimestamp()
         )
-        // Solo la demostracion escribe el odometro; en marcha real lo lleva el servicio de
-        // ubicacion con el GPS de la unidad.
-        if (enabled && route != null && route.stops.size > 1) {
-            // El odometro se escribe completo, no sumando: base del recorrido anterior mas
-            // lo andado desde el primer paradero. Sumando, una escritura repetida o leida
-            // con retraso volvia a contar el mismo tramo y la distancia se iba a 100 km.
-            val base = if (resetOdometer) {
-                // La unidad empieza otra vez: el odometro sigue desde donde iba.
-                shift?.odometerMeters ?: 0.0
-            } else {
-                shift?.odometerBaseMeters ?: 0.0
-            }
-            changes["odometerBaseMeters"] = base
-            changes["odometerMeters"] = odometerMetersAt(route, stopIndex, base)
+        if (resetOdometer) {
+            // La unidad vuelve a empezar: una vuelta mas. Se incrementa en el servidor, asi
+            // el avance no depende de lo que este aviso haya alcanzado a leer. El avance en
+            // metros no se guarda: se calcula de la vuelta y el paradero.
+            changes["odometerLaps"] = FieldValue.increment(1)
         }
         firestore.collection("shifts").document(shiftId).update(changes).await()
     }
@@ -594,6 +585,7 @@ class FirebaseTripRepository @Inject constructor(
                 "boardingStopIndex" to boardingIndex,
                 "boardingStopName" to boardingPosition?.name,
                 "boardingOdometerMeters" to shift.odometerMeters,
+                "boardingLaps" to shift.odometerLaps,
                 "fareType" to fareType,
                 "passengerFirstName" to firstName,
                 "passengerAge" to age,
@@ -830,28 +822,27 @@ internal fun travelledMeters(
     boardingIndex: Int,
     alightingIndex: Int
 ): Double {
+    // Con la demostracion activa el avance se mide por vueltas y paradero: es el mismo
+    // numero que ve el pasajero en su mapa y el conductor en su lista.
+    if (shift?.simulationEnabled == true) {
+        return TripProgress.tripMeters(
+            stops = route.stops,
+            boardingLaps = trip.boardingLaps ?: shift.odometerLaps,
+            boardingStopIndex = boardingIndex,
+            laps = shift.odometerLaps,
+            stopIndex = alightingIndex
+        )
+    }
+    // En marcha real manda el GPS de la unidad, con un tope de cordura: nadie anda mas que
+    // la ruta completa de ida y vuelta.
     val boardingOdometer = trip.boardingOdometerMeters
     val currentOdometer = shift?.odometerMeters
-    // Nadie puede andar mas que la ruta completa de ida y vuelta: evita cobrar un recorrido
-    // acumulado de turnos anteriores si el odometro quedo sin reiniciar.
-    val oneWayMeters = FareEstimator.routeDistanceMeters(route.stops, 0, route.stops.lastIndex)
+    val oneWayMeters = TripProgress.routeMeters(route.stops)
     val maxMeters = if (oneWayMeters > 0.0) oneWayMeters * 2 else Double.MAX_VALUE
     if (boardingOdometer != null && currentOdometer != null && currentOdometer > boardingOdometer) {
         return (currentOdometer - boardingOdometer).coerceAtMost(maxMeters)
     }
     return FareEstimator.routeDistanceMeters(route.stops, boardingIndex, alightingIndex)
-}
-
-/**
- * Odometro de la unidad: lo que llevaba recorrido al empezar este recorrido mas lo andado
- * desde el primer paradero. Se calcula completo en cada aviso, nunca sumando, para que un
- * aviso repetido o atrasado no cuente dos veces el mismo tramo.
- */
-internal fun odometerMetersAt(route: RoutePath, stopIndex: Int, baseMeters: Double): Double {
-    val stops = route.stops
-    if (stops.size < 2) return baseMeters
-    val index = stopIndex.coerceIn(stops.indices)
-    return baseMeters + FareEstimator.routeDistanceMeters(stops, 0, index)
 }
 
 private fun nearestStopIndex(route: RoutePath, position: TripPosition): Int {
@@ -958,6 +949,7 @@ internal fun DocumentSnapshot.toTrip(): Trip? {
         boardingStopName = getString("boardingStopName"),
         alightingStopName = getString("alightingStopName"),
         boardingOdometerMeters = getDouble("boardingOdometerMeters"),
+        boardingLaps = getLong("boardingLaps")?.toInt(),
         alightingStopIndex = getLong("alightingStopIndex")?.toInt(),
         heldAmountCents = getLong("heldAmountCents")?.toInt() ?: 0,
         fareBreakdown = fareBreakdownData?.let {
@@ -1010,7 +1002,7 @@ internal fun DocumentSnapshot.toShift(): Shift? {
         simulatedStopName = getString("simulatedStopName"),
         simulatedUpdatedAtMillis = getTimestamp("simulatedUpdatedAt")?.toDate()?.time,
         odometerMeters = getDouble("odometerMeters") ?: 0.0,
-        odometerBaseMeters = getDouble("odometerBaseMeters") ?: 0.0,
+        odometerLaps = getLong("odometerLaps")?.toInt() ?: 0,
         lastLatitude = getDouble("lastLat"),
         lastLongitude = getDouble("lastLng"),
         lastFixAtMillis = getTimestamp("lastFixAt")?.toDate()?.time

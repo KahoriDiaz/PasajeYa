@@ -1,7 +1,7 @@
 package com.pasajeya.app.feature.trip
 
 import com.pasajeya.app.feature.fare.domain.RouteStop
-import com.pasajeya.app.feature.trip.data.odometerMetersAt
+import com.pasajeya.app.feature.trip.domain.TripProgress
 import com.pasajeya.app.feature.trip.data.travelledMeters
 import com.pasajeya.app.feature.trip.domain.RoutePath
 import com.pasajeya.app.feature.trip.domain.model.Shift
@@ -56,15 +56,15 @@ class ShiftOdometerTest {
 
     @Test
     fun `el odometro es lo andado desde el primer paradero`() {
-        assertEquals(0.0, odometerMetersAt(route, 0, 0.0), 0.0)
-        assertEquals(1112.0, odometerMetersAt(route, 1, 0.0), 3.0)
-        assertEquals(routeLength, odometerMetersAt(route, 3, 0.0), 5.0)
+        assertEquals(0.0, TripProgress.unitMeters(route.stops, 0, 0), 0.0)
+        assertEquals(1112.0, TripProgress.unitMeters(route.stops, 0, 1), 3.0)
+        assertEquals(routeLength, TripProgress.unitMeters(route.stops, 0, 3), 5.0)
     }
 
     @Test
     fun `el mismo aviso repetido no suma dos veces`() {
-        val once = odometerMetersAt(route, 2, 0.0)
-        val twice = odometerMetersAt(route, 2, 0.0)
+        val once = TripProgress.unitMeters(route.stops, 0, 2)
+        val twice = TripProgress.unitMeters(route.stops, 0, 2)
         assertEquals(once, twice, 0.0)
         assertEquals(2224.0, once, 3.0)
     }
@@ -72,8 +72,8 @@ class ShiftOdometerTest {
     @Test
     fun `al volver a empezar el odometro sigue desde donde iba`() {
         // La unidad termino el recorrido (routeLength) y arranca de nuevo.
-        assertEquals(routeLength, odometerMetersAt(route, 0, routeLength), 5.0)
-        assertEquals(routeLength + 1112.0, odometerMetersAt(route, 1, routeLength), 5.0)
+        assertEquals(routeLength, TripProgress.unitMeters(route.stops, 1, 0), 5.0)
+        assertEquals(routeLength + 1112.0, TripProgress.unitMeters(route.stops, 1, 1), 5.0)
     }
 
     @Test
@@ -98,6 +98,39 @@ class ShiftOdometerTest {
             alightingIndex = 1
         )
         // Subio y bajo en el mismo paradero, pero la combi dio la vuelta completa.
+        assertEquals(routeLength, meters, 5.0)
+    }
+
+    @Test
+    fun `en demostracion se mide desde donde subio la persona`() {
+        // La unidad ya habia recorrido dos tramos antes de que la persona subiera.
+        val meters = travelledMeters(
+            trip = trip(boardingOdometer = null, boardingIndex = 1).copy(boardingLaps = 0),
+            shift = shift(odometer = 0.0).copy(
+                simulationEnabled = true,
+                simulatedStopIndex = 3,
+                odometerLaps = 0
+            ),
+            route = route,
+            boardingIndex = 1,
+            alightingIndex = 3
+        )
+        assertEquals(2224.0, meters, 5.0)
+    }
+
+    @Test
+    fun `en demostracion una vuelta mas suma la ruta completa`() {
+        val meters = travelledMeters(
+            trip = trip(boardingOdometer = null, boardingIndex = 1).copy(boardingLaps = 0),
+            shift = shift(odometer = 0.0).copy(
+                simulationEnabled = true,
+                simulatedStopIndex = 1,
+                odometerLaps = 1
+            ),
+            route = route,
+            boardingIndex = 1,
+            alightingIndex = 1
+        )
         assertEquals(routeLength, meters, 5.0)
     }
 
