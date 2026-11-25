@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get install -y -qq imagemagick >/dev/null 2>&1 || true
-      - run: python3 tools/fetch_photos.py
+      - run: true
       - run: bash tools/probe_fuel.sh
       - name: Guardar resultados en la rama
         run: |
