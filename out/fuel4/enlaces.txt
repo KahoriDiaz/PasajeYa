@@ -1,0 +1,1440 @@
+#
+#ctl00_PlaceHolderPageTitleInTitleArea_ctl00_SkipLink
+../../hidrocarburos/Style Library/GFHL/files_tree/css/jquery.treeview.css
+../../hidrocarburos/Style Library/GFHL/files_tree/css/screen.css
+//cdn.osinergmin.gob.pe/Institucional/js/fancybox/jquery.fancybox.css?v=2.1.5
+/_catalogs/masterpage/starter/images/osinerg.ico
+/empresas/hidrocarburos
+/empresas/hidrocarburos/_catalogs/masterpage/Starter/css2/base.css
+/empresas/hidrocarburos/_catalogs/masterpage/Starter/css2/jcarousel.css
+/empresas/hidrocarburos/_catalogs/masterpage/Starter/css2/menu-superior.css
+/empresas/hidrocarburos/_catalogs/masterpage/Starter/css2/reutilizable.css
+/empresas/hidrocarburos/_catalogs/masterpage/starter/css2/1.css
+/empresas/hidrocarburos/_catalogs/masterpage/starter/css2/general.css?v=3
+/empresas/hidrocarburos/_catalogs/masterpage/starter/css2/menu-princ-sup.css?v=3.0
+/empresas/hidrocarburos/_vti_bin/spsdisco.aspx
+/empresas/hidrocarburos/administrado/
+/empresas/hidrocarburos/administrado/otros-tramites/denuncias-actividades-hidrocarburos
+/empresas/hidrocarburos/administrado/otros-tramites/empadronamiento-transporte-gps
+/empresas/hidrocarburos/administrado/otros-tramites/registro-acuerdos-corresponsabilidad-contratos-maquila
+/empresas/hidrocarburos/administrado/otros-tramites/reportes-emergencias
+/empresas/hidrocarburos/administrado/otros-tramites/solicitud-acta-verificacion-pruebas-conformidad
+/empresas/hidrocarburos/administrado/otros-tramites/solicitud-informe-tecnico-favorable-actividades-gas-natural
+/empresas/hidrocarburos/administrado/tramites-tupa/opinion-favorable-ers-pre
+/empresas/hidrocarburos/administrado/tramites-tupa/solicitud-informe-tecnico-favorable
+/empresas/hidrocarburos/administrado/tramites-tupa/solicitud-registro-hidrocarburos
+/empresas/hidrocarburos/almacenamiento
+/empresas/hidrocarburos/almacenamiento/alcance-supervision
+/empresas/hidrocarburos/almacenamiento/descripcion
+/empresas/hidrocarburos/almacenamiento/documentos-tecnicos
+/empresas/hidrocarburos/almacenamiento/formatos
+/empresas/hidrocarburos/almacenamiento/normativa-relacionada
+/empresas/hidrocarburos/almacenamiento/tipos-supervision
+/empresas/hidrocarburos/boletines
+/empresas/hidrocarburos/capacitaciones
+/empresas/hidrocarburos/comercializacion
+/empresas/hidrocarburos/comercializacion/alcance-supervision
+/empresas/hidrocarburos/comercializacion/descripcion
+/empresas/hidrocarburos/comercializacion/documentos-tecnicos
+/empresas/hidrocarburos/comercializacion/formatos
+/empresas/hidrocarburos/comercializacion/manuales-fiscalizacion
+/empresas/hidrocarburos/comercializacion/tipos-supervision
+/empresas/hidrocarburos/empresas-inspectora-hermeticidad
+/empresas/hidrocarburos/exploracion-explotacion
+/empresas/hidrocarburos/exploracion-explotacion/alcance-supervision
+/empresas/hidrocarburos/exploracion-explotacion/descripcion
+/empresas/hidrocarburos/exploracion-explotacion/documentos-tecnicos
+/empresas/hidrocarburos/exploracion-explotacion/formatos
+/empresas/hidrocarburos/exploracion-explotacion/normas-legales
+/empresas/hidrocarburos/exploracion-explotacion/normativa-relacionada
+/empresas/hidrocarburos/exploracion-explotacion/registro-derrames-hidrocarburos
+/empresas/hidrocarburos/exploracion-explotacion/registro-ers-pre
+/empresas/hidrocarburos/exploracion-explotacion/tipos-supervision
+/empresas/hidrocarburos/formatos-reportes-glp-rcd-050-2021-os-cd
+/empresas/hidrocarburos/foros-conferencias
+/empresas/hidrocarburos/indice-riesgos
+/empresas/hidrocarburos/noticia
+/empresas/hidrocarburos/noticia/detalle
+/empresas/hidrocarburos/noticia/electricidad
+/empresas/hidrocarburos/noticia/energias-renovables
+/empresas/hidrocarburos/noticia/gas_natural
+/empresas/hidrocarburos/noticia/glp
+/empresas/hidrocarburos/noticia/grifos
+/empresas/hidrocarburos/noticia/mineria
+/empresas/hidrocarburos/procesamiento-refinacion
+/empresas/hidrocarburos/procesamiento-refinacion/alcance-supervision
+/empresas/hidrocarburos/procesamiento-refinacion/descripcion
+/empresas/hidrocarburos/procesamiento-refinacion/documentos-tecnicos
+/empresas/hidrocarburos/procesamiento-refinacion/formatos
+/empresas/hidrocarburos/procesamiento-refinacion/normativa-relacionada
+/empresas/hidrocarburos/procesamiento-refinacion/tipos-supervision
+/empresas/hidrocarburos/publicaciones
+/empresas/hidrocarburos/scop/documentos-scop
+/empresas/hidrocarburos/scop/manual-registro-inventarios-combustibles-evpc
+/empresas/hidrocarburos/scop/manuales-glp
+/empresas/hidrocarburos/scop/manuales-plataforma-soluciones-gestion-componentes-almacenamiento
+/empresas/hidrocarburos/scop/manuales-registro-inventarios-glp
+/empresas/hidrocarburos/scop/manuales-registro-precios
+/empresas/hidrocarburos/scop/sistema-scop
+/empresas/hidrocarburos/transporte
+/empresas/hidrocarburos/transporte/alcance-supervision
+/empresas/hidrocarburos/transporte/descripcion
+/empresas/hidrocarburos/transporte/documentos-tecnicos
+/empresas/hidrocarburos/transporte/formatos
+/empresas/hidrocarburos/transporte/normativa-relacionada
+/empresas/hidrocarburos/transporte/tipos-supervision
+/seccion/centro_documental/hidrocarburos/Documentos/Formatos/Osinergmin-Formato-Reporte-Trimestral-Empresa-Envasadora.xls
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2005/BOLETIN_DICIEMBRE_05.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2005/BOLETIN_NOVIEMBRE_05.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2005/NAC.07.05.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2005/NAC.08.05.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2005/NAC.09.05.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2005/NAC.10.05.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2005/NAC.11.05.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2005/NAC.12.05.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_ABRIL_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_AGOSTO_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_DICIEMBRE_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_ENERO_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_FEBRERO_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_JULIO_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_JUNIO_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_MARZO_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_MAYO_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_NOVIEMBRE_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_OCTUBRE_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/BOLETIN_SETIEMBRE_06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 01.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 02.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 03.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 04.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 05.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 06.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 07.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 08.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 09.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 10.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 11.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 12.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA_EESS_LIMA_CALLAO_dic2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA_EESS_LIMA_CALLAO_nov2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA_EESS_LIMA_CALLAO_oct2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/DEMANDA_EESS_LIMA_CALLAO_set2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/Demanda-Diesel2-GLP-Nacional/EESS Y GASOC_GLP_DEPART_2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.01.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.02.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.03.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.04.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.05.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.06.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.07.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.08.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.09.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.10.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.11.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2006/NAC.12.06.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 01.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 02.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 03.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 04.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 05.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 06.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 07.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 08.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 09.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 10.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 11.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA GAS_D2_KERO POR ACTIVIDAD - 12.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_ABR2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_AGO2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_DIC2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_ENE2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_FEB2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_JUL2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_JUN2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_MAR2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_MAY2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_NOV2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_OCT2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DEMANDA_EESS_LIMA_CALLAO_SET2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_ABR_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_AGO_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_DIC_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_ENE_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_FEB_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_JUL_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_JUN_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_MAR_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_MAY_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_NOV_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_OCT_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/DGH_REPORTES_SET_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/Demanda-Diesel2-GLP-Nacional/EESS Y GASOC_GLP_DEPART_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.01.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.02.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.03.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.04.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.05.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.06.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.07.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.08.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.09.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.10.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.11.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2007/NAC.12.07.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_01.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_02.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_03.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_04.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_05.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_06.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_07.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_08.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_09.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_10.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_11.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_ACTIVIDAD_12.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_ABR_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_AGO_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_DIC_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_ENE_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_FEB_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_JUL_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_JUN_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_MAR_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_MAY_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_NOV_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_OCT_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DEMANDA_EESS_LIMA_CALLAO_SET_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_ABR_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_AGO_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_DIC_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_ENE_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_FEB_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_JUL_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_JUN_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_MAR_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_MAY_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_NOV_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_OCT_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/DGH_REPORTES_SET_08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/Demanda-Diesel2-GLP-Nacional/EESS Y GASOC_GLP_DEPART_2008.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.01.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.02.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.03.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.04.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.05.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.06.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.07.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.08.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.09.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.10.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.11.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2008/NAC.12.08.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_01.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_02.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_03.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_04.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_05.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_06.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_07.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_08.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_09.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_10.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_11.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_ACTIVIDAD_12.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_ABR_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_AGO_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_DIC_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_ENE_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_FEB_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_JUL_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_JUN_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_MAR_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_MAY_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_NOV_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_OCT_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DEMANDA_EESS_LIMA_CALLAO_SEP_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_ABRIL_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_AGOSTO_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_DICIEMBRE_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_ENERO_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_FEBRERO_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_JULIO_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_JUNIO_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_MARZO_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_MAYO_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_NOVIEMBRE_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_OCTUBRE_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/DGH_REPORTES_SETIEMBRE_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda-Diesel2-GLP-Nacional/EESS Y GASOC_GLP_DEPART_2009.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda_D2_04-09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda_D2_05-09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda_D2_06-09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda_D2_07-09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda_D2_08-09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda_D2_09-09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda_D2_10-09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/Demanda_D2_11-09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.01.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.02.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.03.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.04.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.05.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.06.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.07.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.08.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.09.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.10.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.11.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2009/NAC.12.09.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_01.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_02.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_03.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_04.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_05.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_06.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_07.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_08.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_09.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_10.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_11.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_ACTIVIDAD_12.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_ABR_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_AGO_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_DIC_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_ENE_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_FEB_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_JUL_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_JUN_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_MAR_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_MAY_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_NOV_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_OCT_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DEMANDA_EESS_LIMA_CALLAO_SET_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_ABRIL_2010.PDF
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_AGOSTO_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_DICIEMBRE_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_ENERO_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_FEBRERO_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_JULIO_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_JUNIO_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_MARZO_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_MAYO_2010.PDF
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_NOVIEMBRE_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_OCTUBRE_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/DGH_REPORTES_SETIEMBRE_2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda-Diesel2-GLP-Nacional/DEMANDA DE GLP AUTOMOTOR DICIEMBRE 2010.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_01-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_02-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_03-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_04-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_05-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_06-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_07-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_08-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_09-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_10-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_11-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/Demanda_D2_12-10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.01.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.02.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.03.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.04.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.05.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.06.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.07.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.08.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.09.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.10.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.11.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2010/NAC.12.10.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL ABRIL 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL AGOSTO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL DICIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL ENERO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL FEBRERO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL JULIO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL JUNIO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL MARZO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL MAYO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL NOVIEMBRE  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL OCTUBRE  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/CONSUMO NACIONAL SETIEMBRE  2011 a.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA ABRIL  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA AGOSTO  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA DICIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA ENERO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA FEBRERO  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA JULIO  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA JUNIO  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA MARZO  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA MAYO  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA NOVIEMBRE  2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA OCTUBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DE DIESEL POR ANO HASTA SETIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA ABRIL 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA AGOSTO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA DICIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA ENERO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA FEBRERO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA JULIO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA JUNIO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA MARZO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA MAYO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA NOVIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA OCTUBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA DEL DEPARTAMENTO DE LIMA SETIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD ABRIL 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD AGOSTO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD DICIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD ENERO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD FEBRERO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD JULIO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD JUNIO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD MARZO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD MAYO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD NOVIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD OCTUBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/DEMANDA POR ACTIVIDAD SETIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/Demanda-Diesel2-GLP-Nacional/DEMANDA DE GLP AUTOMOTOR DICIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS ABRIL 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS AGOSTO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS DICIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS ENERO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS FEBRERO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS JULIO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS JUNIO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS MARZO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS MAYO 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS NOVIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS OCTUBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2011/PRECIOS SETIEMBRE 2011.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA ABRIL 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA AGOSTO  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA DICIEMBRE  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA ENERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA FEBRERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA JULIO  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA JUNIO  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA MARZO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA MAYO  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA NOVIEMBRE  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA OCTUBRE  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE DIESEL POR ANO HASTA SETIEMBRE  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -ABRIL 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -AGOSTO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -DICIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -ENERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -FEBRERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -JULIO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -JUNIO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -MARZO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -MAYO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -NOVIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -OCTUBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA DE LIMA METROPOLITANA Y CALLAO -SETIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - ABRIL 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - AGOSTO  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - DICIEMBRE  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - ENERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - FEBRERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - JULIO  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - JUNIO  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - MARZO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - MAYO  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - NOVIEMBRE  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - OCTUBRE  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL  POR ACTIVIDADES - SETIEMBRE  2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -ABRIL 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -AGOSTO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -DICIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -ENERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -FEBRERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -JULIO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -JUNIO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -MARZO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -MAYO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -NOVIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -OCTUBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -SETIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/Demanda-Diesel2-GLP-Nacional/DEMANDA DE GLP AUTOMOTOR DICIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS ABRIL 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS AGOSTO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS DICIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS ENERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS FEBRERO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS JULIO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS JUNIO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS MARZO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS MAYO 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS NOVIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS OCTUBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2012/PRECIOS SETIEMBRE 2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_ABR_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_AGO_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_DIC_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_ENE_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_FEB_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_JUL_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_JUN_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_MAR_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_MAY_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_NOV_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_OCT_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/BOLETIN DE PRECIOS_SET_13.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA ABRIL 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA AGOSTO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA DICIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA ENERO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA FEBRERO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA JULIO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA JUNIO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA MARZO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA MAYO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA NOVIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA OCTUBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE DIESEL POR ANO HASTA SETIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - ABRIL 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - AGOSTO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - DICIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - ENERO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - FEBRERO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - JULIO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - JUNIO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - MARZO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - MAYO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - NOVIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - OCTUBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA DE LIMA METROPOLITANA Y CALLAO - SETIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - ABRIL 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - AGOSTO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - DICIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - ENERO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - FEBRERO 2013.pdf?1
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - JULIO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - JUNIO 2013.pdf?1
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - MARZO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - MAYO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - NOVIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - OCTUBRE 2013.pdf?1
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL  POR ACTIVIDADES - SETIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -ABRIL 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -AGOSTO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -DICIEMBRE 2013.pdf?1
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -ENERO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -FEBRERO 2013.pdf?1
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -JULIO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -JUNIO 2013.pdf?1
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -MARZO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -MAYO 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -NOVIEMBRE 2013.pdf?1
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -OCTUBRE 2013.pdf?1
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -SETIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2013/Demanda-Diesel2-GLP-Nacional/DEMANDA DE GLP AUTOMOTOR DICIEMBRE 2013.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS ABRIL 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS AGOSTO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS DICIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS ENERO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS FEBRERO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS JULIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS JUNIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS MARZO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS MAYO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS NOVIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS OCTUBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/BOLETIN DE PRECIOS SETIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA ABRIL 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA AGOSTO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA DICIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA ENERO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA FEBRERO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA JULIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA JUNIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA MARZO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA MAYO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA NOVIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA OCTUBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE DIESEL POR ANO HASTA SETIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - ABRIL 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - AGOSTO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - DICIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - ENERO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - FEBRERO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - JULIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - JUNIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - MARZO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - MAYO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - NOVIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - OCTUBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA DE LIMA METROPOLITANA Y CALLAO - SETIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - ABRIL 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - AGOSTO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - DICIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - ENERO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - FEBRERO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - JULIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - JUNIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - MARZO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - MAYO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - NOVIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - OCTUBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL  POR ACTIVIDADES - SETIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -ABRIL 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -AGOSTO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -DICIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -ENERO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -FEBRERO 2014.pdf?1
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -JULIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -JUNIO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -MARZO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -MAYO 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -NOVIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -OCTUBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -SETIEMBRE 2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2014.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2014/Demanda-Diesel2-GLP-Nacional/DEMANDA DE GLP AUTOMOTOR 2014.pdf?2
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS ABRIL 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS AGOSTO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS DICIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS ENERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS FEBRERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS JULIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS JUNIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS MARZO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS MAYO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS NOVIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS OCTUBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/BOLETIN DE PRECIOS SETIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA ABRIL 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA AGOSTO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA DICIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA ENERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA FEBRERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA JULIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA JUNIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA MARZO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA MAYO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA NOVIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA OCTUBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE DIESEL POR ANIO HASTA SETIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - ABRIL 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - AGOSTO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - DICIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - ENERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - FEBRERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - JULIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - JUNIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - MARZO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - MAYO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - NOVIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - OCTUBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA DE LIMA METROPOLITANA Y CALLAO - SETIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - ABRIL 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - AGOSTO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - DICIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - ENERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - FEBRERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - JULIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - JUNIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - MARZO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - MAYO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - NOVIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - OCTUBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL  POR ACTIVIDADES - SETIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -ABRIL 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -AGOSTO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -DICIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -ENERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -FEBRERO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -JULIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -JUNIO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -MARZO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -MAYO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -NOVIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -OCTUBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/DEMANDA NACIONAL DE COMBUSTIBLES LIQUIDOS -SETIEMBRE 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/Demanda-Diesel2-GLP-Nacional/DEMANDA DE DIESEL POR ACTIVIDAD 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/Demanda-Diesel2-GLP-Nacional/DEMANDA DE DIESEL POR DEPARTAMENTO 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2015/Demanda-Diesel2-GLP-Nacional/DEMANDA DE GLP AUTOMOTOR 2015.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Abril 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Agosto 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Diciembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Enero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Febrero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Julio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Junio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Marzo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Mayo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Noviembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Octubre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/01 - Demanda Nacional de Combustibles Liquidos Setiembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Abril 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Agosto 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Diciembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Enero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Febrero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Julio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Junio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Marzo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Mayo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Noviembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Octubre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/02 - Demanda Nacional por Actividades Setiembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Abril 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Agosto 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Diciembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Enero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Febrero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Julio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Junio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Marzo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Mayo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Noviembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Octubre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/03.3 - Demanda de Diesel por Anio Hasta Setiembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Abril 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Agosto 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Diciembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Enero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Febrero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Julio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Junio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Marzo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Mayo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Noviembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Octubre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/06 - Demanda de Lima Metropolitana y Callao Setiembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Abril 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Agosto 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Diciembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Enero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Febrero 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Julio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Junio 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Marzo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Mayo 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Noviembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Octubre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/07-Reporte Mensual de Precios Setiembre 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/Demanda-Diesel2-GLP-Nacional/03.1 - Demanda de Diesel por Departamento 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/Demanda-Diesel2-GLP-Nacional/03.2 - Demanda de Diesel por Actividad 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2016/Demanda-Diesel2-GLP-Nacional/05 - Demanda de GLP Automotor 2016.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Abril 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Agosto 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Diciembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Enero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Febrero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Julio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Junio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Marzo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Mayo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Noviembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Octubre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/01 - Demanda Nacional de Combustibles Liquidos Setiembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Abril 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Agosto 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Diciembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Enero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Febrero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Julio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Junio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Marzo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Mayo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Noviembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Octubre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/02 - Demanda Nacional por Actividades Setiembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Abril 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Agosto 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Diciembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Enero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Febrero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Julio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Junio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Marzo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Mayo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Noviembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Octubre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/03.3 - Demanda de Diesel por Anio Hasta Setiembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Abril 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Agosto 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Diciembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Enero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Febrero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Julio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Junio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Marzo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Mayo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Noviembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Octubre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/06 - Demanda del Departamento de Lima Setiembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Demanda-Diesel2-GLP-Nacional/03.1 - Demanda de Diesel por Departamento 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Demanda-Diesel2-GLP-Nacional/03.2 - Demanda de Diesel por Actividad 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Demanda-Diesel2-GLP-Nacional/05 - Demanda de GLP Automotor 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Abril 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Agosto 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Diciembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Enero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Febrero 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Julio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Junio 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Marzo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Mayo 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Noviembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Octubre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2017/Reporte Mensual de Precios Setiembre 2017.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Abril 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Agosto 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Diciembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Enero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Febrero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Julio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Junio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Marzo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Mayo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Noviembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Octubre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/01 - Demanda Nacional de Combustibles Liquidos Setiembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Abril 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Agosto 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Diciembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Enero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Febrero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Julio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Junio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Marzo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Mayo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Noviembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Octubre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/02 - Demanda Nacional por Actividades Setiembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Abril 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Agosto 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Diciembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Enero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Febrero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Julio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Junio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Marzo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Mayo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Noviembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Octubre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/03.3 - Demanda de Diesel por Anio Hasta Setiembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Abril 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Agosto 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Diciembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Enero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Febrero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Julio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Junio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Marzo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Mayo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Noviembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Octubre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/06 - Demanda del Departamento de Lima Setiembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Demanda-Diesel2-GLP-Nacional/03.1 - Demanda de Diesel por Departamento 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Demanda-Diesel2-GLP-Nacional/03.2 - Demanda de Diesel por Actividad 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Demanda-Diesel2-GLP-Nacional/05 - Demanda de GLP Automotor 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Abril 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Agosto 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Diciembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Enero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Febrero 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Julio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Junio 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Marzo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Mayo 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Noviembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Octubre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2018/Reporte Mensual de Precios Setiembre 2018.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Abril 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Agosto 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Diciembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Enero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Febrero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Julio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Junio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Marzo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Mayo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Noviembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Octubre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/01 - Demanda Nacional de Combustibles Liquidos Setiembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Abril 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Agosto 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Diciembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Enero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Febrero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Julio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Junio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Marzo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Mayo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Noviembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Octubre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/02 - Demanda Nacional por Actividades Setiembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Abril 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Agosto 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Diciembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Enero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Febrero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Julio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Junio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Marzo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Mayo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Noviembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Octubre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/03.3 - Demanda de Diesel por Anio Hasta Setiembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Abril 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Agosto 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Diciembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Enero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Febrero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Julio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Junio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Marzo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Mayo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Noviembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Octubre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/06 - Demanda del Departamento de Lima Setiembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Demanda-Diesel2-GLP-Nacional/03.1 - Demanda de Diesel por Departamento 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Demanda-Diesel2-GLP-Nacional/03.2 - Demanda de Diesel por Actividad 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Demanda-Diesel2-GLP-Nacional/05 - Demanda de GLP Automotor 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Abril 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Agosto 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Diciembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Enero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Febrero 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Julio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Junio 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Marzo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Mayo 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Noviembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Octubre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2019/Reporte Mensual de Precios Setiembre 2019.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Abril-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Agosto-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Diciembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Enero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Febrero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Julio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Junio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Marzo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Mayo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Noviembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Octubre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/01-Demanda-Nacional-Combustibles-Liquidos-Setiembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Abril-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Agosto-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Diciembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Enero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Febrero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Julio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Junio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Marzo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Mayo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Noviembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Octubre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/02-Demanda-Nacional-Actividades-Setiembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Abril-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Agosto-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Diciembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Enero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Febrero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Julio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Junio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Marzo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Mayo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Noviembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Octubre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/03-3-Demanda-Diesel-Anio-Setiembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Abril-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Agosto-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Diciembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Enero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Febrero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Julio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Junio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Marzo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Mayo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Noviembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Octubre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/06-Demanda-Departamento-Lima-Setiembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Demanda-Diesel2-GLP-Nacional/03-1-Demanda-Diesel-Departamento-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Demanda-Diesel2-GLP-Nacional/03-2-Demanda-Diesel-Actividad-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Demanda-Diesel2-GLP-Nacional/05-Demanda-GLP-Automotor-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Registro-precios/CL-Registro-precios-DMA-V-CCA-CCE-2020.zip
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Registro-precios/CL-Registro-precios-DMIN-2020.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Registro-precios/GLP-Registro-precios-DG-DC-2020.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Registro-precios/GLP-Registro-precios-PIC-PE-V-2020.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Abril-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Agosto-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Diciembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Enero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Febrero-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Julio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Junio-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Marzo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Mayo-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Noviembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Octubre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2020/Reporte-Mensual-Precios-Setiembre-2020.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Abril-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Agosto-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Diciembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Enero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Febrero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Julio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Junio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Marzo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Mayo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Noviembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Octubre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/01-Demanda-Nacional-Combustibles-Liquidos-Setiembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Abril-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Agosto-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Diciembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Enero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Febrero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Julio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Junio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Marzo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Mayo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Noviembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Octubre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/02-Demanda-Nacional-Actividades-Setiembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Abril-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Agosto-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Diciembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Enero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Febrero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Julio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Junio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Marzo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Mayo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Noviembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Octubre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/03-3-Demanda-Diesel-Anio-Setiembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Abril-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Agosto-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Diciembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Enero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Febrero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Julio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Junio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Marzo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Mayo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Noviembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Octubre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/06-Demanda-Departamento-Lima-Setiembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Demanda-Diesel2-GLP-Nacional/03-1-Demanda-Diesel-Departamento-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Demanda-Diesel2-GLP-Nacional/03-2-Demanda-Diesel-Actividad-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Demanda-Diesel2-GLP-Nacional/05-Demanda-GLP-Automotor-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Registro-precios/CL-Registro-precios-DMA-V-CCA-CCE-2021.zip
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Registro-precios/CL-Registro-precios-DMIN-2021.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Registro-precios/GLP-Registro-precios-DG-DC-2021-desde-noviembre.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Registro-precios/GLP-Registro-precios-DG-DC-2021-hasta-octubre.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Registro-precios/GLP-Registro-precios-PIC-PE-V-2021.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Abril-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Agosto-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Diciembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Enero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Febrero-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Julio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Junio-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Marzo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Mayo-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Noviembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Octubre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2021/Reporte-Mensual-Precios-Setiembre-2021.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Abril-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Agosto-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Diciembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Enero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Febrero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Julio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Junio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Marzo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Mayo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Noviembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Octubre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/01-Demanda-Nacional-Combustibles-Liquidos-Setiembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Abril-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Agosto-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Diciembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Enero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Febrero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Julio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Junio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Marzo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Mayo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Noviembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Octubre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/02-Demanda-Nacional-Actividades-Setiembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Abril-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Agosto-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Diciembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Enero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Febrero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Julio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Junio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Marzo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Mayo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Noviembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Octubre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/03-3-Demanda-Diesel-Anio-Setiembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Abril-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Agosto-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Diciembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Enero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Febrero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Julio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Junio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Marzo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Mayo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Noviembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Octubre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/06-Demanda-Departamento-Lima-Setiembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Demanda-Diesel2-GLP-Nacional/03-1-Demanda-Diesel-Departamento-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Demanda-Diesel2-GLP-Nacional/03-2-Demanda-Diesel-Actividad-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Demanda-Diesel2-GLP-Nacional/05-Demanda-GLP-Automotor-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Registro-precios/CL-Registro-precios-DMA-V-CCA-CCE-2022.zip
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Registro-precios/CL-Registro-precios-DMIN-2022.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Registro-precios/GLP-Registro-precios-DG-DC-2022.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Registro-precios/GLP-Registro-precios-PIC-PE-V-2022.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Abril-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Agosto-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Diciembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Enero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Febrero-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Julio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Junio-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Marzo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Mayo-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Noviembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Octubre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2022/Reporte-Mensual-Precios-Setiembre-2022.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Abril-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Agosto-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Diciembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Enero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Febrero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Julio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Junio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Marzo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Mayo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Noviembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Octubre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/01-Demanda-Nacional-Combustibles-Liquidos-Setiembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Abril-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Agosto-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Diciembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Enero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Febrero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Julio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Junio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Marzo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Mayo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Noviembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Octubre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/02-Demanda-Nacional-Actividades-Setiembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Abril-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Agosto-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Diciembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Enero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Febrero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Julio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Junio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Marzo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Mayo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Noviembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Octubre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/03-3-Demanda-Diesel-Anio-Setiembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Abril-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Agosto-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Diciembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Enero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Febrero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Julio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Junio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Marzo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Mayo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Noviembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Octubre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/06-Demanda-Departamento-Lima-Setiembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Demanda-Diesel2-GLP-Nacional/03-1-Demanda-Diesel-Departamento-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Demanda-Diesel2-GLP-Nacional/03-2-Demanda-Diesel-Actividad-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Demanda-Diesel2-GLP-Nacional/05-Demanda-GLP-Automotor-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Registro-precios/CL-Registro-precios-DMA-V-CCA-CCE-2023.zip
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Registro-precios/CL-Registro-precios-DMIN-2023.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Registro-precios/GLP-Registro-precios-DG-DC-2023.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Registro-precios/GLP-Registro-precios-PIC-PE-V-2023.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Abril-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Agosto-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Diciembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Enero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Febrero-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Julio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Junio-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Marzo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Mayo-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Noviembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Octubre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2023/Reporte-Mensual-Precios-Setiembre-2023.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Abril-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Agosto-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Diciembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Enero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Febrero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Julio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Junio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Marzo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Mayo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Noviembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Octubre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/01-Demanda-Nacional-Combustibles-Liquidos-Setiembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Abril-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Agosto-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Diciembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Enero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Febrero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Julio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Junio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Marzo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Mayo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Noviembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Octubre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/02-Demanda-Nacional-Actividades-Setiembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Abril-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Agosto-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Diciembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Enero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Febrero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Julio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Junio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Marzo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Mayo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Noviembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Octubre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/03-3-Demanda-Diesel-Anio-Setiembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Abril-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Agosto-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Diciembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Enero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Febrero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Julio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Junio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Marzo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Mayo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Noviembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Octubre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/06-Demanda-Departamento-Lima-Setiembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Demanda-Diesel2-GLP-Nacional/03-1-Demanda-Diesel-Departamento-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Demanda-Diesel2-GLP-Nacional/03-2-Demanda-Diesel-Actividad-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Demanda-Diesel2-GLP-Nacional/05-Demanda-GLP-Automotor-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Registro-precios/CL-Registro-precios-DMA-V-CCA-CCE-2024.zip
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Registro-precios/CL-Registro-precios-DMIN-2024.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Registro-precios/GLP-Registro-precios-DG-DC-2024.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Registro-precios/GLP-Registro-precios-PIC-PE-V-2024.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Abril-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Agosto-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Diciembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Enero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Febrero-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Julio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Junio-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Marzo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Mayo-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Noviembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Octubre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2024/Reporte-Mensual-Precios-Setiembre-2024.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Abril-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Agosto-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Diciembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Enero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Febrero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Julio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Junio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Marzo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Mayo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Noviembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Octubre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/01-Demanda-Nacional-Combustibles-Liquidos-Setiembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Abril-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Agosto-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Diciembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Enero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Febrero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Julio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Junio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Marzo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Mayo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Noviembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Octubre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/02-Demanda-Nacional-Actividades-Setiembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Abril-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Agosto-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Diciembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Enero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Febrero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Julio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Junio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Marzo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Mayo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Noviembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Octubre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/03-3-Demanda-Diesel-Anio-Setiembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Abril-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Agosto-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Diciembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Enero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Febrero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Julio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Junio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Marzo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Mayo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Noviembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Octubre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/06-Demanda-Departamento-Lima-Setiembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Demanda-Diesel2-GLP-Nacional/03-1-Demanda-Diesel-Departamento-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Demanda-Diesel2-GLP-Nacional/03-2-Demanda-Diesel-Actividad-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Demanda-Diesel2-GLP-Nacional/05-Demanda-GLP-Automotor-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Registro-precios/CL-Registro-precios-DMA-V-CCA-CCE-2025.zip
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Registro-precios/CL-Registro-precios-DMIN-2025.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Registro-precios/GLP-Registro-precios-DG-DC-2025.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Registro-precios/GLP-Registro-precios-PIC-PE-V-2025.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Abril-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Agosto-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Diciembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Enero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Febrero-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Julio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Junio-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Marzo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Mayo-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Noviembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Octubre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2025/Reporte-Mensual-Precios-Setiembre-2025.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Abril-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Agosto-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Diciembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Enero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Febrero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Julio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Junio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Marzo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Mayo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Noviembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Octubre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/01-Demanda-Nacional-Combustibles-Liquidos-Setiembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Abril-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Agosto-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Diciembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Enero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Febrero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Julio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Junio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Marzo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Mayo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Noviembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Octubre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/02-Demanda-Nacional-Actividades-Setiembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Abril-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Agosto-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Diciembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Enero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Febrero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Julio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Junio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Marzo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Mayo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Noviembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Octubre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/03-3-Demanda-Diesel-Anio-Setiembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Abril-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Agosto-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Diciembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Enero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Febrero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Julio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Junio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Marzo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Mayo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Noviembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Octubre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/06-Demanda-Departamento-Lima-Setiembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Demanda-Diesel2-GLP-Nacional/03-1-Demanda-Diesel-Departamento-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Demanda-Diesel2-GLP-Nacional/03-2-Demanda-Diesel-Actividad-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Demanda-Diesel2-GLP-Nacional/04-Demanda-Nacional-GLP-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Demanda-Diesel2-GLP-Nacional/05-Demanda-GLP-Automotor-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Registro-precios/CL-Registro-precios-DMA-V-CCA-CCE-2026.zip
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Registro-precios/CL-Registro-precios-DMIN-2026.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Registro-precios/GLP-Registro-precios-DG-DC-2026.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Registro-precios/GLP-Registro-precios-PIC-PE-V-2026.zip
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Registro-precios/Ultimos-Precios-Registrados-EVPC.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Registro-precios/Ultimos-precios-registrados-DMAY.xlsx
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Abril-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Agosto-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Diciembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Enero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Febrero-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Julio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Junio-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Marzo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Mayo-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Noviembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Octubre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/2026/Reporte-Mensual-Precios-Setiembre-2026.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Boletin_1_2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Boletin_1_2007.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Boletin_2_2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Boletin_3_2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Boletin_4_2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Boletin_5_2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Boletin_6_2006.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Codigo_IVR.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/DS-045-2001-EM.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Informe_Sector_Hidrocarburos_2012.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Manual-Scop-Mayoristas.zip
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Manual-para-Grifos-SCOP.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/OSINERG-033-2004-OSPRES.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/OSINERG-048-2003-OSCD.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/OSINERG-1076-2004-OSGG.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Archivos-SCOP/Preguntas-Frecuentes.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Reportes-Semanales/Reporte-Precio-Semanal-Lima.pdf
+/seccion/centro_documental/hidrocarburos/SCOP/SCOP-DOCS/Reportes-Semanales/Reporte-Precio-Semanal-Nacional.pdf
+/seccion/institucional/regulacion-tarifaria/precios-de-referencia-banda-de-precios/banda-de-precios-de-combustibles-liquidos
+/seccion/institucional/regulacion-tarifaria/precios-de-referencia-banda-de-precios/precios-de-referencia-de-combustibles
+http://sig.osinerg.gob.pe/SIG/uploads%20WebISO//SIG-GFHL/PROCEDIMIENTOS%20INTERNOS/Transversales%20a%20las%203%20Unidades%20Operativas/GFHL-GS-01%20Guia%20General%20de%20Hidrocarburos%20Rev%2003.pdf?1
+http://www.osinergmin.gob.pe/empresas/hidrocarburos/_layouts/15/Authenticate.aspx?Source=%2Fempresas%2Fhidrocarburos%2Fscop%2Fdocumentos%2Dscop
+http://www.osinergmin.gob.pe:80/empresas/hidrocarburos/scop/documentos-scop
+https://pvo.osinergmin.gob.pe/seguridad/
+https://sistemas.osinergmin.gob.pe/
+https://www.osinergmin.gob.pe/empresas/hidrocarburos/administrado/pdj
+https://www.osinergmin.gob.pe/empresas/hidrocarburos/administrado/supervision-gps
+https://www.osinergmin.gob.pe/empresas/hidrocarburos/scop/compensaciones-aportaciones-fepc
+https://www.osinergmin.gob.pe/empresas/hidrocarburos/scop/documentos-scop
+https://www.osinergmin.gob.pe/empresas/hidrocarburos/spic/spic
+https://www.osinergmin.gob.pe/empresas/hidrocarburos/unidades-mayores/norma-aplicable
+https://www.osinergmin.gob.pe/empresas/hidrocarburos/unidades-menores/estadistica-emergencias
+https://www.osinergmin.gob.pe/newweb/pages/GFH/169.htm
+https://www.osinergmin.gob.pe/newweb/pages/GFH/FEPC.htm
+https://www.osinergmin.gob.pe/newweb/pages/GFH/SME_Home.html
+https://www.osinergmin.gob.pe/newweb/pages/GFH/control_calidad_cantidad_combustibles.htm
+javascript:;
