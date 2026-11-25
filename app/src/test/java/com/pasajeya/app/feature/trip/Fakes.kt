@@ -214,10 +214,13 @@ class FakeTripRepository : TripRepository {
     override suspend fun loadShift(shiftId: String): Shift? = activeShift.value
 
     override suspend fun findOpenTripForPassenger(
-        passengerUid: String
+        passengerUid: String,
+        shiftId: String?
     ): Trip? {
         return openTrips.value.firstOrNull {
-            it.passengerUid == passengerUid && it.status == "open"
+            it.passengerUid == passengerUid &&
+                it.status == "open" &&
+                (shiftId == null || it.shiftId == shiftId)
         }
     }
 

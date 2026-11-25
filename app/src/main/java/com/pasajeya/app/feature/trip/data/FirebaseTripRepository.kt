@@ -14,6 +14,7 @@ import com.pasajeya.app.feature.fare.domain.RouteFareContext
 import com.pasajeya.app.feature.trip.domain.BusQrCodec
 import com.pasajeya.app.feature.trip.domain.FareCalculator
 import com.pasajeya.app.feature.trip.domain.FareVersionInput
+import com.pasajeya.app.feature.trip.domain.PassengerQrCodec
 import com.pasajeya.app.feature.trip.domain.RoutePath
 import com.pasajeya.app.feature.trip.domain.TripPosition
 import com.pasajeya.app.feature.trip.domain.TripProgress
@@ -58,7 +59,7 @@ class FirebaseTripRepository @Inject constructor(
             )
         } catch (e: Exception) {
             QrToken(
-                token = "DEMO_QR_${auth.currentUser?.uid ?: "user"}",
+                token = PassengerQrCodec.credentialFor(auth.currentUser?.uid ?: "user"),
                 expiresAtMillis = System.currentTimeMillis() + (10 * 60 * 1000)
             )
         }
@@ -128,12 +129,38 @@ class FirebaseTripRepository @Inject constructor(
     override suspend fun loadShift(shiftId: String): Shift? =
         awaitDocument("shifts", shiftId)?.toShift()
 
+    /**
+     * Posicion con la que se ubica el paradero. Si el telefono no logro leer el GPS llega
+     * (0,0), que no es un lugar: en ese caso se usa la posicion de la unidad, que es donde
+     * esta la persona de todas formas.
+     */
+    private fun usablePosition(shift: Shift?, position: TripPosition): TripPosition {
+        val hasFix = position.latitude != 0.0 || position.longitude != 0.0
+        if (hasFix || shift == null) return position
+        val lat = shift.simulatedLatitude.takeIf { shift.simulationEnabled }
+            ?: shift.lastLatitude
+            ?: shift.simulatedLatitude
+        val lng = shift.simulatedLongitude.takeIf { shift.simulationEnabled }
+            ?: shift.lastLongitude
+            ?: shift.simulatedLongitude
+        return if (lat != null && lng != null) {
+            TripPosition(lat, lng, accuracy = position.accuracy)
+        } else {
+            position
+        }
+    }
+
     override suspend fun findOpenTripForPassenger(
-        passengerUid: String
+        passengerUid: String,
+        shiftId: String?
     ): Trip? {
-        return firestore.collection("trips")
+        var query = firestore.collection("trips")
             .whereEqualTo("passengerUid", passengerUid)
             .whereEqualTo("status", "open")
+        if (shiftId != null) {
+            query = query.whereEqualTo("shiftId", shiftId)
+        }
+        return query
             .limit(1)
             .get()
             .await()
@@ -390,7 +417,7 @@ class FirebaseTripRepository @Inject constructor(
             if (e is kotlinx.coroutines.CancellationException) throw e
             // El servidor no respondió: abrimos el viaje con el perfil real del pasajero escaneado
             // (QR o NFC), nunca con la cuenta del conductor.
-            val passengerUid = qrToken.removePrefix("DEMO_QR_").trim()
+            val passengerUid = PassengerQrCodec.passengerUid(qrToken).orEmpty()
             if (passengerUid.isBlank()) {
                 throw TripOperationException("No se pudo leer al pasajero. Intenta de nuevo.", e)
             }
@@ -442,14 +469,15 @@ class FirebaseTripRepository @Inject constructor(
 
             // Misma medicion que el Tap Out del pasajero: paraderos de la ruta, nunca
             // una distancia inventada.
+            val fix = usablePosition(shift, position)
             val boardingIndex = trip.boardingStopIndex
                 ?.takeIf { it in route.stops.indices }
-                ?: nearestStopIndex(route, position)
+                ?: nearestStopIndex(route, fix)
             val alightingIndex = if (shift?.simulationEnabled == true) {
                 shift.simulatedStopIndex.takeIf { it in route.stops.indices }
-                    ?: nearestStopIndex(route, position)
+                    ?: nearestStopIndex(route, fix)
             } else {
-                nearestStopIndex(route, position)
+                nearestStopIndex(route, fix)
             }
             val distanceMeters = travelledMeters(
                 trip = trip,
@@ -558,11 +586,12 @@ class FirebaseTripRepository @Inject constructor(
             ?: userDoc?.getString("birthDate")?.ageFromBirthDate()
         // Con el modo demostracion encendido el bus esta en un paradero conocido; sin el,
         // el paradero de subida es el mas cercano a la posicion real del telefono.
+        val fix = usablePosition(shift, position)
         val boardingIndex = if (shift.simulationEnabled) {
             shift.simulatedStopIndex.takeIf { it in route.stops.indices }
-                ?: nearestStopIndex(route, position)
+                ?: nearestStopIndex(route, fix)
         } else {
-            nearestStopIndex(route, position)
+            nearestStopIndex(route, fix)
         }
         val boardingPosition = route.stops.getOrNull(boardingIndex)
         val tripId = "trip_${System.currentTimeMillis()}"
@@ -633,14 +662,15 @@ class FirebaseTripRepository @Inject constructor(
         val trip = tripDoc.toTrip() ?: throw TripOperationException("No pudimos leer el viaje.")
         val route = loadRoutePath(trip.routeId)
             ?: throw TripOperationException("No pudimos cargar la ruta del viaje.")
+        val fix = usablePosition(shift, position)
         val boardingIndex = tripDoc.getLong("boardingStopIndex")?.toInt()
             ?.takeIf { it in route.stops.indices }
-            ?: nearestStopIndex(route, position)
+            ?: nearestStopIndex(route, fix)
         val alightingIndex = if (shift.simulationEnabled) {
             shift.simulatedStopIndex.takeIf { it in route.stops.indices }
-                ?: nearestStopIndex(route, position)
+                ?: nearestStopIndex(route, fix)
         } else {
-            nearestStopIndex(route, position)
+            nearestStopIndex(route, fix)
         }
         val alightingPosition = route.stops[alightingIndex]
         val distanceMeters = travelledMeters(

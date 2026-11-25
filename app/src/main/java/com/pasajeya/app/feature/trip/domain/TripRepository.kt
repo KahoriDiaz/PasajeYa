@@ -65,7 +65,11 @@ interface TripRepository {
     fun observeShift(shiftId: String): Flow<Shift?>
 
     /** Busca un viaje abierto de un pasajero (cualquier turno). */
-    suspend fun findOpenTripForPassenger(passengerUid: String): Trip?
+    /**
+     * Viaje abierto del pasajero. Con [shiftId] se busca solo en ese turno: un viaje que
+     * quedo abierto en otra unidad no se debe cerrar desde aqui.
+     */
+    suspend fun findOpenTripForPassenger(passengerUid: String, shiftId: String? = null): Trip?
 
     /**
      * @param resetOdometer true cuando la unidad vuelve a empezar el recorrido: el odometro

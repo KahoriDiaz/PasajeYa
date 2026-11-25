@@ -3,6 +3,7 @@ package com.pasajeya.app.feature.nfc
 import android.nfc.cardemulation.HostApduService
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
+import com.pasajeya.app.feature.trip.domain.PassengerQrCodec
 import java.nio.charset.StandardCharsets
 
 /** Servicio HCE del pasajero. Responde al SELECT AID con el identificador del usuario autenticado. */
@@ -39,7 +40,8 @@ class ApduHceService : HostApduService() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         if (uid.isNullOrBlank()) return errorResponse()
 
-        val payload = ("DEMO_QR_" + uid).toByteArray(StandardCharsets.UTF_8)
+        // La misma credencial que muestra el QR del pasajero.
+        val payload = PassengerQrCodec.credentialFor(uid).toByteArray(StandardCharsets.UTF_8)
         return payload + byteArrayOf(SW_SUCCESS_1.toByte(), SW_SUCCESS_2.toByte())
     }
 

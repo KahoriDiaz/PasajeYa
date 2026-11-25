@@ -17,6 +17,7 @@ import com.pasajeya.app.feature.trip.domain.BusQrCodec
 import com.pasajeya.app.feature.trip.domain.QrScanGate
 import com.pasajeya.app.feature.trip.domain.RoutePath
 import com.pasajeya.app.feature.trip.domain.TripPosition
+import com.pasajeya.app.feature.trip.domain.PassengerQrCodec
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.OperatorContext
 import com.pasajeya.app.feature.trip.domain.model.Shift
@@ -311,9 +312,25 @@ class OperatorTripViewModel @Inject constructor(
         _uiState.update { it.copy(isProcessingScan = true) }
         viewModelScope.launch {
             try {
-                // Consulta directa a Firestore: si el pasajero ya tiene un viaje abierto en este
-                // turno, forzar Tap Out (segunda lectura). No crear un nuevo viaje.
-                val existingOpenTrip = tripRepository.findOpenTripForPassenger(rawValue)
+                // El QR del pasajero trae el prefijo de la credencial; el viaje se guarda
+                // con el uid limpio. Sin quitarlo, la segunda lectura nunca encontraba el
+                // viaje abierto y en lugar de Tap Out volvia a decir Tap In.
+                val passengerId = PassengerQrCodec.passengerUid(rawValue)
+                if (passengerId == null) {
+                    _uiState.update {
+                        it.copy(
+                            isProcessingScan = false,
+                            notice = notice(OperatorNoticeKind.INVALID_DATA)
+                        )
+                    }
+                    return@launch
+                }
+                // Si el pasajero ya tiene un viaje abierto en ESTE turno, la segunda lectura
+                // es el Tap Out. Un viaje abierto en otra unidad no se toca.
+                val existingOpenTrip = tripRepository.findOpenTripForPassenger(
+                    passengerUid = passengerId,
+                    shiftId = shift.id
+                )
                 if (existingOpenTrip != null) {
                     _uiState.update {
                         it.copy(
@@ -331,7 +348,7 @@ class OperatorTripViewModel @Inject constructor(
                 val result = tripRepository.tapIn(
                     sessionId = sessionId(),
                     shiftId = shift.id,
-                    qrToken = rawValue,
+                    qrToken = passengerId,
                     position = position
                 )
                 _uiState.update {
@@ -388,15 +405,17 @@ class OperatorTripViewModel @Inject constructor(
                     isoDep.close()
                     decodeNfcResponse(response)
                 }
-                val passengerId = payload?.removePrefix("DEMO_QR_") ?: payload
-                if (passengerId.isNullOrBlank()) {
+                val passengerId = PassengerQrCodec.passengerUid(payload)
+                if (passengerId == null) {
                     _uiState.update { it.copy(isProcessingScan = false) }
                     return@launch
                 }
 
-                // Consulta directa a Firestore: si el pasajero ya tiene un viaje abierto en este
-                // turno, forzar Tap Out (segunda lectura). No crear un nuevo viaje.
-                val existingOpenTrip = tripRepository.findOpenTripForPassenger(passengerId)
+                // Igual que el QR: segunda lectura en este turno es Tap Out.
+                val existingOpenTrip = tripRepository.findOpenTripForPassenger(
+                    passengerUid = passengerId,
+                    shiftId = shift.id
+                )
                 if (existingOpenTrip != null) {
                     _uiState.update {
                         it.copy(
