@@ -8,6 +8,7 @@ import com.pasajeya.app.feature.fare.domain.RouteStop
 import com.pasajeya.app.feature.trip.domain.FareVersionInput
 import com.pasajeya.app.feature.trip.domain.UniversityBenefitSchedule
 import com.pasajeya.app.feature.trip.domain.GpsFix
+import com.pasajeya.app.feature.trip.domain.model.Shift
 import com.pasajeya.app.feature.trip.domain.model.Trip
 import com.pasajeya.app.feature.trip.location.LocationProvider
 import com.pasajeya.app.feature.trip.ui.passenger.LiveTripViewModel
@@ -38,9 +39,14 @@ private class FakeFareRepository : FareRepository {
         route = RouteGeo(
             id = "route-1",
             name = "Ruta 1",
+            // Paraderos cada 0.01 de latitud: ~1112 m entre uno y el siguiente.
             stops = listOf(
-                RouteStop("A", 0.0, -71.5),
-                RouteStop("B", 0.05, -71.5)
+                RouteStop("A", 0.00, -71.5),
+                RouteStop("B", 0.01, -71.5),
+                RouteStop("C", 0.02, -71.5),
+                RouteStop("D", 0.03, -71.5),
+                RouteStop("E", 0.04, -71.5),
+                RouteStop("F", 0.05, -71.5)
             ),
             officialFareCents = 330,
             officialUniversityFareCents = 165
@@ -86,7 +92,10 @@ class LiveTripViewModelTest {
         endedAtMillis = null,
         distanceMeters = 0.0,
         passengerFirstName = "Ana",
-        passengerAge = 20
+        passengerAge = 20,
+        boardingStopIndex = 0,
+        boardingLaps = 0,
+        boardingOdometerMeters = 0.0
     )
 
     @Before
@@ -122,6 +131,25 @@ class LiveTripViewModelTest {
     private fun fix(lat: Double, seconds: Long) =
         GpsFix(lat = lat, lng = -71.5, accuracyMeters = 5.0, timeMillis = seconds * 1000)
 
+    /**
+     * El turno de la unidad en modo demostracion, parado en [stopIndex]. La distancia del
+     * viaje la mide la unidad, no el telefono del pasajero.
+     */
+    private fun shiftAt(stopIndex: Int) = Shift(
+        id = "shift-1",
+        operatorUid = "operator-1",
+        plate = "V7D123",
+        routeId = "route-1",
+        startedAtMillis = 0L,
+        endedAtMillis = null,
+        status = "active",
+        simulationEnabled = true,
+        simulatedStopIndex = stopIndex,
+        simulatedStopName = "Paradero ${stopIndex + 1}",
+        simulatedLatitude = stopIndex * 0.01,
+        simulatedLongitude = -71.5
+    )
+
     @Test(timeout = 10_000)
     fun `sin viaje activo no hay seguimiento`() = runTest {
         val vm = viewModel()
@@ -131,36 +159,36 @@ class LiveTripViewModelTest {
     }
 
     @Test(timeout = 10_000)
-    fun `emite distancia y costo en vivo con cada lectura del gps`() = runTest {
+    fun `emite distancia y costo en vivo segun avanza la unidad`() = runTest {
         trips.activeTrip.value = trip
+        trips.activeShift.value = shiftAt(0)
         val vm = viewModel()
         runCurrent()
 
         assertTrue(vm.uiState.value.hasTrip)
         assertNotNull(vm.uiState.value.route)
-        // Sin movimiento aun: tarifa minima.
+        // Recien subio: la unidad no avanzo, tarifa minima.
         assertEquals(0.0, vm.uiState.value.distanceMeters, 0.0)
         assertEquals(50, vm.uiState.value.fareCents)
 
-        fixes.tryEmit(fix(0.000, 0))
-        fixes.tryEmit(fix(0.005, 60)) // ~556 m
-        fixes.tryEmit(fix(0.010, 120)) // ~556 m
+        // La unidad avanza un paradero y el pasajero ve el mismo numero que el conductor.
+        trips.activeShift.value = shiftAt(1)
+        fixes.tryEmit(fix(0.010, 120))
         runCurrent()
 
         val state = vm.uiState.value
-        assertEquals(1_112.0, state.distanceMeters, 2.0)
+        assertEquals(1_112.0, state.distanceMeters, 3.0)
         // 1.112 km * 120 = 133.4 -> 135
         assertEquals(135, state.fareCents)
         assertNotNull(state.position)
+        assertEquals("Paradero 2", state.currentStopName)
     }
 
     @Test(timeout = 10_000)
     fun `aplica el descuento universitario en vivo cuando el beneficio esta aprobado`() = runTest {
         trips.activeTrip.value = trip
+        trips.activeShift.value = shiftAt(1)
         val vm = viewModel()
-        runCurrent()
-        fixes.tryEmit(fix(0.000, 0))
-        fixes.tryEmit(fix(0.010, 120))
         runCurrent()
         assertEquals(135, vm.uiState.value.fareCents)
         assertFalse(vm.uiState.value.hasUniversityBenefit)
@@ -177,10 +205,8 @@ class LiveTripViewModelTest {
     @Test(timeout = 10_000)
     fun `al cerrarse el viaje se reinicia el estado`() = runTest {
         trips.activeTrip.value = trip
+        trips.activeShift.value = shiftAt(1)
         val vm = viewModel()
-        runCurrent()
-        fixes.tryEmit(fix(0.000, 0))
-        fixes.tryEmit(fix(0.010, 120))
         runCurrent()
         assertTrue(vm.uiState.value.distanceMeters > 0)
 

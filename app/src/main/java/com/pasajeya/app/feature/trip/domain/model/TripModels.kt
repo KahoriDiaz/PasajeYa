@@ -67,10 +67,6 @@ data class Shift(
     val simulatedLongitude: Double? = null,
     val simulatedStopName: String? = null,
     val simulatedUpdatedAtMillis: Long? = null,
-    /**
-     * Metros recorridos por la unidad desde que arranco el turno. Solo crece, asi que
-     * sirve igual si la combi da la vuelta completa y vuelve a pasar por el mismo paradero.
-     */
     /** Metros medidos con el GPS de la unidad. Solo se usa cuando no hay demostracion. */
     val odometerMeters: Double = 0.0,
     /**
