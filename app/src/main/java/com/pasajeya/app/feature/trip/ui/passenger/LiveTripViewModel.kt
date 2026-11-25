@@ -251,7 +251,7 @@ class LiveTripViewModel @Inject constructor(
                 if (lastShift?.simulationEnabled != true && lastShift?.lastLatitude == null) {
                     lastStopIndex = nearestStopIndex(
                         context.route.stops,
-                        MapUserPosition(fix.latitude, fix.longitude)
+                        MapUserPosition(fix.lat, fix.lng)
                     )
                     measure(lastShift, lastStopIndex)
                 }
