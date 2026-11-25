@@ -9,7 +9,9 @@ import com.pasajeya.app.feature.fare.domain.FareRepository
 import com.pasajeya.app.feature.fare.domain.RouteFareContext
 import com.pasajeya.app.feature.fare.domain.RouteGeo
 import com.pasajeya.app.feature.trip.domain.GpsFix
-import com.pasajeya.app.feature.trip.domain.TripDistanceTracker
+import com.pasajeya.app.core.util.Haversine
+import com.pasajeya.app.feature.fare.domain.RouteStop
+import com.pasajeya.app.feature.trip.domain.model.Shift
 import com.pasajeya.app.feature.trip.domain.TripProgress
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.Trip
@@ -128,17 +130,17 @@ class LiveTripViewModel @Inject constructor(
             return@coroutineScope
         }
 
-        val tracker = TripDistanceTracker()
-        val oneWayMeters = TripProgress.routeMeters(context.route.stops)
-        val maxTripMeters = if (oneWayMeters > 0.0) oneWayMeters * 2 else Double.MAX_VALUE
         var hasBenefit = false
-        // La distancia la mide la unidad (odometro del turno); el GPS del telefono solo se
-        // usa si el turno todavia no reporta nada.
-        var simulatedMeters: Double? = null
+        // La distancia la mide la unidad y se calcula igual que al cobrar, con o sin
+        // demostracion: el telefono del pasajero solo dice en que paradero va la combi
+        // mientras el turno no publique su propia posicion.
+        var unitMeters: Double? = null
+        var lastShift: Shift? = null
         var simulationOn = false
+        var lastStopIndex: Int? = null
 
         fun publish(position: GpsFix?) {
-            val meters = simulatedMeters ?: tracker.distanceMeters
+            val meters = unitMeters ?: 0.0
             val fare = FareEstimator.fareForDistance(
                 context = context,
                 distanceMeters = meters,
@@ -172,53 +174,61 @@ class LiveTripViewModel @Inject constructor(
         }
 
         // El pasajero ve lo mismo que el conductor: posicion de la unidad, paradero por el
-        // que va y la distancia que mide la unidad. Antes este bloque iba despues del
-        // collect del GPS, que nunca termina, asi que no se ejecutaba nunca.
+        // que va y la misma distancia. Antes este bloque iba despues del collect del GPS,
+        // que nunca termina, asi que no se ejecutaba nunca.
+        fun measure(shift: Shift?, stopIndex: Int?) {
+            val boardingIndex = trip.boardingStopIndex ?: return
+            val simulating = shift?.simulationEnabled == true
+            val currentIndex = if (simulating) {
+                shift.simulatedStopIndex
+            } else {
+                stopIndex ?: return
+            }
+            unitMeters = TripProgress.tripMeters(
+                stops = context.route.stops,
+                simulationEnabled = simulating,
+                boardingStopIndex = boardingIndex,
+                stopIndex = currentIndex,
+                boardingLaps = trip.boardingLaps ?: shift?.odometerLaps ?: 0,
+                laps = shift?.odometerLaps ?: 0,
+                boardingOdometerMeters = trip.boardingOdometerMeters,
+                unitOdometerMeters = shift?.odometerMeters
+            )
+        }
+
         shiftJob?.cancel()
         shiftJob = launch {
             tripRepository.observeShift(shiftId)
                 .catch { error -> if (error is CancellationException) throw error }
                 .collect { shift ->
+                    lastShift = shift
                     val simulating = shift?.simulationEnabled == true
                     simulationOn = simulating
+                    // Con demostracion manda la posicion simulada; en marcha real, la
+                    // ultima posicion que publica el telefono del conductor.
                     val position = if (simulating) {
-                        shift?.simulatedLatitude?.let { lat ->
-                            shift.simulatedLongitude?.let { lng -> MapUserPosition(lat, lng) }
-                        }
+                        shift?.simulatedLatitude to shift?.simulatedLongitude
                     } else {
-                        shift?.lastLatitude?.let { lat ->
-                            shift.lastLongitude?.let { lng -> MapUserPosition(lat, lng) }
-                        } ?: shift?.simulatedLatitude?.let { lat ->
-                            shift.simulatedLongitude?.let { lng -> MapUserPosition(lat, lng) }
-                        }
+                        (shift?.lastLatitude ?: shift?.simulatedLatitude) to
+                            (shift?.lastLongitude ?: shift?.simulatedLongitude)
                     }
-                    // La distancia la mide la unidad, no el telefono del pasajero, y se
-                    // calcula igual que al cobrar: vueltas completas mas el paradero.
-                    val boardingIndex = trip.boardingStopIndex
-                    if (simulating && shift != null && boardingIndex != null) {
-                        simulatedMeters = TripProgress.tripMeters(
-                            stops = context.route.stops,
-                            boardingLaps = trip.boardingLaps ?: shift.odometerLaps,
-                            boardingStopIndex = boardingIndex,
-                            laps = shift.odometerLaps,
-                            stopIndex = shift.simulatedStopIndex
-                        )
-                    } else {
-                        val boardingOdometer = trip.boardingOdometerMeters
-                        val odometer = shift?.odometerMeters
-                        if (boardingOdometer != null && odometer != null &&
-                            odometer > boardingOdometer
-                        ) {
-                            simulatedMeters = (odometer - boardingOdometer)
-                                .coerceAtMost(maxTripMeters)
-                        }
+                    val busPosition = position.first?.let { lat ->
+                        position.second?.let { lng -> MapUserPosition(lat, lng) }
                     }
+                    if (!simulating && busPosition != null) {
+                        // El paradero por el que va la unidad, segun su propia posicion.
+                        lastStopIndex = nearestStopIndex(context.route.stops, busPosition)
+                    }
+                    measure(shift, lastStopIndex)
                     _uiState.update {
                         it.copy(
-                            busPosition = position ?: it.busPosition,
-                            currentStopName = shift?.simulatedStopName?.takeIf { name ->
-                                name.isNotBlank() && simulating
-                            } ?: it.currentStopName
+                            busPosition = busPosition ?: it.busPosition,
+                            currentStopName = currentStopName(
+                                stops = context.route.stops,
+                                simulating = simulating,
+                                simulatedName = shift?.simulatedStopName,
+                                stopIndex = lastStopIndex
+                            ) ?: it.currentStopName
                         )
                     }
                     publish(position = null)
@@ -236,8 +246,41 @@ class LiveTripViewModel @Inject constructor(
                 }
             }
             .collect { fix ->
-                if (simulatedMeters == null) tracker.onFix(fix)
+                // El telefono del pasajero no mide el viaje: solo sirve para saber por que
+                // paradero va la combi mientras el turno no publique su posicion.
+                if (lastShift?.simulationEnabled != true && lastShift?.lastLatitude == null) {
+                    lastStopIndex = nearestStopIndex(
+                        context.route.stops,
+                        MapUserPosition(fix.latitude, fix.longitude)
+                    )
+                    measure(lastShift, lastStopIndex)
+                }
                 publish(position = fix)
             }
     }
+}
+
+/** Paradero mas cercano a una posicion, dentro de la ruta. */
+private fun nearestStopIndex(stops: List<RouteStop>, position: MapUserPosition): Int {
+    if (stops.isEmpty()) return 0
+    return stops.indices.minByOrNull { index ->
+        Haversine.distanceMeters(
+            position.latitude,
+            position.longitude,
+            stops[index].lat,
+            stops[index].lng
+        )
+    } ?: 0
+}
+
+/** Nombre del paradero por el que va la unidad, con demostracion o sin ella. */
+private fun currentStopName(
+    stops: List<RouteStop>,
+    simulating: Boolean,
+    simulatedName: String?,
+    stopIndex: Int?
+): String? = if (simulating) {
+    simulatedName?.takeIf { it.isNotBlank() }
+} else {
+    stopIndex?.let { stops.getOrNull(it)?.name }?.takeIf { it.isNotBlank() }
 }

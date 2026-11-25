@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pasajeya.app.feature.auth.domain.DeviceSessionRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
@@ -37,16 +38,31 @@ class DeviceSessionRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun registerDevice(uid: String, deviceId: String) {
+    /**
+     * Marca del servidor con la que este telefono tomo la sesion. Sirve para no cerrarse a
+     * si mismo: solo un inicio de sesion POSTERIOR al nuestro nos saca.
+     */
+    @Volatile
+    private var claimedAtMillis: Long? = null
+
+    override suspend fun registerDevice(uid: String, deviceId: String): Long? =
         withContext(Dispatchers.IO) {
-            firestore.collection("users").document(uid).update(
+            val document = firestore.collection("users").document(uid)
+            document.update(
                 mapOf(
                     "activeDeviceId" to deviceId,
+                    "activeSessionAt" to FieldValue.serverTimestamp(),
                     "lastLoginAtMillis" to System.currentTimeMillis()
                 )
-            )
+            ).await()
+            // Se vuelve a leer para quedarse con la hora del servidor: comparar relojes de
+            // telefonos distintos no sirve, cada uno puede estar desfasado.
+            val claimedAt = runCatching {
+                document.get().await().getTimestamp("activeSessionAt")?.toDate()?.time
+            }.getOrNull()
+            claimedAtMillis = claimedAt
+            claimedAt
         }
-    }
 
     override fun observeActiveDeviceId(uid: String) = callbackFlow<String?> {
         val docRef = firestore.collection("users").document(uid)
@@ -61,16 +77,21 @@ class DeviceSessionRepositoryImpl @Inject constructor(
                     return@addSnapshotListener
                 }
                 val remoteDeviceId = snapshot.getString("activeDeviceId")
-                if (remoteDeviceId.isNullOrBlank()) {
-                    docRef.update("activeDeviceId", deviceId)
-                        .addOnFailureListener { e ->
-                            Log.e("AUTH_SESSION", "Error actualizando activeDeviceId", e)
-                        }
+                // Un telefono que solo esta mirando no se queda con la sesion: antes, si el
+                // dato estaba vacio, cualquiera se la adjudicaba y el que acababa de entrar
+                // se quedaba afuera. La sesion solo se toma al iniciarla.
+                if (remoteDeviceId.isNullOrBlank() || remoteDeviceId == deviceId) {
                     return@addSnapshotListener
                 }
-                if (remoteDeviceId != deviceId) {
-                    trySend(remoteDeviceId)
+                // Solo un inicio de sesion posterior al nuestro cierra este telefono. Sin
+                // esto, el que acababa de entrar leia el dispositivo anterior y se cerraba
+                // a si mismo antes de que su propio registro llegara.
+                val remoteAt = snapshot.getTimestamp("activeSessionAt")?.toDate()?.time
+                val ownAt = claimedAtMillis
+                if (ownAt != null && remoteAt != null && remoteAt <= ownAt) {
+                    return@addSnapshotListener
                 }
+                trySend(remoteDeviceId)
             }
         } catch (error: Exception) {
             Log.e("AUTH_SESSION", "Error en observeActiveDeviceId", error)

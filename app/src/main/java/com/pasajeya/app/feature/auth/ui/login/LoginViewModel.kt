@@ -117,13 +117,14 @@ class LoginViewModel @Inject constructor(
             try {
                 val user = authRepository.signIn(email, current.password)
                 val session = accountRepository.ensureSession(user.uid)
-                // Registrar el dispositivo activo para control de sesión única.
-                viewModelScope.launch {
-                    try {
-                        deviceSessionRepository.registerDevice(user.uid, deviceSessionRepository.deviceId)
-                    } catch (_: Exception) {
-                        // No bloquear el login si falla el registro del dispositivo.
-                    }
+                // La sesion se toma ANTES de entrar: si se dejaba para despues, este mismo
+                // telefono leia el dispositivo anterior y se cerraba a si mismo. Si el
+                // registro falla no se bloquea el ingreso.
+                runCatching {
+                    deviceSessionRepository.registerDevice(
+                        user.uid,
+                        deviceSessionRepository.deviceId
+                    )
                 }
                 limiter.reset()
                 _events.send(resolveAuthDestination(session))

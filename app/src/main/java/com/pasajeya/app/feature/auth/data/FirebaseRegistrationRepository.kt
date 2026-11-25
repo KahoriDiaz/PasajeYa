@@ -67,7 +67,8 @@ class FirebaseRegistrationRepository @Inject constructor(
             baseData(uid, email, fullName, dni, UserRole.PASSENGER) + mapOf(
                 "birthDate" to birthDate,
                 "age" to age,
-                "activeDeviceId" to deviceId
+                "activeDeviceId" to deviceId,
+                "activeSessionAt" to FieldValue.serverTimestamp()
             ) + universityData
         )
     }
@@ -123,7 +124,8 @@ class FirebaseRegistrationRepository @Inject constructor(
                 "age" to age,
                 "plate" to plate,
                 "assignedRoutes" to route.routeIds,
-                "activeDeviceId" to deviceId
+                "activeDeviceId" to deviceId,
+                "activeSessionAt" to FieldValue.serverTimestamp()
             ) + companyData
         )
 
@@ -155,7 +157,8 @@ class FirebaseRegistrationRepository @Inject constructor(
                 "age" to age,
                 "businessName" to businessName,
                 "ruc" to ruc,
-                "activeDeviceId" to deviceId
+                "activeDeviceId" to deviceId,
+                "activeSessionAt" to FieldValue.serverTimestamp()
             )
         )
         try {

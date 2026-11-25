@@ -808,10 +808,6 @@ private fun String.ageFromBirthDate(): Int? {
 }
 
 /**
- * Metros que la unidad avanzo al pasar del paradero [from] al [to]. Si el indice retrocede,
- * es que termino el recorrido y arranco de nuevo, asi que se suma el regreso completo.
- */
-/**
  * Distancia real del viaje: la diferencia del odometro de la unidad entre subida y bajada.
  * Si el turno no llevaba odometro, se mide entre los paraderos.
  */
@@ -822,27 +818,17 @@ internal fun travelledMeters(
     boardingIndex: Int,
     alightingIndex: Int
 ): Double {
-    // Con la demostracion activa el avance se mide por vueltas y paradero: es el mismo
-    // numero que ve el pasajero en su mapa y el conductor en su lista.
-    if (shift?.simulationEnabled == true) {
-        return TripProgress.tripMeters(
-            stops = route.stops,
-            boardingLaps = trip.boardingLaps ?: shift.odometerLaps,
-            boardingStopIndex = boardingIndex,
-            laps = shift.odometerLaps,
-            stopIndex = alightingIndex
-        )
-    }
-    // En marcha real manda el GPS de la unidad, con un tope de cordura: nadie anda mas que
-    // la ruta completa de ida y vuelta.
-    val boardingOdometer = trip.boardingOdometerMeters
-    val currentOdometer = shift?.odometerMeters
-    val oneWayMeters = TripProgress.routeMeters(route.stops)
-    val maxMeters = if (oneWayMeters > 0.0) oneWayMeters * 2 else Double.MAX_VALUE
-    if (boardingOdometer != null && currentOdometer != null && currentOdometer > boardingOdometer) {
-        return (currentOdometer - boardingOdometer).coerceAtMost(maxMeters)
-    }
-    return FareEstimator.routeDistanceMeters(route.stops, boardingIndex, alightingIndex)
+    // Una sola forma de medir para el pasajero, el conductor y el cobro.
+    return TripProgress.tripMeters(
+        stops = route.stops,
+        simulationEnabled = shift?.simulationEnabled == true,
+        boardingStopIndex = boardingIndex,
+        stopIndex = alightingIndex,
+        boardingLaps = trip.boardingLaps ?: shift?.odometerLaps ?: 0,
+        laps = shift?.odometerLaps ?: 0,
+        boardingOdometerMeters = trip.boardingOdometerMeters,
+        unitOdometerMeters = shift?.odometerMeters
+    )
 }
 
 private fun nearestStopIndex(route: RoutePath, position: TripPosition): Int {

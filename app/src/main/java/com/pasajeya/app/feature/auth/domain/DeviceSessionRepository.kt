@@ -13,8 +13,12 @@ interface DeviceSessionRepository {
     /** Devuelve el ID del dispositivo, generandolo si no existe. */
     val deviceId: String
 
-    /** Guarda el deviceId activo en Firestore para el usuario dado. */
-    suspend fun registerDevice(uid: String, deviceId: String)
+    /**
+     * Toma la sesion para este telefono. Manda el ultimo inicio de sesion: el telefono que
+     * estaba abierto se cierra. Devuelve la marca de tiempo del servidor con la que quedo
+     * registrada, para poder distinguir despues un inicio posterior al nuestro.
+     */
+    suspend fun registerDevice(uid: String, deviceId: String): Long?
 
     /** Observa el activeDeviceId remoto del usuario en Firestore. */
     fun observeActiveDeviceId(uid: String): Flow<String?>

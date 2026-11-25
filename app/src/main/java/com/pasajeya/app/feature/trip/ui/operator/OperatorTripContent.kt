@@ -65,6 +65,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pasajeya.app.R
 import com.pasajeya.app.core.map.MapUserPosition
+import com.pasajeya.app.core.util.Haversine
 import com.pasajeya.app.core.map.RouteMap
 import com.pasajeya.app.core.theme.BorderLight
 import com.pasajeya.app.core.theme.ErrorRed
@@ -117,12 +118,37 @@ fun OperatorTripContent(
     var targetPosition by remember { mutableStateOf<MapUserPosition?>(null) }
 
 
+    // Con demostracion, donde va la unidad simulada; en marcha real, la ultima posicion
+    // que publico el telefono del conductor. El pasajero ve exactamente la misma.
     val busPosition: MapUserPosition? = state.shift?.let { shift ->
-        shift.simulatedLatitude?.let { lat ->
-            shift.simulatedLongitude?.let { lng ->
-                MapUserPosition(lat, lng)
-            }
+        val lat = if (state.simulationEnabled) {
+            shift.simulatedLatitude
+        } else {
+            shift.lastLatitude ?: shift.simulatedLatitude
         }
+        val lng = if (state.simulationEnabled) {
+            shift.simulatedLongitude
+        } else {
+            shift.lastLongitude ?: shift.simulatedLongitude
+        }
+        lat?.let { latitude -> lng?.let { longitude -> MapUserPosition(latitude, longitude) } }
+    }
+
+    // Paradero por el que va la unidad: el de la demostracion o el mas cercano a su
+    // posicion real. Con esto la lista de pasajeros mide igual que el cobro.
+    val unitStopIndex: Int = if (state.simulationEnabled) {
+        state.simulatedStopIndex
+    } else {
+        busPosition?.let { position ->
+            state.routeStops.indices.minByOrNull { index ->
+                Haversine.distanceMeters(
+                    position.latitude,
+                    position.longitude,
+                    state.routeStops[index].lat,
+                    state.routeStops[index].lng
+                )
+            }
+        } ?: state.simulatedStopIndex
     }
 
     fun advanceStop() {
@@ -331,7 +357,7 @@ fun OperatorTripContent(
                 onRestartRoute = viewModel::restartRoute,
                 isEnding = state.isEndingShift
             )
-            if (state.simulationEnabled && state.routeStops.isNotEmpty() && busPosition != null) {
+            if (state.routeStops.isNotEmpty() && busPosition != null) {
                 BusMapCard(
                     stops = state.routeStops,
                     busPosition = busPosition,
@@ -346,6 +372,8 @@ fun OperatorTripContent(
                 routeStops = state.routeStops,
                 laps = state.shift?.odometerLaps ?: 0,
                 simulationEnabled = state.shift?.simulationEnabled == true,
+                unitOdometerMeters = state.shift?.odometerMeters,
+                unitStopIndex = unitStopIndex,
                 tapOutTripId = state.tapOutTripId,
                 onTapOut = viewModel::requestTapOut
             )
@@ -950,6 +978,8 @@ private fun OpenTripsCard(
     routeStops: List<com.pasajeya.app.feature.fare.domain.RouteStop>,
     laps: Int,
     simulationEnabled: Boolean,
+    unitOdometerMeters: Double?,
+    unitStopIndex: Int,
     tapOutTripId: String?,
     onTapOut: (Trip) -> Unit
 ) {
@@ -1021,13 +1051,16 @@ private fun OpenTripsCard(
                             // Lo mismo que ve el pasajero y lo mismo que se cobra: antes
                             // aqui se multiplicaba cada paradero por 1.2 km inventados.
                             val boardingIndex = trip.boardingStopIndex
-                            if (simulationEnabled && boardingIndex != null) {
+                            if (boardingIndex != null && routeStops.size > 1) {
                                 val meters = TripProgress.tripMeters(
                                     stops = routeStops,
-                                    boardingLaps = trip.boardingLaps ?: laps,
+                                    simulationEnabled = simulationEnabled,
                                     boardingStopIndex = boardingIndex,
+                                    stopIndex = unitStopIndex,
+                                    boardingLaps = trip.boardingLaps ?: laps,
                                     laps = laps,
-                                    stopIndex = simulatedStopIndex
+                                    boardingOdometerMeters = trip.boardingOdometerMeters,
+                                    unitOdometerMeters = unitOdometerMeters
                                 )
                                 Text(
                                     text = stringResource(
