@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,6 +38,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import com.pasajeya.app.R
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import com.pasajeya.app.core.theme.DeepBlue
 import com.pasajeya.app.core.theme.BorderLight
 import com.pasajeya.app.core.theme.ErrorRed
 import com.pasajeya.app.core.theme.PrimaryBlue
@@ -205,70 +215,97 @@ private fun PassengerScanCard(
     isProcessing: Boolean,
     onScan: () -> Unit
 ) {
+    // Tarjeta principal: es la accion que la persona hace al subir y al bajar, asi que
+    // lleva el color de la marca y ocupa el lugar mas visible.
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(
-            containerColor = PrimaryBlue.copy(alpha = 0.08f)
-        ),
-        border = BorderStroke(1.dp, BorderLight)
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .background(
+                    Brush.linearGradient(listOf(PrimaryBlue, DeepBlue))
+                )
         ) {
-            Text(
-                text = stringResource(
-                    if (hasActiveTrip) {
-                        R.string.passenger_scan_out_title
-                    } else {
-                        R.string.passenger_scan_in_title
-                    }
-                ),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = TextPrimary
-            )
-            Text(
-                text = stringResource(
-                    if (hasActiveTrip) {
-                        R.string.passenger_scan_out_body
-                    } else {
-                        R.string.passenger_scan_in_body
-                    }
-                ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = TextGray,
-                textAlign = TextAlign.Center
-            )
-            Button(
-                onClick = onScan,
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 52.dp)
-                    .testTag("passenger_scan_bus"),
-                shape = RoundedCornerShape(14.dp),
-                enabled = !isProcessing
+                    .padding(horizontal = 22.dp, vertical = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (isProcessing) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(22.dp),
-                        strokeWidth = 2.dp,
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = if (hasActiveTrip) {
+                            Icons.Filled.Logout
+                        } else {
+                            Icons.Filled.QrCodeScanner
+                        },
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(26.dp)
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = stringResource(
+                            if (hasActiveTrip) {
+                                R.string.passenger_scan_out_title
+                            } else {
+                                R.string.passenger_scan_in_title
+                            }
+                        ),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
-                } else {
-                    Text(
-                        stringResource(
-                            if (hasActiveTrip) {
-                                R.string.passenger_scan_out_action
-                            } else {
-                                R.string.passenger_scan_in_action
-                            }
-                        )
+                }
+                Text(
+                    text = stringResource(
+                        if (hasActiveTrip) {
+                            R.string.passenger_scan_out_body
+                        } else {
+                            R.string.passenger_scan_in_body
+                        }
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White.copy(alpha = 0.88f)
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Button(
+                    onClick = onScan,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 54.dp)
+                        .testTag("passenger_scan_bus"),
+                    shape = RoundedCornerShape(16.dp),
+                    enabled = !isProcessing,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = PrimaryBlue,
+                        disabledContainerColor = Color.White.copy(alpha = 0.6f),
+                        disabledContentColor = PrimaryBlue.copy(alpha = 0.6f)
                     )
+                ) {
+                    if (isProcessing) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(22.dp),
+                            strokeWidth = 2.dp,
+                            color = PrimaryBlue
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(
+                                if (hasActiveTrip) {
+                                    R.string.passenger_scan_out_action
+                                } else {
+                                    R.string.passenger_scan_in_action
+                                }
+                            ),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }
