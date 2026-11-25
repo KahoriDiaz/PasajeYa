@@ -2,18 +2,21 @@ name: Herramientas de la presentacion
 on:
   push:
     branches: [herramientas]
+permissions:
+  contents: write
 jobs:
-  fotos:
+  buscar:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: bash tools/fetch_photos.sh
-      - uses: actions/upload-artifact@v4
-        with: { name: fotos, path: out/fotos }
-  diesel:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      - run: sudo apt-get install -y -qq imagemagick >/dev/null 2>&1 || true
+      - run: python3 tools/fetch_photos.py
       - run: bash tools/probe_fuel.sh
-      - uses: actions/upload-artifact@v4
-        with: { name: diesel, path: out/fuel }
+      - name: Guardar resultados en la rama
+        run: |
+          rm -f out/fuel/cookies.txt
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add out
+          git commit -m "Resultados de las herramientas [skip ci]" || true
+          git push
