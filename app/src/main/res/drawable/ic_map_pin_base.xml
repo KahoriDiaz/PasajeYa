@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gota blanca que va debajo del pin de color: hace de borde y de circulo del centro. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="26dp"
+    android:height="34dp"
+    android:viewportWidth="26"
+    android:viewportHeight="34">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M13,0.4C6.6,0.4 1.4,5.6 1.4,12c0,7.4 11.6,21.6 11.6,21.6S24.6,19.4 24.6,12C24.6,5.6 19.4,0.4 13,0.4z" />
+</vector>

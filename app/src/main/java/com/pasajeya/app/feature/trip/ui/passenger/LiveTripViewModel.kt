@@ -265,8 +265,8 @@ private fun nearestStopIndex(stops: List<RouteStop>, position: MapUserPosition):
     if (stops.isEmpty()) return 0
     return stops.indices.minByOrNull { index ->
         Haversine.distanceMeters(
-            position.latitude,
-            position.longitude,
+            position.lat,
+            position.lng,
             stops[index].lat,
             stops[index].lng
         )

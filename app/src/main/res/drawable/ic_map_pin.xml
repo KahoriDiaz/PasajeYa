@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Pin de mapa: la gota con un agujero al centro (fillType evenOdd). Se tinta con el color
+  del paradero y debajo va ic_map_pin_base, que es la misma gota en blanco: asi el borde y
+  el circulo del centro quedan blancos sin tener que tintar varias capas.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="26dp"
+    android:height="34dp"
+    android:viewportWidth="26"
+    android:viewportHeight="34">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M13,2.2c-5,0 -9.1,4.1 -9.1,9.1c0,6.6 9.1,20.5 9.1,20.5s9.1,-13.9 9.1,-20.5C22.1,6.3 18,2.2 13,2.2zM13,7.6c2.1,0 3.8,1.7 3.8,3.8S15.1,15.2 13,15.2s-3.8,-1.7 -3.8,-3.8S10.9,7.6 13,7.6z" />
+</vector>

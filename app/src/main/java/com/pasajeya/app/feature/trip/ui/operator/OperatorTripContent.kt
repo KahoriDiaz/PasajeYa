@@ -142,8 +142,8 @@ fun OperatorTripContent(
         busPosition?.let { position ->
             state.routeStops.indices.minByOrNull { index ->
                 Haversine.distanceMeters(
-                    position.latitude,
-                    position.longitude,
+                    position.lat,
+                    position.lng,
                     state.routeStops[index].lat,
                     state.routeStops[index].lng
                 )

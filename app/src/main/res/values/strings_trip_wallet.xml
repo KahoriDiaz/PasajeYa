@@ -14,6 +14,13 @@
     <string name="live_trip_error">No pudimos cargar el costo en vivo: %1$s</string>
 
     <!-- Estimar pasaje -->
+    <string name="estimate_fit_route">Ver la ruta completa</string>
+    <string name="estimate_swap">Intercambiar origen y destino</string>
+    <string name="estimate_pick_stop">Elegir paradero</string>
+    <string name="estimate_no_result">S/ --</string>
+    <string name="estimate_distance_summary">%1$s km de recorrido</string>
+    <string name="estimate_toggle_detail">Ver u ocultar el detalle</string>
+    <string name="estimate_see_detail">Ver el detalle del cálculo</string>
     <string name="estimate_title">Estimar mi pasaje</string>
     <string name="estimate_route">Ruta</string>
     <string name="estimate_select_route">Seleccionar ruta</string>

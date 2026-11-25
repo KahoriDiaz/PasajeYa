@@ -2,6 +2,8 @@ package com.pasajeya.app.core.map
 
 import android.content.Context
 import android.graphics.Color as AndroidColor
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
@@ -59,7 +61,9 @@ fun RouteMap(
     alightingIndex: Int? = null,
     userPosition: MapUserPosition? = null,
     targetPosition: MapUserPosition? = null,
-    busPosition: MapUserPosition? = null
+    busPosition: MapUserPosition? = null,
+    /** Al cambiar, el mapa vuelve a encuadrar la ruta completa. */
+    fitRequest: Int = 0
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -69,6 +73,9 @@ fun RouteMap(
             setTileSource(TileSourceFactory.MAPNIK)
             setMultiTouchControls(true)
             zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+            // El mapa de OpenStreetMap viene muy cargado de color y tapa la ruta. Se baja
+            // la saturacion y se aclara un poco para que la linea y los paraderos resalten.
+            overlayManager.tilesOverlay.setColorFilter(cleanMapFilter())
             minZoomLevel = 3.0
             maxZoomLevel = 19.0
             controller.setZoom(13.0)
@@ -98,6 +105,19 @@ fun RouteMap(
             lifecycleOwner.lifecycle.removeObserver(observer)
             mapView.onPause()
             mapView.onDetach()
+        }
+    }
+
+    // Volver a encuadrar la ruta cuando la persona toca el boton de centrar.
+    LaunchedEffect(fitRequest, stops) {
+        if (fitRequest > 0 && stops.size >= 2) {
+            runCatching {
+                mapView.zoomToBoundingBox(
+                    BoundingBox.fromGeoPoints(stops.map { GeoPoint(it.lat, it.lng) }),
+                    true,
+                    96
+                )
+            }
         }
     }
 
@@ -142,15 +162,18 @@ fun RouteMap(
                 )
             }
             stops.forEachIndexed { index, stop ->
-                val color = when (index) {
-                    boardingIndex -> COLOR_BOARDING
-                    alightingIndex -> COLOR_ALIGHTING
-                    else -> COLOR_STOP
+                // Los paraderos del viaje llevan pin; el resto, un punto discreto.
+                when (index) {
+                    boardingIndex -> view.overlays.add(
+                        pinMarker(view, stop.name, stop.lat, stop.lng, COLOR_BOARDING)
+                    )
+                    alightingIndex -> view.overlays.add(
+                        pinMarker(view, stop.name, stop.lat, stop.lng, COLOR_ALIGHTING)
+                    )
+                    else -> view.overlays.add(
+                        stopMarker(view, stop.name, stop.lat, stop.lng, COLOR_STOP, false)
+                    )
                 }
-                val highlighted = index == boardingIndex || index == alightingIndex
-                view.overlays.add(
-                    stopMarker(view, stop.name, stop.lat, stop.lng, color, highlighted)
-                )
             }
             userPosition?.let {
                 view.overlays.add(
@@ -191,6 +214,54 @@ fun RouteMap(
             }
         }
     )
+}
+
+/** Pin de paradero, para la subida y la bajada del viaje. */
+private fun pinMarker(
+    view: MapView,
+    title: String,
+    lat: Double,
+    lng: Double,
+    color: Int
+): Marker {
+    val density = view.resources.displayMetrics.density
+    val width = (26 * density).toInt()
+    val height = (34 * density).toInt()
+    val base = ContextCompat.getDrawable(view.context, R.drawable.ic_map_pin_base)
+    val pin = ContextCompat.getDrawable(view.context, R.drawable.ic_map_pin)?.mutate()
+    pin?.setTint(color)
+    val icon = if (base != null && pin != null) {
+        LayerDrawable(arrayOf(base, pin))
+    } else {
+        pin ?: base
+    }
+    icon?.setBounds(0, 0, width, height)
+    return Marker(view).apply {
+        position = GeoPoint(lat, lng)
+        this.icon = icon
+        // La punta del pin marca el paradero.
+        setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        this.title = title
+        if (title.isEmpty()) setInfoWindow(null)
+    }
+}
+
+/**
+ * Filtro de color del mapa base: menos saturacion y un poco mas de luz, para que la ruta,
+ * los paraderos y la unidad se lean encima.
+ */
+private fun cleanMapFilter(): ColorMatrixColorFilter {
+    val desaturate = ColorMatrix().apply { setSaturation(0.68f) }
+    val lighten = ColorMatrix(
+        floatArrayOf(
+            0.94f, 0f, 0f, 0f, 16f,
+            0f, 0.94f, 0f, 0f, 16f,
+            0f, 0f, 0.94f, 0f, 16f,
+            0f, 0f, 0f, 1f, 0f
+        )
+    )
+    lighten.preConcat(desaturate)
+    return ColorMatrixColorFilter(lighten)
 }
 
 /** Marcador del bus: el mismo dibujo del icono de la app sobre un circulo blanco. */
