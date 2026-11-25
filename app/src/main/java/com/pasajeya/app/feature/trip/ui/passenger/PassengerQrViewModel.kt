@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.pasajeya.app.feature.auth.domain.AccountRepository
 import com.pasajeya.app.feature.auth.domain.AuthRepository
 import com.pasajeya.app.feature.trip.domain.TripPosition
+import com.pasajeya.app.feature.trip.domain.BusQrCodec
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.FareBreakdown
 import com.pasajeya.app.feature.trip.domain.model.Trip
@@ -116,6 +117,15 @@ class PassengerQrViewModel @Inject constructor(
         _uiState.update { it.copy(lastMessage = null, lastError = null) }
     }
 
+    /** Viaje abierto de esta persona en la unidad del QR leido, segun Firestore. */
+    private suspend fun openTripForThisBus(busQr: String): Trip? {
+        val uid = authRepository.currentUser()?.uid ?: return null
+        val shiftId = BusQrCodec.parse(busQr)?.shiftId ?: return null
+        return runCatching {
+            tripRepository.findOpenTripForPassenger(passengerUid = uid, shiftId = shiftId)
+        }.getOrNull()
+    }
+
     fun onBusQrScanned(rawValue: String) {
         if (_uiState.value.isProcessing) return
         _uiState.update {
@@ -128,7 +138,12 @@ class PassengerQrViewModel @Inject constructor(
                 }.getOrElse {
                     TripPosition(0.0, 0.0, accuracy = 0.0)
                 }
-                val hasActiveTrip = _uiState.value.trip?.status == "open"
+                // Se le pregunta a Firestore, igual que hace el conductor: si el estado
+                // local todavia no se sincronizo (app recien abierta, un momento sin red),
+                // la segunda lectura tiene que cobrar y cerrar el viaje, no volver a decir
+                // que subiste.
+                val hasActiveTrip = _uiState.value.trip?.status == "open" ||
+                    openTripForThisBus(rawValue) != null
                 if (hasActiveTrip) {
                     val result = tripRepository.passengerTapOut(
                         sessionId = sessionId(),
