@@ -58,7 +58,22 @@ jobs:
           gh release view apk-demo >/dev/null 2>&1 || gh release create apk-demo \
             --title "APK de demostración" \
             --notes "Instalable de la última compilación. Desinstala primero cualquier versión anterior de PasajeYa, porque está firmada con otra llave."
-          gh release upload apk-demo PasajeYa-demo.apk --clobber
+          # GitHub a veces responde 500 al reemplazar el archivo anterior. Se reintenta y,
+          # si no cede, se sube con el numero de compilacion para que siempre haya un APK
+          # descargable.
+          for intento in 1 2 3; do
+            if gh release upload apk-demo PasajeYa-demo.apk --clobber; then
+              echo "APK publicado como PasajeYa-demo.apk"
+              exit 0
+            fi
+            echo "Reintento $intento del envio del APK"
+            sleep 20
+          done
+          alterno="PasajeYa-demo-${{ github.run_number }}.apk"
+          cp PasajeYa-demo.apk "$alterno"
+          gh release upload apk-demo "$alterno"
+          echo "APK publicado como $alterno"
+
 
       - name: Guardar los reportes de prueba
         if: failure()
