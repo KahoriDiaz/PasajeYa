@@ -1,0 +1,25 @@
+HTTP/1.1 200 OK
+Cache-Control: private,max-age=0
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+Expires: Tue, 10 Nov 2026 19:39:14 GMT
+Last-Modified: Wed, 25 Nov 2026 19:00:30 GMT
+Accept-Ranges: bytes
+ETag: "{64E3CCCB-D6A3-4B0E-9F73-80FBDC46E27A},15756"
+X-SharePointHealthScore: 0
+ResourceTag: rt:64E3CCCB-D6A3-4B0E-9F73-80FBDC46E27A@00000015756
+Public-Extension: http://schemas.microsoft.com/repl-2
+SPRequestGuid: 506652a2-bb23-901c-8f7f-983847ddb9fc
+request-id: 506652a2-bb23-901c-8f7f-983847ddb9fc
+X-FRAME-OPTIONS: SAMEORIGIN
+Content-Security-Policy: frame-ancestors 'self' teams.microsoft.com *.teams.microsoft.com *.skype.com *.teams.microsoft.us local.teams.office.com *.powerapps.com *.yammer.com *.officeapps.live.com *.office.com *.stream.azure-test.net *.microsoftstream.com *.dynamics.com *.microsoft.com onedrive.live.com *.onedrive.live.com;
+SPRequestDuration: 53
+SPIisLatency: 1
+MicrosoftSharePointTeamServices: 16.0.0.19725
+X-Content-Type-Options: nosniff
+X-MS-InvokeApp: 1; RequireReadOnly
+Date: Wed, 25 Nov 2026 19:39:14 GMT
+Content-Length: 1585545
+Set-Cookie: SERVERID5=m2; path=/
+Set-Cookie: TS011e59b4=01ab578e5eeaa1ba58ec4b777745a450816232f8610c8a04c94833312dadad0000cd2d098227df2a30e2278cece13de23ae69fbf7ae502ebadac311a36af49916d2a8a2fd6; Path=/; 
+Set-Cookie: TS4c988926027=088cef6a82ab200065e7963c48dfc6627a1d2ebfd6fc8af0864b2be101be8dc9743a009c6b44392a089bf9bb671130001d81888e0c40e6b7c6fd63eee801cf1b8fae72a52f3d0c16357c206903ce93950dc870197fcebe16deb89c8065060553; Path=/
+
