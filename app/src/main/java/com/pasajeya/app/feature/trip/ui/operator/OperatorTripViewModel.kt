@@ -320,7 +320,7 @@ class OperatorTripViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isProcessingScan = false,
-                            notice = notice(OperatorNoticeKind.INVALID_DATA)
+                            notice = notice(OperatorNoticeKind.GENERIC_ERROR)
                         )
                     }
                     return@launch
