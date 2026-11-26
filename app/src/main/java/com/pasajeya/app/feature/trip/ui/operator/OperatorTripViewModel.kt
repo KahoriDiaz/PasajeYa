@@ -17,6 +17,7 @@ import com.pasajeya.app.feature.trip.domain.BusQrCodec
 import com.pasajeya.app.feature.trip.domain.QrScanGate
 import com.pasajeya.app.feature.trip.domain.RoutePath
 import com.pasajeya.app.feature.trip.domain.TripPosition
+import com.pasajeya.app.feature.trip.domain.NfcCredentialProtocol
 import com.pasajeya.app.feature.trip.domain.PassengerQrCodec
 import com.pasajeya.app.feature.trip.domain.TripRepository
 import com.pasajeya.app.feature.trip.domain.model.OperatorContext
@@ -31,7 +32,6 @@ import com.pasajeya.app.feature.voice.domain.VoiceAnnouncementFormatter
 import com.pasajeya.app.feature.voice.domain.VoicePreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -399,15 +399,19 @@ class OperatorTripViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val isoDep = IsoDep.get(tag) ?: return@launch
-                val payload = withContext(Dispatchers.IO) {
-                    isoDep.connect()
-                    val response = isoDep.transceive(SELECT_AID_APDU)
-                    isoDep.close()
-                    decodeNfcResponse(response)
+                val passengerId = withContext(Dispatchers.IO) {
+                    try {
+                        isoDep.connect()
+                        NfcCredentialProtocol.passengerUidFrom(isoDep.transceive(NfcCredentialProtocol.selectApdu()))
+                    } finally {
+                        runCatching { isoDep.close() }
+                    }
                 }
-                val passengerId = PassengerQrCodec.passengerUid(payload)
+                // Una respuesta que no es credencial de PasajeYa no es un pasajero: no se abre viaje.
                 if (passengerId == null) {
-                    _uiState.update { it.copy(isProcessingScan = false) }
+                    _uiState.update {
+                        it.copy(isProcessingScan = false, notice = notice(OperatorNoticeKind.GENERIC_ERROR))
+                    }
                     return@launch
                 }
 
@@ -453,30 +457,6 @@ class OperatorTripViewModel @Inject constructor(
         }
     }
 
-    private fun decodeNfcResponse(response: ByteArray?): String? {
-        if (response == null || response.isEmpty()) return null
-        var data = response
-        if (data.size >= 2 && data[data.size - 2] == 0x90.toByte() && data[data.size - 1] == 0x00.toByte()) {
-            data = data.copyOfRange(0, data.size - 2)
-        }
-        return if (data.isEmpty()) null else String(data, StandardCharsets.UTF_8)
-    }
-
-    private val SELECT_AID_APDU: ByteArray =
-        byteArrayOf(
-            0x00.toByte(),
-            0xA4.toByte(),
-            0x04.toByte(),
-            0x07.toByte(),
-            0xA0.toByte(),
-            0x00.toByte(),
-            0x00.toByte(),
-            0x00.toByte(),
-            0x01.toByte(),
-            0x01.toByte(),
-            0x02.toByte(),
-            0x00.toByte()
-        )
 
     fun requestTapOut(trip: Trip) {
         if (_uiState.value.tapOutTripId != null) return

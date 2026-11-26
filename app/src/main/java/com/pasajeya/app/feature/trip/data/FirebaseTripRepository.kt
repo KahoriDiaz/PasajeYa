@@ -421,6 +421,10 @@ class FirebaseTripRepository @Inject constructor(
             if (passengerUid.isBlank()) {
                 throw TripOperationException("No se pudo leer al pasajero. Intenta de nuevo.", e)
             }
+            // El conductor no puede subirse a si mismo como pasajero.
+            if (passengerUid == auth.currentUser?.uid) {
+                throw TripOperationException("Se leyo la cuenta del conductor. El pasajero debe acercar su celular con su sesion abierta.", e)
+            }
             val shift = loadShift(shiftId)
                 ?: throw TripOperationException("La unidad ya no tiene un turno activo.", e)
             if (!shift.isActive) throw TripOperationException("La unidad ya terminó su turno.", e)
@@ -576,14 +580,17 @@ class FirebaseTripRepository @Inject constructor(
         val userDoc = runCatching {
             firestore.collection("users").document(uid).get().await()
         }.getOrNull()
-        val isUniversity = userDoc?.isUniversityEligible() == true
-        val firstName = userDoc?.getString("firstName")
-            ?.takeIf { it.isNotBlank() }
-            ?: auth.currentUser?.displayName
+        // Solo se abre viaje para una cuenta de pasajero que existe. Antes, si la lectura venia
+        // mal, se usaba el nombre de la cuenta abierta en este celular: la del conductor.
+        if (userDoc == null || !userDoc.exists()) {
+            throw TripOperationException("No reconocimos al pasajero. Pidele que vuelva a acercar su celular o que muestre su QR.")
+        }
+        val isUniversity = userDoc.isUniversityEligible()
+        val firstName = userDoc.getString("firstName")
             ?.takeIf { it.isNotBlank() }
             ?: "Pasajero"
-        val age = userDoc?.getLong("age")?.toInt()?.takeIf { it in 0..120 }
-            ?: userDoc?.getString("birthDate")?.ageFromBirthDate()
+        val age = userDoc.getLong("age")?.toInt()?.takeIf { it in 0..120 }
+            ?: userDoc.getString("birthDate")?.ageFromBirthDate()
         // Con el modo demostracion encendido el bus esta en un paradero conocido; sin el,
         // el paradero de subida es el mas cercano a la posicion real del telefono.
         val fix = usablePosition(shift, position)
