@@ -41,6 +41,20 @@ object NfcCredentialProtocol {
      * El uid del pasajero a partir de la respuesta, o null si la respuesta no es una credencial
      * de PasajeYa (un error, otra tarjeta, otra app). Nunca devuelve basura como uid.
      */
+    /** Explicacion para el conductor cuando la lectura no trae un pasajero. */
+    fun problemFor(response: ByteArray?): String {
+        if (response == null || response.isEmpty()) {
+            return "El celular del pasajero no respondio. Acercalo de nuevo y mantenlo juntos un segundo."
+        }
+        val n = response.size
+        val code = if (n >= 2) "%02X%02X".format(response[n - 2], response[n - 1]) else "%02X".format(response[0])
+        return if (code == "6A82") {
+            "El celular del pasajero respondio sin su cuenta (codigo 6A82). Revisa que tenga PasajeYa actualizada y la sesion abierta."
+        } else {
+            "Eso no es un pasajero de PasajeYa (codigo $code). Prueba de nuevo o usa el QR."
+        }
+    }
+
     fun passengerUidFrom(response: ByteArray?): String? {
         if (response == null || response.size <= 2) return null
         val n = response.size

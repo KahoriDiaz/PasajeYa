@@ -50,4 +50,10 @@ class NfcCredentialProtocolTest {
         val other = "otra-app".toByteArray() + byteArrayOf(0x90.toByte(), 0x00)
         assertNull(NfcCredentialProtocol.passengerUidFrom(other))
     }
+
+    @Test
+    fun `el aviso dice el codigo cuando el pasajero responde sin cuenta`() {
+        assertTrue(NfcCredentialProtocol.problemFor(NfcCredentialProtocol.SW_NOT_FOUND).contains("6A82"))
+        assertTrue(NfcCredentialProtocol.problemFor(null).contains("no respondio"))
+    }
 }

@@ -399,18 +399,27 @@ class OperatorTripViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val isoDep = IsoDep.get(tag) ?: return@launch
-                val passengerId = withContext(Dispatchers.IO) {
+                val response = withContext(Dispatchers.IO) {
                     try {
                         isoDep.connect()
-                        NfcCredentialProtocol.passengerUidFrom(isoDep.transceive(NfcCredentialProtocol.selectApdu()))
+                        isoDep.timeout = 2_000
+                        isoDep.transceive(NfcCredentialProtocol.selectApdu())
+                    } catch (lost: android.nfc.TagLostException) {
+                        null
+                    } catch (io: java.io.IOException) {
+                        null
                     } finally {
                         runCatching { isoDep.close() }
                     }
                 }
+                val passengerId = NfcCredentialProtocol.passengerUidFrom(response)
                 // Una respuesta que no es credencial de PasajeYa no es un pasajero: no se abre viaje.
                 if (passengerId == null) {
                     _uiState.update {
-                        it.copy(isProcessingScan = false, notice = notice(OperatorNoticeKind.GENERIC_ERROR))
+                        it.copy(
+                            isProcessingScan = false,
+                            notice = errorNotice(IllegalStateException(NfcCredentialProtocol.problemFor(response)))
+                        )
                     }
                     return@launch
                 }
